@@ -1,0 +1,273 @@
+<link rel="import" href="../px-mobile/px-mobile.html"/>
+<script type="text/javascript">
+  px.views = {
+    // add properties and methods on the element's prototype
+    properties : {
+
+      // declare properties for the element's public API
+      title : {
+        type : String,
+        value : 'Predix Mobile View'
+      },
+
+      //The default selected view
+      selected: {
+        type: Number,
+        reflectToAttribute: true,
+        notify: true,
+        observer: '_selectedChanged',
+        value: 0
+      },
+
+      //The current context of the view.
+      context : {
+        type : Object,
+        value : {}
+      },
+
+      //The list of views
+      views : {
+        type : Object,
+        value : {}
+      },
+
+      //The views routes
+      routes : {
+        type : Object,
+        value : {}
+      }
+    },
+
+    created : function() {
+      var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:blue'}});
+      px.mobile.utils.addMixin(logger, this);
+
+      this.logApi('created', this.id);
+
+      this.viewMap = {};
+      this.viewList = [];
+    },
+    ready : function() {
+      this.logApi('ready', this.id);
+    },
+
+    attached : function() {
+      this.logApi('attached', this.id + ' - ' + this.selected);
+      if (!this.id) {
+        throw 'Views' + this.tagName + ' cannot be created without an id!';
+      }
+      this.fire('px-views-ready');
+
+      this._initViews();
+      //this._initUI();
+      this._initLocation();
+      this._handleRoute();
+    },
+
+
+    _initLocation: function () {
+      var self = this;
+      console.warn('listening for hashchange');
+      if ("onhashchange" in window) {
+        console.warn('The browser supports the hashchange event!');
+        window.addEventListener('hashchange', function (e) {
+          self._handleRoute(e);
+        });
+      }
+    },
+
+    /**
+     * I handle when the route changes
+     * @param e
+     * @private
+     */
+    _handleRoute: function (e) {
+      var self = this, parts = [];
+      parts = location.hash.replace('#/', '').split('/');
+
+      var routeMap = {
+        view: parts[0],
+        deck: parts[1],
+        card: parts[2]
+      };
+
+      console.log(parts, routeMap);
+
+      //Set view/deck/card active
+      for (var route in routeMap) {
+        if (routeMap[route]) {
+          self._setActive(routeMap[route]);
+        }
+      }
+
+
+      //If no card and a deck. set all deck cards to active
+      var selector = '';
+      if (routeMap.deck && !routeMap.card) {
+        selector = 'px-deck#' + routeMap.deck + ' > px-card';
+        console.warn('Set all cards in deck', routeMap.deck, selector);
+
+        Polymer.dom(this).querySelectorAll(selector).forEach(function (el) {
+          el.className = 'active';
+          console.warn('set active', el);
+        });
+      }
+
+      //If a view and no deck or cards, set all to active
+      if (routeMap.view && !routeMap.deck && !routeMap.card) {
+        self._elements.forEach(function (el) {
+          self._setActive(el.id);
+        });
+      }
+
+      console.warn('hashChange', location.hash);
+    },
+
+    _initViews: function(){
+      var self = this;
+      this.logApi('_initViews', this);
+      Polymer.dom(this).querySelectorAll('px-view').forEach(function(view){
+        self._addView(view);
+      });
+      this.changeView(this.selected);
+    },
+
+    //show view
+    showView: function(index){
+      console.warn('INFO', 'show view', this.id);
+
+      this.viewList[this.selected].toggleClass('current');
+      this.viewList[this.selected].child()[0].toggleClass('current');
+      this.viewList[this.selected].toggleClass('previous');
+      this.viewList[this.selected].child()[0].toggleClass('previous');
+      this.viewList[this.selected].addClass('hidden');
+      this.viewList[this.selected].child()[0].addClass('hidden');
+
+      this.selected = index;
+      this.viewList[this.selected].removeClass('hidden');
+      this.viewList[this.selected].child()[0].removeClass('hidden');
+      this.viewList[this.selected].toggleClass('current');
+      this.viewList[this.selected].child()[0].toggleClass('current');
+
+    },
+
+    //hide view
+    hideView: function(index){
+      console.warn('INFO', 'hide view', this.id);
+      this.toggleClass('hidden', true, this);
+    },
+
+    //update view
+    updateView: function(){
+      console.warn('INFO', 'update view', this.id);
+    },
+
+    getCurrentView: function(){
+      console.warn('INFO', 'current view', this.id);
+      return px.mobile.dom(this.id).find('.current');
+    },
+
+
+    _selectedChanged: function(newVal, oldVal){
+      this.logApi('_selectedChanged');
+      console.log('_selectedChanged', 'from', oldVal, 'to', newVal);
+
+      //newVal++;
+      if(oldVal){
+        //the previous view
+        if(this.viewList[oldVal]){
+          this.viewList[oldVal].toggleClass('previous');
+        }
+      }
+
+      //set the selected view
+      if(newVal){
+
+        //set current view
+        this._setCurrent(newVal, oldVal);
+
+      }
+    },
+
+    //Handle adding a view to the map
+    _addView: function(view){
+      var index = this.viewList.length;
+
+      //add the index to the el
+      view.attr('index', index.toString());
+
+      //add next class to element
+      view.addClass('next');
+
+      //push to view list
+      this.viewList.push(view);
+
+      //add to view map
+      this.viewMap[view.id] = view;
+
+      //log
+      this.logApi('_addView', {id: view.id, index: index});
+    },
+
+
+    //Handle clearing all the 'current' classes.
+    _clearCurrent: function(){
+      this.logApi('_clearCurrent');
+      var _views = Polymer.dom(this).querySelectorAll('px-view');
+      if(_views){
+        _views.forEach(function(view){
+          view.removeClass('current');
+        });
+      }
+    }
+  };
+
+
+  px.views._setCurrent = function(index, oldIndex){
+    this.logApi('_setCurrent', index);
+    if(this.viewList[oldIndex]){
+      this.viewList[oldIndex].removeClass('current');
+    }
+    if(this.viewList[index]){
+      this.viewList[index].removeClass('next');
+      this.viewList[index].removeClass('previous');
+      this.viewList[index].removeClass('hidden');
+      this.viewList[index].addClass('current');
+    }
+  };
+
+  px.views.changeView = function(indexOrId){
+    this.logApi('changeView', indexOrId);
+    this._clearCurrent();
+    if(this.viewList[indexOrId]){
+      this._setCurrent(indexOrId);
+    } else if(this.viewMap[indexOrId]){
+      this._setCurrent(this.viewList.indexOf(this.viewMap[indexOrId]) + 1);
+    }
+  };
+
+  px.views.nextView = function(){
+      var items = this.viewList;
+    this.selected++;
+  	if(this.selected >= items.length){
+  		this.selected = this.selected - items.length;
+  	}
+    console.log('next-' + this.selected);
+  };
+
+  px.views.prevView = function(){
+    var items = this.viewList;
+    var index = this.selected;
+
+    if(this.selected <= 0){
+      this.selected = items.length;
+    }
+
+    this.selected--;
+    if(this.selected >= items.length){
+      this.selected = this.selected - items.length;
+    }
+    console.log('prev-' + this.selected);
+  };
+
+</script>

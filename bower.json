@@ -1,0 +1,27 @@
+{
+  "name": "px-view",
+  "version": "0.0.1",
+  "authors": [
+    "Jonnie Spratley <jonnie.spratley@ge.com>"
+  ],
+  "description": "A web component for a view",
+  "main": "px-view.html",
+  "keywords": [
+    "px"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "~1.0.9",
+    "px-mobile": "https://github.build.ge.com/PredixComponents/px-mobile.git"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.5"
+  }
+}

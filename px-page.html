@@ -1,0 +1,150 @@
+<!-- TODO: Dependencies -->
+<link rel="import" href="../polymer/polymer.html"/>
+
+<!-- TODO: px components
+<link rel="import" href="../pg-card/pg-card.html"/>
+-->
+<link rel="import" href="../px-card/px-deck.html"/>
+<link rel="import" href="../px-card/px-card.html"/>
+
+<link rel="import" href="../px-mobile/px-mobile.html"/>
+
+
+<!--
+<link rel="stylesheet" href="px-view.css"/>
+# Overview
+This provides a wrapper for px-deck and px-card elements.
+
+## Usage
+To use this component in your custom component do the following:
+
+```
+<dom-module id="demo-view">
+  <template>
+    <px-view id="demo-card-view">
+      <px-card header-text="Sample Card">
+        Card content
+      <px-card>
+    </px-view>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+  is: 'demo-view',
+    init: function(){
+      // this is where you can do some initialization of your card
+    },
+    behaviors: [px.view]
+  });
+</script>
+```
+@element px-view
+@blurb Element containing basic styling and behaviors (API) for card
+@demo demo.html
+@homepage index.html
+-->
+<dom-module id="px-view">
+  <style>
+
+  </style>
+  <template>
+    <article class="view">
+      <header class="text--center" hidden="{{!title}}">
+        <button class="btn btn--tertiary float--left" hidden="{{!backText}}" on-click="backAction">{{backText}}</button>
+        <span class="epsilon">{{title}}</span>
+        <!--
+        <button class="btn float - -right" hidden="{{!actionBtn}}">
+          Action
+        </button>-->
+      </header>
+      <nav class="nav">
+      </nav>
+      <section class="content">
+        <content></content>
+      </section>
+    </article>
+  </template>
+</dom-module>
+<script type="text/javascript">
+  Polymer({
+    is : 'px-view',
+    behaviors : [],
+    properties : {
+      title : {
+        type : String,
+        value: null
+      },
+
+      backText:{
+        type: String,
+        value: null
+      },
+
+      backLink:{
+        type: String,
+        value: null
+      },
+
+      //Path to remote view that will be loaded
+      tmpl:{
+        type: String,
+        notify: true,
+        observer: '_tmplChanged'
+      },
+
+      active : {
+        type : Boolean,
+        value : false,
+      },
+
+      context : {
+        type : Object,
+        value : {}
+      }
+    },
+
+    created : function() {
+      var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:orange'}});
+      px.mobile.utils.addMixin(logger, this);
+
+      this.logApi('created', this.id);
+    },
+    ready : function() {
+      this.logApi('ready', this.id);
+      console.warn('LOAD HTML', this.tmpl);
+    },
+    show: function(){
+      console.warn('INFO', 'show view', this.id);
+      this.toggleClass('current', false, this);
+    },
+    hide: function(){
+      console.warn('INFO', 'hide view', this.id);
+      this.toggleClass('hidden', true, this);
+    },
+    update: function(){
+      console.warn('INFO', 'update view', this.id);
+    },
+    currentView: function(){
+      console.warn('INFO', 'current view', this.id);
+      this.child()[0].toggleClass('current', true, this);
+    },
+    nextView: function(){
+      console.warn('INFO', 'next view', this.id);
+      this.toggleClass('next', true, this);
+    },
+    previousView: function(){
+      console.warn('INFO', 'previous view', this.id);
+      this.toggleClass('previous', true, this);
+    },
+    contextChanged : function(newContext, oldContext) {
+      console.warn('contextChanged', newContext, oldContext);
+    },
+    _tmplChanged: function(newVal, oldVal){
+      console.warn('Load remote html', newVal);
+      if(newVal){
+        console.warn('Load remote html', newVal);
+      }
+    }
+  });
+
+</script>

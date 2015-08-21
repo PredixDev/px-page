@@ -1,0 +1,51 @@
+<html>
+  <head>
+
+    <!-- TODO: Dependencies -->
+    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../polymer/polymer.html">
+
+    <!-- TODO: pxm components -->
+    <link rel="import" href="px-views.html">
+    <link rel="import" href="px-view.html">
+
+    <style media="screen">
+      body {
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+
+  <px-views id="app-views">
+    <px-view id="sandbox-view" title="Main View">
+      <px-deck id="deck-1">
+        <px-card id="card-1" header-text="What is a Card?">
+         A Card is an editable container that resides within the content area of your screen. For example, there are three sections on this page--each section is a card.
+       </px-card>
+        <px-card id="card-2" header-text="WHAT IS A DECK?">
+        A Deck is an ordered series of cards set by you, the developer.
+        </px-card>
+      </px-deck>
+    </px-view>
+
+    <px-view id="detail-view" title="Details View">
+      <px-deck id="deck-2">
+        <px-card id="card-3" header-text="deck-2 - card 3">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non sodales ante. Aenean et quam ac orci tincidunt ornare eu sit amet nibh. Donec porttitor sapien turpis, sed interdum turpis eleifend ut. Integer orci mi, volutpat gravida efficitur semper, consequat vel nulla. Suspendisse pulvinar ante justo, eget fringilla velit laoreet a. Ut gravida nulla sit amet diam interdum, ac consectetur mi fringilla. Ut aliquam feugiat facilisis. Aliquam gravida dui quis ipsum pharetra, et dignissim felis iaculis. Suspendisse at orci ut mauris sagittis condimentum nec sed est.
+        </px-card>
+        <px-card id="card-4" header-text="deck-2 - card 4">
+          deck-2 - card 4
+        </px-card>
+      </px-deck>
+    </px-view>
+
+</px-views>
+
+
+
+
+
+  </body>
+</html>
