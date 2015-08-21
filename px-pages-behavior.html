@@ -1,6 +1,6 @@
 <link rel="import" href="../px-mobile/px-mobile.html"/>
 <script type="text/javascript">
-  px.views = {
+  px.pages = {
     // add properties and methods on the element's prototype
     properties : {
 
@@ -25,13 +25,13 @@
         value : {}
       },
 
-      //The list of views
-      views : {
+      //The list of pages
+      pages : {
         type : Object,
         value : {}
       },
 
-      //The views routes
+      //The pages routes
       routes : {
         type : Object,
         value : {}
@@ -54,82 +54,19 @@
     attached : function() {
       this.logApi('attached', this.id + ' - ' + this.selected);
       if (!this.id) {
-        throw 'Views' + this.tagName + ' cannot be created without an id!';
+        throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
-      this.fire('px-views-ready');
+      this._initpages();
 
-      this._initViews();
-      //this._initUI();
-      this._initLocation();
-      this._handleRoute();
     },
-
-
-    _initLocation: function () {
+    _initpages: function(){
       var self = this;
-      console.warn('listening for hashchange');
-      if ("onhashchange" in window) {
-        console.warn('The browser supports the hashchange event!');
-        window.addEventListener('hashchange', function (e) {
-          self._handleRoute(e);
-        });
-      }
-    },
-
-    /**
-     * I handle when the route changes
-     * @param e
-     * @private
-     */
-    _handleRoute: function (e) {
-      var self = this, parts = [];
-      parts = location.hash.replace('#/', '').split('/');
-
-      var routeMap = {
-        view: parts[0],
-        deck: parts[1],
-        card: parts[2]
-      };
-
-      console.log(parts, routeMap);
-
-      //Set view/deck/card active
-      for (var route in routeMap) {
-        if (routeMap[route]) {
-          self._setActive(routeMap[route]);
-        }
-      }
-
-
-      //If no card and a deck. set all deck cards to active
-      var selector = '';
-      if (routeMap.deck && !routeMap.card) {
-        selector = 'px-deck#' + routeMap.deck + ' > px-card';
-        console.warn('Set all cards in deck', routeMap.deck, selector);
-
-        Polymer.dom(this).querySelectorAll(selector).forEach(function (el) {
-          el.className = 'active';
-          console.warn('set active', el);
-        });
-      }
-
-      //If a view and no deck or cards, set all to active
-      if (routeMap.view && !routeMap.deck && !routeMap.card) {
-        self._elements.forEach(function (el) {
-          self._setActive(el.id);
-        });
-      }
-
-      console.warn('hashChange', location.hash);
-    },
-
-    _initViews: function(){
-      var self = this;
-      this.logApi('_initViews', this);
-      Polymer.dom(this).querySelectorAll('px-view').forEach(function(view){
+      this.logApi('_initpages', this);
+      Polymer.dom(this).querySelectorAll('px-page').forEach(function(view){
         self._addView(view);
       });
       this.changeView(this.selected);
+      this.fire('px-pages-ready');
     },
 
     //show view
@@ -167,25 +104,19 @@
       return px.mobile.dom(this.id).find('.current');
     },
 
-
     _selectedChanged: function(newVal, oldVal){
-      this.logApi('_selectedChanged');
-      console.log('_selectedChanged', 'from', oldVal, 'to', newVal);
+      this.logApi('_selectedChanged', oldVal + ' => ' + newVal);
 
       //newVal++;
-      if(oldVal){
+      if(oldVal && this.viewList[oldVal]){
         //the previous view
-        if(this.viewList[oldVal]){
-          this.viewList[oldVal].toggleClass('previous');
-        }
+        this.viewList[oldVal].toggleClass('previous');
       }
 
       //set the selected view
-      if(newVal){
-
+      if(newVal && this.viewList[newVal]){
         //set current view
         this._setCurrent(newVal, oldVal);
-
       }
     },
 
@@ -209,25 +140,26 @@
       this.logApi('_addView', {id: view.id, index: index});
     },
 
-
     //Handle clearing all the 'current' classes.
     _clearCurrent: function(){
       this.logApi('_clearCurrent');
-      var _views = Polymer.dom(this).querySelectorAll('px-view');
-      if(_views){
-        _views.forEach(function(view){
+      var _pages = Polymer.dom(this).querySelectorAll('px-page');
+      if(_pages){
+        _pages.forEach(function(view){
           view.removeClass('current');
         });
       }
     }
   };
 
-
-  px.views._setCurrent = function(index, oldIndex){
+  px.pages._setCurrent = function(index, oldIndex){
     this.logApi('_setCurrent', index);
     if(this.viewList[oldIndex]){
+      console.log('removing Current from', this.viewList[oldIndex]);
       this.viewList[oldIndex].removeClass('current');
+      this.viewList[oldIndex].addClass('previous');
     }
+
     if(this.viewList[index]){
       this.viewList[index].removeClass('next');
       this.viewList[index].removeClass('previous');
@@ -236,7 +168,7 @@
     }
   };
 
-  px.views.changeView = function(indexOrId){
+  px.pages.changeView = function(indexOrId){
     this.logApi('changeView', indexOrId);
     this._clearCurrent();
     if(this.viewList[indexOrId]){
@@ -246,7 +178,7 @@
     }
   };
 
-  px.views.nextView = function(){
+  px.pages.nextView = function(){
       var items = this.viewList;
     this.selected++;
   	if(this.selected >= items.length){
@@ -255,14 +187,12 @@
     console.log('next-' + this.selected);
   };
 
-  px.views.prevView = function(){
+  px.pages.prevView = function(){
     var items = this.viewList;
     var index = this.selected;
-
     if(this.selected <= 0){
       this.selected = items.length;
     }
-
     this.selected--;
     if(this.selected >= items.length){
       this.selected = this.selected - items.length;

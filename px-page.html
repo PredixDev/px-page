@@ -11,7 +11,7 @@
 
 
 <!--
-<link rel="stylesheet" href="px-view.css"/>
+<link rel="stylesheet" href="px-page.css"/>
 # Overview
 This provides a wrapper for px-deck and px-card elements.
 
@@ -21,11 +21,11 @@ To use this component in your custom component do the following:
 ```
 <dom-module id="demo-view">
   <template>
-    <px-view id="demo-card-view">
+    <px-page id="demo-card-view">
       <px-card header-text="Sample Card">
         Card content
       <px-card>
-    </px-view>
+    </px-page>
   </template>
 </dom-module>
 <script>
@@ -38,12 +38,12 @@ To use this component in your custom component do the following:
   });
 </script>
 ```
-@element px-view
+@element px-page
 @blurb Element containing basic styling and behaviors (API) for card
 @demo demo.html
 @homepage index.html
 -->
-<dom-module id="px-view">
+<dom-module id="px-page">
   <style>
 
   </style>
@@ -67,7 +67,7 @@ To use this component in your custom component do the following:
 </dom-module>
 <script type="text/javascript">
   Polymer({
-    is : 'px-view',
+    is : 'px-page',
     behaviors : [],
     properties : {
       title : {
@@ -89,6 +89,7 @@ To use this component in your custom component do the following:
       tmpl:{
         type: String,
         notify: true,
+        value: null,
         observer: '_tmplChanged'
       },
 

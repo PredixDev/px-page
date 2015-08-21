@@ -1,11 +1,11 @@
 {
-  "name": "px-view",
+  "name": "px-page",
   "version": "0.0.1",
   "authors": [
     "Jonnie Spratley <jonnie.spratley@ge.com>"
   ],
   "description": "A web component for a view",
-  "main": "px-view.html",
+  "main": "px-page.html",
   "keywords": [
     "px"
   ],

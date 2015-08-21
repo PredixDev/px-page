@@ -5,11 +5,11 @@
 <link rel="import" href="../pg-card/pg-card.html"/>
 -->
 <link rel="import" href="../px-mobile/px-mobile-behavior.html"/>
-<link rel="import" href="px-views-behavior.html"/>
+<link rel="import" href="px-pages-behavior.html"/>
 <!--
-<link rel="stylesheet" href="px-view.css"/>
+<link rel="stylesheet" href="px-page.css"/>
 # Overview
-This provides a wrapper for px-view elements.
+This provides a wrapper for px-page elements.
 
 ## Usage
 To use this component in your custom component do the following:
@@ -17,11 +17,11 @@ To use this component in your custom component do the following:
 ```
 <dom-module id="demo-view">
   <template>
-    <px-views id="app-views">
-      <px-view id="demo-card-view">
+    <px-pages id="app-views">
+      <px-page id="demo-card-view">
         [View Content]
-      <px-view>
-    </px-views>
+      <px-page>
+    </px-pages>
   </template>
 </dom-module>
 <script>
@@ -34,16 +34,22 @@ To use this component in your custom component do the following:
   });
 </script>
 ```
-@element px-views
+@element px-pages
 @blurb Element containing basic styling and behaviors (API) for card
 @demo demo.html
 @homepage index.html
 -->
-<dom-module id="px-views">
+<dom-module id="px-pages">
   <style>
 
+  ::content px-page {
+    -webkit-transition: all 0.35s ease-out;
+    transition: all 0.35s ease-out;
+  }
+
   @media only screen and (min-width: 768px) {
-    ::content article, ::content px-view {
+    ::content article,
+    ::content px-page {
       -webkit-transition: all 0.25s ease-out;
       transition: all 0.25s ease-out;
     }
@@ -59,10 +65,13 @@ To use this component in your custom component do the following:
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
-  ::content px-view:first-child{
+  ::content px-page:first-child{
 
   }
-  ::content px-view {
+  ::content px-page:not(.current){
+
+  }
+  ::content px-page {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -109,8 +118,8 @@ To use this component in your custom component do the following:
 </dom-module>
 <script type="text/javascript">
   Polymer({
-    is : 'px-views',
-    behaviors : [px.views],
+    is : 'px-pages',
+    behaviors : [px.pages],
     _initUI : function() {
       var self = this;
 
