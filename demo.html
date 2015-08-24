@@ -37,10 +37,12 @@
   </head>
   <body>
     <div class="navbar">
-      <button type="button" onclick="appPages.prevPage()">Prev</button>
-      <button type="button" onclick="appPages.nextPage()">Next</button>
+      <button type="button" onclick="appPages.prev()">Prev</button>
+      <button type="button" onclick="appPages.next()">Next</button>
     </div>
-  <px-pages id="appPages" main="true" selected="0" class="et-wrapper">
+
+
+  <px-pages id="appPages" main="true" selected="0" class="et-wrapper" in="rotateSlideIn" out="rotateSlideOut">
     <px-page id="Page0" title="Main Page" route="/Page0" class="et-page">
       <div class="demo-Page">
         Page 0
@@ -49,31 +51,8 @@
     <px-page id="Page1" title="Page" route="/Page1">
       <div class="demo-Page">
         Page 1
-        <button type="button" onclick="Page1Pages.prevPage()">Prev</button>
-        <button type="button" onclick="Page1Pages.nextPage()">Next</button>
-
-
-        <div class="et-wrapper et-rotate" et-in="rotateSlideIn" et-out="rotateSlideOut">
-  <div class="et-page">
-    <h2>Page 1</h2>
-  </div>
-  <div class="et-page">
-    <h2>Page 2</h2>
-  </div>
-</div>
-
-        <px-pages id="Page1Pages" class="et-wrapper">
-          <px-page id="page1-0" class="et-page">
-            SupPage 1-0
-          </px-page>
-          <px-page id="page1-1" class="et-page">
-            SupPage 1-1
-          </px-page>
-          <px-page id="page1-2" class="et-page">
-            SupPage 1-2
-          </px-page>
-        </px-pages>
-
+        <button type="button" onclick="Page1Pages.prev()">Prev</button>
+        <button type="button" onclick="Page1Pages.next()">Next</button>
 
       </div>
     </px-page>

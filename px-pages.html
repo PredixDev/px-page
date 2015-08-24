@@ -7,11 +7,8 @@
 <link rel="import" href="../px-mobile/px-mobile-behavior.html"/>
 <link rel="import" href="px-pages-behavior.html"/>
 
-<link rel="stylesheet" href="/styles/elementTransitions.css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="/scripts/elementTransitions.min.js">
+<link rel="stylesheet" href="elementTransitions.css"/>
 
-</script>
 <!--
 <link rel="stylesheet" href="px-page.css"/>
 
@@ -78,6 +75,7 @@ To use this component in your custom component do the following:
   ::content px-page:not(.current){
 
   }
+  /*
   ::content px-page {
     position: absolute;
     height: 100%;
@@ -86,19 +84,16 @@ To use this component in your custom component do the following:
   ::content .hidden{
     display:none;
   }
-  ::content .current{
+  ::content px-page.current{
     top: 0%;
-    left:0%;
   }
-  ::content .previous{
+  ::content px-page.previous{
     bottom: -100%;
   }
-  ::content .next{
+  ::content px-page.next{
     top: -100%;
   }
-  /* ==============================
-   Article navigation states
-   =========================== */
+
   ::content .current {
     opacity: 1;
     visibility: visible;
@@ -116,7 +111,7 @@ To use this component in your custom component do the following:
     transform: translate3d(-100%, 0, 0);
     opacity: 1;
     visibility: visible;
-  }
+  }*/
   </style>
   <template>
     <content></content>
@@ -125,7 +120,7 @@ To use this component in your custom component do the following:
 <script type="text/javascript">
   Polymer({
     is : 'px-pages',
-    behaviors : [ px.views]
+    behaviors : [ px.pages]
   });
 
 </script>

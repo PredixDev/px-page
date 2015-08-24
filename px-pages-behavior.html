@@ -15,7 +15,7 @@
         type: Number,
         reflectToAttribute: true,
         notify: true,
-        observer: '_selectedChanged',
+        observer: '_setCurrent',
         value: 0
       },
 
@@ -27,18 +27,29 @@
 
       //The list of pages
       pages : {
-        type : Object,
-        value : {}
+        type : Array
       },
 
       PageList : {
         type : Array
       },
 
+      selectedIndex:{
+        type: Number
+      },
       //The pages routes
       routes : {
         type : Object,
         value : {}
+      },
+
+      //The in effect
+      in: {
+        type: String
+      },
+      //The out effect
+      out: {
+        type: String
       }
     },
 
@@ -61,15 +72,15 @@
         throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
       this._initpages();
-
     },
     _initpages: function(){
       var self = this;
       this.logApi('_initpages', this);
-      Polymer.dom(this).querySelectorAll('px-page').forEach(function(Page){
+      this.pages = Polymer.dom(this).querySelectorAll('px-pages > px-page');
+      this.pages.forEach(function(Page){
         self._addPage(Page);
       });
-      this.changePage(this.selected);
+      this.gotoIndex(this.selected);
       this.fire('px-pages-ready');
     },
 
@@ -105,45 +116,24 @@
       console.warn('INFO', 'update Page', this.id);
     },
 
-    getCurrentPage: function(){
-      console.warn('INFO', 'current Page', this.id);
-      return px.mobile.dom(this.id).find('.current');
-    },
-
-    _selectedChanged: function(newVal, oldVal){
-      this.logApi('_selectedChanged', oldVal + ' => ' + newVal);
-
-      //newVal++;
-      if(oldVal && this.PageList[oldVal]){
-        //the previous Page
-        this.PageList[oldVal].toggleClass('previous');
-      }
-
-      //set the selected Page
-      if(newVal && this.PageList[newVal]){
-        //set current Page
-        this._setCurrent(newVal, oldVal);
-      }
-    },
-
     //Handle adding a Page to the map
     _addPage: function(Page){
-      var index = this.PageList.length;
 
       //add the index to the el
-      Page.attr('index', index.toString());
-
-      //add next class to element
-      Page.addClass('next');
+      Page.attr('index', this.PageList.length.toString());
 
       //push to Page list
       this.PageList.push(Page);
+
+      //add next class to element
+      Page.addClass('et-page');
+      Page.addClass('next');
 
       //add to Page map
       this.PageMap[Page.id] = Page;
 
       //log
-      this.logApi('_addPage', {id: Page.id, index: index});
+      this.logApi('_addPage', Page);
     },
 
     //Handle clearing all the 'current' classes.
@@ -157,6 +147,8 @@
       }
     }
   };
+
+
 
   px.pages._setCurrent = function(index, oldIndex){
     this.logApi('_setCurrent', index);
@@ -182,31 +174,52 @@
     if(this.PageList[indexOrId]){
       this._setCurrent(indexOrId);
     } else if(this.PageMap[indexOrId]){
-      this._setCurrent(this.PageList.indexOf(this.PageMap[indexOrId]) + 1);
+      this._setCurrent(this.PageList.indexOf(this.PageMap[indexOrId]));
     }
   };
 
-  px.pages.nextPage = function(){
-      var items = this.PageList;
-    this.selected++;
-  	if(this.selected >= items.length){
-  		this.selected = this.selected - items.length;
-  	}
-    console.log('next-' + this.selected);
-  };
 
-  px.pages.prevPage = function(){
-    var items = this.PageList;
-    var index = this.selected;
-    this.selected--;
-    if(this.selected >= items.length){
-      this.selected = items.length;
-    }
-
-    if(this.selected >= items.length){
-      this.selected = this.selected - items.length - 1;
-    }
-    console.log('prev-' + this.selected);
-  };
-
+  // TODO: New IMplmenation
+    px.pages.currentIndex = 0;
+    px.pages.gotoPage = function(id){
+      var index = 0;
+      if(this.PageMap[id]){
+        index = this.PageList.indexOf(this.PageMap[id]);
+      }
+      this.selected = index;
+      console.warn('gotoPage', id, index);
+    };
+    px.pages.gotoIndex = function(index){
+      console.warn('gotoIndex', index);
+      this.selected = index;
+    };
+    px.pages.current = function(){
+      this.gotoIndex(this.selected);
+      console.warn('current');
+    };
+    px.pages.next = function(){
+      if(this.selected >= this.PageList.length -1){
+        this.current();
+      } else {
+        this.gotoIndex(this.selected + 1);
+      }
+    };
+    px.pages.prev = function(){
+      if(this.selected <= 0){
+        this.current();
+      } else {
+        this.gotoIndex(this.selected -1);
+      }
+    };
+    px.pages.removeTransition = function(index) {
+      var page = this.PageList[index];
+      page.content.css('transition', 'none');
+    };
+    px.pages.doTransition = function(index) {
+      var page = this.PageList[index];
+      var position = page.position();
+       page
+        .css('transition', 'all 400ms ease')
+        .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
+    };
 </script>
