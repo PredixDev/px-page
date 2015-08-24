@@ -15,6 +15,24 @@
 # Overview
 This provides a wrapper for px-deck and px-card elements.
 
+### Page Data Properties
+page.name	Contains string value of data-page attribute
+page.url	Contains string URL of just loaded page
+page.query	object with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue" then page.query will contain:
+{
+  id: '10',
+  count: '20',
+  color: 'blue'
+}
+page.view	object. View instance that contains this page (if this View was initialized)
+page.container	Link to Page HTMLElement
+page.from	string - direction of where Page comes from. It will be "right" if you load new page, and "left" - if page comes after you click on "Back" button
+page.navbarInnerContainer	Link to related "navbar-inner" HTMLElement. Only for Dynamic Navbars
+page.swipeBack	boolean. Equals to true if page animation was initiated by swipe back. Available only within onPageBefore/AfterAnimation callbacks/events.
+page.context	object. Template7 context that was passed for this page when using Template7 pages
+page.fromPage	object. Page Data object of the previously active page
+
+
 ## Usage
 To use this component in your custom component do the following:
 
@@ -45,30 +63,22 @@ To use this component in your custom component do the following:
 -->
 <dom-module id="px-page">
   <style>
+  :host{
+    display: block;
+    height: 100%;
 
+  }
   </style>
   <template>
-    <article class="view">
-      <header class="text--center" hidden="{{!title}}">
-        <button class="btn btn--tertiary float--left" hidden="{{!backText}}" on-click="backAction">{{backText}}</button>
-        <span class="epsilon">{{title}}</span>
-        <!--
-        <button class="btn float - -right" hidden="{{!actionBtn}}">
-          Action
-        </button>-->
-      </header>
-      <nav class="nav">
-      </nav>
-      <section class="content">
+
         <content></content>
-      </section>
-    </article>
+
   </template>
 </dom-module>
 <script type="text/javascript">
   Polymer({
     is : 'px-page',
-    behaviors : [],
+    behaviors : [px.views],
     properties : {
       title : {
         type : String,
@@ -86,7 +96,7 @@ To use this component in your custom component do the following:
       },
 
       //Path to remote view that will be loaded
-      tmpl:{
+      href:{
         type: String,
         notify: true,
         value: null,
@@ -99,8 +109,7 @@ To use this component in your custom component do the following:
       },
 
       context : {
-        type : Object,
-        value : {}
+        type : Object
       }
     },
 
@@ -112,7 +121,6 @@ To use this component in your custom component do the following:
     },
     ready : function() {
       this.logApi('ready', this.id);
-      console.warn('LOAD HTML', this.tmpl);
     },
     show: function(){
       console.warn('INFO', 'show view', this.id);
@@ -140,11 +148,27 @@ To use this component in your custom component do the following:
     contextChanged : function(newContext, oldContext) {
       console.warn('contextChanged', newContext, oldContext);
     },
+
+    //I handle loading a page from a url
     _tmplChanged: function(newVal, oldVal){
-      console.warn('Load remote html', newVal);
+      var _this = this, html = '';
       if(newVal){
-        console.warn('Load remote html', newVal);
+      	console.warn(this.id, 'Load remote html', newVal);
+
+
+        this.importHref(newVal, function(e) {
+        	html = e.target.import.body.innerHTML;
+        	_this.logApi('inject html', _this.id);
+          console.warn('inject px-view html', _this.id);
+          _this.html(html);
+        }, function(e) {
+            // loading error
+            console.error('Error loading page', e);
+        });
       }
+    },
+    showMenu:function(){
+      px.mobile.dom('px-app').toggleClass('show-menu');
     }
   });
 

@@ -6,45 +6,99 @@
     <link rel="import" href="../polymer/polymer.html">
 
     <!-- TODO: pxm components -->
-    <link rel="import" href="px-views.html">
-    <link rel="import" href="px-view.html">
+    <link rel="import" href="px-pages.html">
+    <link rel="import" href="px-page.html">
 
-    <style media="screen">
-      body {
-        padding: 0;
-        margin: 0;
+    <style >
+      html, body {
+
+        height: 100%;
       }
+      .demo-Page{
+        padding: 25px;
+        height: 350px;
+        text-align: center;
+        font-size: 4em;
+        color: #fff;
+
+      }
+      .demo-Page:nth-child(odd){
+        background: crimson;
+      }
+      .demo-Page px-page{
+        background: blue;
+      }
+      .navbar{
+        padding: 10px;
+        text-align: center;
+      }
+
     </style>
   </head>
   <body>
-
-  <px-views id="app-views">
-    <px-view id="sandbox-view" title="Main View">
-      <px-deck id="deck-1">
-        <px-card id="card-1" header-text="What is a Card?">
-         A Card is an editable container that resides within the content area of your screen. For example, there are three sections on this page--each section is a card.
-       </px-card>
-        <px-card id="card-2" header-text="WHAT IS A DECK?">
-        A Deck is an ordered series of cards set by you, the developer.
-        </px-card>
-      </px-deck>
-    </px-view>
-
-    <px-view id="detail-view" title="Details View">
-      <px-deck id="deck-2">
-        <px-card id="card-3" header-text="deck-2 - card 3">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec non sodales ante. Aenean et quam ac orci tincidunt ornare eu sit amet nibh. Donec porttitor sapien turpis, sed interdum turpis eleifend ut. Integer orci mi, volutpat gravida efficitur semper, consequat vel nulla. Suspendisse pulvinar ante justo, eget fringilla velit laoreet a. Ut gravida nulla sit amet diam interdum, ac consectetur mi fringilla. Ut aliquam feugiat facilisis. Aliquam gravida dui quis ipsum pharetra, et dignissim felis iaculis. Suspendisse at orci ut mauris sagittis condimentum nec sed est.
-        </px-card>
-        <px-card id="card-4" header-text="deck-2 - card 4">
-          deck-2 - card 4
-        </px-card>
-      </px-deck>
-    </px-view>
-
-</px-views>
+    <div class="navbar">
+      <button type="button" onclick="appPages.prevPage()">Prev</button>
+      <button type="button" onclick="appPages.nextPage()">Next</button>
+    </div>
+  <px-pages id="appPages" main="true" selected="0" class="et-wrapper">
+    <px-page id="Page0" title="Main Page" route="/Page0" class="et-page">
+      <div class="demo-Page">
+        Page 0
+      </div>
+    </px-page>
+    <px-page id="Page1" title="Page" route="/Page1">
+      <div class="demo-Page">
+        Page 1
+        <button type="button" onclick="Page1Pages.prevPage()">Prev</button>
+        <button type="button" onclick="Page1Pages.nextPage()">Next</button>
 
 
+        <div class="et-wrapper et-rotate" et-in="rotateSlideIn" et-out="rotateSlideOut">
+  <div class="et-page">
+    <h2>Page 1</h2>
+  </div>
+  <div class="et-page">
+    <h2>Page 2</h2>
+  </div>
+</div>
 
+        <px-pages id="Page1Pages" class="et-wrapper">
+          <px-page id="page1-0" class="et-page">
+            SupPage 1-0
+          </px-page>
+          <px-page id="page1-1" class="et-page">
+            SupPage 1-1
+          </px-page>
+          <px-page id="page1-2" class="et-page">
+            SupPage 1-2
+          </px-page>
+        </px-pages>
+
+
+      </div>
+    </px-page>
+    <px-page id="Page2" title="Page" route="/Page2">
+      <div class="demo-Page">
+        Page 2
+      </div>
+    </px-page>
+    <px-page id="Page3" title="Page" route="/Page3">
+      <div class="demo-Page">
+        Page 3
+      </div>
+    </px-page>
+    <px-page id="Page4" title="Page" route="/Page4">
+      <div class="demo-Page">
+        Page 4
+      </div>
+    </px-page>
+    <px-page id="Page5" title="Page" route="/Page5">
+      <div class="demo-Page">
+        Page 5
+      </div>
+    </px-page>
+
+  </px-pages>
 
 
   </body>

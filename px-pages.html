@@ -6,8 +6,15 @@
 -->
 <link rel="import" href="../px-mobile/px-mobile-behavior.html"/>
 <link rel="import" href="px-pages-behavior.html"/>
+
+<link rel="stylesheet" href="/styles/elementTransitions.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="/scripts/elementTransitions.min.js">
+
+</script>
 <!--
 <link rel="stylesheet" href="px-page.css"/>
+
 # Overview
 This provides a wrapper for px-page elements.
 
@@ -42,14 +49,13 @@ To use this component in your custom component do the following:
 <dom-module id="px-pages">
   <style>
 
-  ::content px-page {
-    -webkit-transition: all 0.35s ease-out;
-    transition: all 0.35s ease-out;
+  ::content {
+    -webkit-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
   }
 
   @media only screen and (min-width: 768px) {
-    ::content article,
-    ::content px-page {
+    ::content {
       -webkit-transition: all 0.25s ease-out;
       transition: all 0.25s ease-out;
     }
@@ -57,10 +63,11 @@ To use this component in your custom component do the following:
   :host{
     display: block;
     position: relative;
+    min-height: 300px;
     height: 100%;
     width: 100%;
-    -webkit-transition: all 0.15s;
-    transition: all 0.15s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -80,13 +87,14 @@ To use this component in your custom component do the following:
     display:none;
   }
   ::content .current{
-    left: 0%;
+    top: 0%;
+    left:0%;
   }
   ::content .previous{
-    left: -100%;
+    bottom: -100%;
   }
   ::content .next{
-    right: -100%;
+    top: -100%;
   }
   /* ==============================
    Article navigation states
@@ -111,29 +119,13 @@ To use this component in your custom component do the following:
   }
   </style>
   <template>
-    <div class="views">
-      <content></content>
-    </div>
+    <content></content>
   </template>
 </dom-module>
 <script type="text/javascript">
   Polymer({
     is : 'px-pages',
-    behaviors : [px.pages],
-    _initUI : function() {
-      var self = this;
-
-      self.cards = Polymer.dom(this).querySelectorAll('px-card');
-      self.decks = Polymer.dom(this).querySelectorAll('px-deck');
-
-      self._elements = self.cards.concat(self.decks);
-      self._cardMap = {};
-      self.cards.forEach(function(el) {
-        console.log('adding', el.id, 'to _cardMap');
-        self._cardMap[el.id] = el;
-      });
-      console.log(self);
-    }
+    behaviors : [ px.views]
   });
 
 </script>

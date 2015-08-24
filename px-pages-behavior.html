@@ -7,10 +7,10 @@
       // declare properties for the element's public API
       title : {
         type : String,
-        value : 'Predix Mobile View'
+        value : 'Predix Mobile Page'
       },
 
-      //The default selected view
+      //The default selected Page
       selected: {
         type: Number,
         reflectToAttribute: true,
@@ -19,7 +19,7 @@
         value: 0
       },
 
-      //The current context of the view.
+      //The current context of the Page.
       context : {
         type : Object,
         value : {}
@@ -29,6 +29,10 @@
       pages : {
         type : Object,
         value : {}
+      },
+
+      PageList : {
+        type : Array
       },
 
       //The pages routes
@@ -42,13 +46,13 @@
       var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:blue'}});
       px.mobile.utils.addMixin(logger, this);
 
-      this.logApi('created', this.id);
+      this.logApi(this.id, 'created');
 
-      this.viewMap = {};
-      this.viewList = [];
+      this.PageMap = {};
+      this.PageList = [];
     },
     ready : function() {
-      this.logApi('ready', this.id);
+      this.logApi(this.id, 'ready');
     },
 
     attached : function() {
@@ -62,45 +66,47 @@
     _initpages: function(){
       var self = this;
       this.logApi('_initpages', this);
-      Polymer.dom(this).querySelectorAll('px-page').forEach(function(view){
-        self._addView(view);
+      Polymer.dom(this).querySelectorAll('px-page').forEach(function(Page){
+        self._addPage(Page);
       });
-      this.changeView(this.selected);
+      this.changePage(this.selected);
       this.fire('px-pages-ready');
     },
 
-    //show view
-    showView: function(index){
-      console.warn('INFO', 'show view', this.id);
+    //show Page
+    showPage: function(index){
+      console.warn('INFO', 'show Page', this.id);
 
-      this.viewList[this.selected].toggleClass('current');
-      this.viewList[this.selected].child()[0].toggleClass('current');
-      this.viewList[this.selected].toggleClass('previous');
-      this.viewList[this.selected].child()[0].toggleClass('previous');
-      this.viewList[this.selected].addClass('hidden');
-      this.viewList[this.selected].child()[0].addClass('hidden');
+      this.PageList[this.selected].toggleClass('current');
+      this.PageList[this.selected].child()[0].toggleClass('current');
+      this.PageList[this.selected].child()[0].toggleClass('et-page-current');
+      this.PageList[this.selected].toggleClass('previous');
+      this.PageList[this.selected].child()[0].toggleClass('previous');
+      this.PageList[this.selected].addClass('hidden');
+      this.PageList[this.selected].child()[0].addClass('hidden');
 
       this.selected = index;
-      this.viewList[this.selected].removeClass('hidden');
-      this.viewList[this.selected].child()[0].removeClass('hidden');
-      this.viewList[this.selected].toggleClass('current');
-      this.viewList[this.selected].child()[0].toggleClass('current');
+      this.PageList[this.selected].removeClass('hidden');
+      this.PageList[this.selected].child()[0].removeClass('hidden');
+      this.PageList[this.selected].toggleClass('current');
+      this.PageList[this.selected].child()[0].toggleClass('current');
+      this.PageList[this.selected].child()[0].toggleClass('et-page-current');
 
     },
 
-    //hide view
-    hideView: function(index){
-      console.warn('INFO', 'hide view', this.id);
+    //hide Page
+    hidePage: function(index){
+      console.warn('INFO', 'hide Page', this.id);
       this.toggleClass('hidden', true, this);
     },
 
-    //update view
-    updateView: function(){
-      console.warn('INFO', 'update view', this.id);
+    //update Page
+    updatePage: function(){
+      console.warn('INFO', 'update Page', this.id);
     },
 
-    getCurrentView: function(){
-      console.warn('INFO', 'current view', this.id);
+    getCurrentPage: function(){
+      console.warn('INFO', 'current Page', this.id);
       return px.mobile.dom(this.id).find('.current');
     },
 
@@ -108,36 +114,36 @@
       this.logApi('_selectedChanged', oldVal + ' => ' + newVal);
 
       //newVal++;
-      if(oldVal && this.viewList[oldVal]){
-        //the previous view
-        this.viewList[oldVal].toggleClass('previous');
+      if(oldVal && this.PageList[oldVal]){
+        //the previous Page
+        this.PageList[oldVal].toggleClass('previous');
       }
 
-      //set the selected view
-      if(newVal && this.viewList[newVal]){
-        //set current view
+      //set the selected Page
+      if(newVal && this.PageList[newVal]){
+        //set current Page
         this._setCurrent(newVal, oldVal);
       }
     },
 
-    //Handle adding a view to the map
-    _addView: function(view){
-      var index = this.viewList.length;
+    //Handle adding a Page to the map
+    _addPage: function(Page){
+      var index = this.PageList.length;
 
       //add the index to the el
-      view.attr('index', index.toString());
+      Page.attr('index', index.toString());
 
       //add next class to element
-      view.addClass('next');
+      Page.addClass('next');
 
-      //push to view list
-      this.viewList.push(view);
+      //push to Page list
+      this.PageList.push(Page);
 
-      //add to view map
-      this.viewMap[view.id] = view;
+      //add to Page map
+      this.PageMap[Page.id] = Page;
 
       //log
-      this.logApi('_addView', {id: view.id, index: index});
+      this.logApi('_addPage', {id: Page.id, index: index});
     },
 
     //Handle clearing all the 'current' classes.
@@ -145,8 +151,8 @@
       this.logApi('_clearCurrent');
       var _pages = Polymer.dom(this).querySelectorAll('px-page');
       if(_pages){
-        _pages.forEach(function(view){
-          view.removeClass('current');
+        _pages.forEach(function(Page){
+          Page.removeClass('current');
         });
       }
     }
@@ -154,32 +160,34 @@
 
   px.pages._setCurrent = function(index, oldIndex){
     this.logApi('_setCurrent', index);
-    if(this.viewList[oldIndex]){
-      console.log('removing Current from', this.viewList[oldIndex]);
-      this.viewList[oldIndex].removeClass('current');
-      this.viewList[oldIndex].addClass('previous');
+    if(this.PageList[oldIndex]){
+      console.log('removing Current from', this.PageList[oldIndex]);
+      this.PageList[oldIndex].removeClass('current');
+      this.PageList[oldIndex].removeClass('et-page-current');
+      this.PageList[oldIndex].addClass('previous');
     }
 
-    if(this.viewList[index]){
-      this.viewList[index].removeClass('next');
-      this.viewList[index].removeClass('previous');
-      this.viewList[index].removeClass('hidden');
-      this.viewList[index].addClass('current');
+    if(this.PageList[index]){
+      this.PageList[index].removeClass('next');
+      this.PageList[index].removeClass('previous');
+      this.PageList[index].removeClass('hidden');
+      this.PageList[index].addClass('current');
+      this.PageList[index].addClass('et-page-current');
     }
   };
 
-  px.pages.changeView = function(indexOrId){
-    this.logApi('changeView', indexOrId);
+  px.pages.changePage = function(indexOrId){
+    this.logApi('changePage', indexOrId);
     this._clearCurrent();
-    if(this.viewList[indexOrId]){
+    if(this.PageList[indexOrId]){
       this._setCurrent(indexOrId);
-    } else if(this.viewMap[indexOrId]){
-      this._setCurrent(this.viewList.indexOf(this.viewMap[indexOrId]) + 1);
+    } else if(this.PageMap[indexOrId]){
+      this._setCurrent(this.PageList.indexOf(this.PageMap[indexOrId]) + 1);
     }
   };
 
-  px.pages.nextView = function(){
-      var items = this.viewList;
+  px.pages.nextPage = function(){
+      var items = this.PageList;
     this.selected++;
   	if(this.selected >= items.length){
   		this.selected = this.selected - items.length;
@@ -187,15 +195,16 @@
     console.log('next-' + this.selected);
   };
 
-  px.pages.prevView = function(){
-    var items = this.viewList;
+  px.pages.prevPage = function(){
+    var items = this.PageList;
     var index = this.selected;
-    if(this.selected <= 0){
-      this.selected = items.length;
-    }
     this.selected--;
     if(this.selected >= items.length){
-      this.selected = this.selected - items.length;
+      this.selected = items.length;
+    }
+
+    if(this.selected >= items.length){
+      this.selected = this.selected - items.length - 1;
     }
     console.log('prev-' + this.selected);
   };
