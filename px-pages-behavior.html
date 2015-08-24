@@ -88,19 +88,12 @@
     showPage: function(index){
       console.warn('INFO', 'show Page', this.id);
 
-      this.PageList[this.selected].toggleClass('current');
-      this.PageList[this.selected].child()[0].toggleClass('current');
-      this.PageList[this.selected].child()[0].toggleClass('et-page-current');
-      this.PageList[this.selected].toggleClass('previous');
-      this.PageList[this.selected].child()[0].toggleClass('previous');
-      this.PageList[this.selected].addClass('hidden');
-      this.PageList[this.selected].child()[0].addClass('hidden');
+
+      this.PageList[this.selected].toggleClass('et-page-current');
+
 
       this.selected = index;
-      this.PageList[this.selected].removeClass('hidden');
-      this.PageList[this.selected].child()[0].removeClass('hidden');
-      this.PageList[this.selected].toggleClass('current');
-      this.PageList[this.selected].child()[0].toggleClass('current');
+
       this.PageList[this.selected].child()[0].toggleClass('et-page-current');
 
     },
@@ -127,7 +120,7 @@
 
       //add next class to element
       Page.addClass('et-page');
-      Page.addClass('next');
+    ///  Page.addClass('next');
 
       //add to Page map
       this.PageMap[Page.id] = Page;
@@ -157,16 +150,13 @@
 
     if(prevPage){
       console.log('removing Current from', prevPage);
-      prevPage.removeClass('current');
+
       prevPage.removeClass('et-page-current');
-      prevPage.addClass('previous');
+
     }
 
     if(currPage){
-      currPage.removeClass('next');
-      currPage.removeClass('previous');
-      currPage.removeClass('hidden');
-      currPage.addClass('current');
+
       currPage.addClass('et-page-current');
     }
   };
