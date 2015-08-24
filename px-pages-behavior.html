@@ -76,10 +76,10 @@
     _initpages: function(){
       var self = this;
       this.logApi('_initpages', this);
-      this.pages = Polymer.dom(this).querySelectorAll('px-pages > px-page');
-      this.pages.forEach(function(Page){
-        self._addPage(Page);
-      });
+      var len = this.children.length;
+      for (var i = 0; i < len; i++) {
+        self._addPage(this.children[i]);
+      }
       this.gotoIndex(this.selected);
       this.fire('px-pages-ready');
     },
@@ -152,19 +152,22 @@
 
   px.pages._setCurrent = function(index, oldIndex){
     this.logApi('_setCurrent', index);
-    if(this.PageList[oldIndex]){
-      console.log('removing Current from', this.PageList[oldIndex]);
-      this.PageList[oldIndex].removeClass('current');
-      this.PageList[oldIndex].removeClass('et-page-current');
-      this.PageList[oldIndex].addClass('previous');
+    var prevPage = this.children[oldIndex];
+    var currPage = this.children[index];
+
+    if(prevPage){
+      console.log('removing Current from', prevPage);
+      prevPage.removeClass('current');
+      prevPage.removeClass('et-page-current');
+      prevPage.addClass('previous');
     }
 
-    if(this.PageList[index]){
-      this.PageList[index].removeClass('next');
-      this.PageList[index].removeClass('previous');
-      this.PageList[index].removeClass('hidden');
-      this.PageList[index].addClass('current');
-      this.PageList[index].addClass('et-page-current');
+    if(currPage){
+      currPage.removeClass('next');
+      currPage.removeClass('previous');
+      currPage.removeClass('hidden');
+      currPage.addClass('current');
+      currPage.addClass('et-page-current');
     }
   };
 
