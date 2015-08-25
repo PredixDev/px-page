@@ -47,9 +47,16 @@
       in: {
         type: String
       },
+
       //The out effect
       out: {
         type: String
+      },
+
+      //Loop pages once end is reached.
+      loop: {
+        type: Boolean,
+        value: true
       }
     },
 
@@ -72,6 +79,8 @@
         throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
       this._initpages();
+      this.gotoIndex(this.selected);
+      this.addClass('et-wrapper');
     },
     _initpages: function(){
       var self = this;
@@ -80,22 +89,15 @@
       for (var i = 0; i < len; i++) {
         self._addPage(this.children[i]);
       }
-      this.gotoIndex(this.selected);
       this.fire('px-pages-ready');
     },
 
     //show Page
     showPage: function(index){
       console.warn('INFO', 'show Page', this.id);
-
-
       this.PageList[this.selected].toggleClass('et-page-current');
-
-
       this.selected = index;
-
       this.PageList[this.selected].child()[0].toggleClass('et-page-current');
-
     },
 
     //hide Page
@@ -120,7 +122,7 @@
 
       //add next class to element
       Page.addClass('et-page');
-    ///  Page.addClass('next');
+      Page.addClass('next');
 
       //add to Page map
       this.PageMap[Page.id] = Page;
@@ -142,7 +144,6 @@
   };
 
 
-
   px.pages._setCurrent = function(index, oldIndex){
     this.logApi('_setCurrent', index);
     var prevPage = this.children[oldIndex];
@@ -150,16 +151,16 @@
 
     if(prevPage){
       console.log('removing Current from', prevPage);
-
       prevPage.removeClass('et-page-current');
-
+      prevPage.addClass('previous');
     }
 
     if(currPage){
-
+      currPage.removeClass('next');
       currPage.addClass('et-page-current');
     }
   };
+
 
   px.pages.changePage = function(indexOrId){
     this.logApi('changePage', indexOrId);
@@ -174,6 +175,29 @@
 
   // TODO: New IMplmenation
     px.pages.currentIndex = 0;
+    px.pages.reset = function(reverse){
+      var _pages = this.children;
+      var len = this.children.length;
+      for (var i = 0; i < len; i++) {
+        this.children[i].removeClass('current');
+
+        if(reverse){
+          this.children[i].addClass('previous');
+          this.children[i].removeClass('next');
+        } else {
+          this.children[i].addClass('next');
+          this.children[i].removeClass('previous');
+        }
+      }
+      this.children[this.selected].removeClass('next');
+      if(reverse){
+        this.selected = this.PageList.length - 1;
+      } else {
+        this.selected = this.selected - (this.PageList.length - 1);
+      }
+
+      this.current();
+    };
     px.pages.gotoPage = function(id){
       var index = 0;
       if(this.PageMap[id]){
@@ -185,6 +209,8 @@
     px.pages.gotoIndex = function(index){
       console.warn('gotoIndex', index);
       this.selected = index;
+      this.children[index].removeClass('previous');
+      this.children[index].removeClass('next');
     };
     px.pages.current = function(){
       this.gotoIndex(this.selected);
@@ -192,14 +218,22 @@
     };
     px.pages.next = function(){
       if(this.selected >= this.PageList.length -1){
-        this.current();
+        if(this.loop){
+            this.reset();
+        } else {
+          this.current();
+        }
       } else {
         this.gotoIndex(this.selected + 1);
       }
     };
     px.pages.prev = function(){
       if(this.selected <= 0){
-        this.current();
+        if(this.loop){
+          this.reset(true);
+        } else {
+          this.current();
+        }
       } else {
         this.gotoIndex(this.selected -1);
       }
