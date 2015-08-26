@@ -57,32 +57,28 @@ To use this component in your custom component do the following:
   }
 
   ::content px-page {
-    position: absolute;
-    height: 100%;
-    width: 100%;
     -webkit-transition: all 0.5s ease-out;
     transition: all 0.5s ease-out;
   }
 
   ::content px-page.et-page-current{
-
-  }
-
-  ::content px-page.current {
     opacity: 1;
     visibility: visible;
-
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
   }
+
+
   ::content px-page.next {
-    -webkit-transform: translate(110%, 0);
-    transform: translate(110%, 0);
-    opacity: 1;
+    -webkit-transform: translate(150%, 0);
+    transform: translate(150%, 0);
+    opacity: 0;
     visibility: visible;
   }
   ::content px-page.previous {
-    -webkit-transform: translate(-110%, 0);
-    transform: translate(-110%, 0);
-    opacity: 1;
+    -webkit-transform: translate(-150%, 0);
+    transform: translate(-150%, 0);
+    opacity: 0;
     visibility: visible;
   }
   </style>
