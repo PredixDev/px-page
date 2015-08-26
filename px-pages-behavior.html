@@ -198,6 +198,14 @@
 
       this.current();
     };
+
+    px.pages.goto = function(indexOrId){
+      if(this.PageMap[indexOrId]){
+        this.gotoPage(indexOrId);
+      } else if(this.PageList[indexOrId]){
+        this.gotoIndex(indexOrId);
+      }
+    };
     px.pages.gotoPage = function(id){
       var index = 0;
       if(this.PageMap[id]){
@@ -206,6 +214,7 @@
       this.selected = index;
       console.warn('gotoPage', id, index);
     };
+
     px.pages.gotoIndex = function(index){
       console.warn('gotoIndex', index);
       this.selected = index;
