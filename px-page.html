@@ -64,8 +64,12 @@ To use this component in your custom component do the following:
   <style>
   :host{
     display: block;
-    height: 100%;
-
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 80vh;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    -webkit-overflow-scrolling: touch;
   }
   </style>
   <template>
