@@ -52,13 +52,10 @@ To use this component in your custom component do the following:
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
     -webkit-overflow-scrolling: touch;
-  }
-  ::content {
     -webkit-transition: all 0.5s ease-out;
     transition: all 0.5s ease-out;
   }
 
-  /**/
   ::content px-page {
     position: absolute;
     height: 100%;
@@ -71,27 +68,20 @@ To use this component in your custom component do the following:
 
   }
 
-  ::content px-page.previous{
-    top: -99%;
-  }
-  ::content px-page.next{
-    top: 99%;
-  }
-
   ::content px-page.current {
     opacity: 1;
     visibility: visible;
 
   }
   ::content px-page.next {
-    -webkit-transform: translate(0px, 99%);
-    transform: translate(0px, 99%);
+    -webkit-transform: translate(110%, 0);
+    transform: translate(110%, 0);
     opacity: 1;
     visibility: visible;
   }
   ::content px-page.previous {
-    -webkit-transform: translate(0px, -99%);
-    transform: translate(0px, -99%);
+    -webkit-transform: translate(-110%, 0);
+    transform: translate(-110%, 0);
     opacity: 1;
     visibility: visible;
   }
