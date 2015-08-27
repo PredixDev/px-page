@@ -202,8 +202,12 @@
     px.pages.goto = function(indexOrId){
       if(this.PageMap[indexOrId]){
         this.gotoPage(indexOrId);
+        return this.PageMap[indexOrId];
+
       } else if(this.PageList[indexOrId]){
         this.gotoIndex(indexOrId);
+        
+        return this.PageList[indexOrId];
       }
     };
     px.pages.gotoPage = function(id){
