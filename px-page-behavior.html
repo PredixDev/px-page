@@ -1,8 +1,56 @@
 <link rel="import" href="../px-mobile/px-mobile.html"/>
+<!-- TODO:
+
+
+pageBeforeInit	Page Element
+<div class="page">
+Event will be triggered when Framework7 just inserts new page to DOM
+pageInit	Page Element
+<div class="page">
+Event will be triggered after Framework7 initialize required page's components and navbar
+pageReinit	Page Element
+<div class="page">
+This event will be triggered when cached page becomes visible. It is only applicaple for Inline Pages (DOM cached pages)
+pageBeforeAnimation	Page Element
+<div class="page">
+Event will be triggered when everything initialized and page (and navbar) is ready to be animated
+pageAfterAnimation	Page Element
+<div class="page">
+Event will be triggered after page (and navbar) animation
+pageBeforeRemove	Page Element
+<div class="page">
+Event will be triggered right before Page will be removed from DOM. This event could be very useful if you need to detach some events / destroy some plugins to free memory
+pageBack	Page Element
+<div class="page">
+Event will be triggered right before "back" transition. Difference with "pageBeforeAnimation" is that this event will be triggered for the "old" page - page that slides from center to right
+pageAfterBack
+
+
+
+
+
+
+Page Data Properties
+page.name	Contains string value of data-page attribute
+page.url	Contains string URL of just loaded page
+page.query	object with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue" then page.query will contain:
+{
+  id: '10',
+  count: '20',
+  color: 'blue'
+}
+page.view	object. View instance that contains this page (if this View was initialized)
+page.container	Link to Page HTMLElement
+page.from	string - direction of where Page comes from. It will be "right" if you load new page, and "left" - if page comes after you click on "Back" button
+page.navbarInnerContainer	Link to related "navbar-inner" HTMLElement. Only for Dynamic Navbars
+page.swipeBack	boolean. Equals to true if page animation was initiated by swipe back. Available only within onPageBefore/AfterAnimation callbacks/events.
+page.context	object. Template7 context that was passed for this page when using Template7 pages
+page.fromPage	object. Page Data object of the previously active page
+ -->
 <script type="text/javascript">
   px.page = {
     doSomething: function(){
-      
+
     }
   };
 

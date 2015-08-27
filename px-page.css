@@ -1,4 +1,79 @@
 
+
+
+
+.page-content > ::content .content-block-title {
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: #6d6d72;
+    margin: 35px 15px 10px;
+}
+.page-content > ::content .content-block-title+.card,
+.page-content > ::content .content-block-title+.content-block,
+.page-content > ::content .content-block-title+.list-block {
+    margin-top: 10px;
+}
+.page-content > ::content .content-block {
+    margin: 35px 0;
+    padding: 0 15px;
+    color: #6d6d72;
+    box-sizing: border-box;
+}
+
+.page-content > ::content .row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-box-lines: multiple;
+    -moz-box-lines: multiple;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+}
+.page-content > ::content .row>[class*=col-] {
+    box-sizing: border-box;
+}
+.page-content > ::content div[class*="col-"] {
+    background: #fff;
+    text-align: center;
+    color: #000;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin-bottom: 15px;
+}
+
+/* TODO: Grid Styles */
+::content section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+
+}
+::content section > div {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+
   .article {
   position: absolute;
   top: 45px;

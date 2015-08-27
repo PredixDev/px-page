@@ -10,238 +10,156 @@
     <link rel="import" href="px-page.html">
 
     <style >
-      html, body {
-        position: relative;
-        overflow: hidden;
-      }
-      .demo-Page{
-        padding: 25px;
-        height: 350px;
-        text-align: center;
-        font-size: 1em;
-        color: #fff;
+    body{
+      position: relative;
+      overflow: hidden;
+    }
+    section{
+      background: yellow;
+    }
+    section div:before{
+      color: #ccc;
+      text-align: center;
+      content: 'div';
+    }
 
-      }
-      px-page:nth-child(1){
-        background: brown;
-      }
-      px-page:nth-child(2){
-        background: green;
-      }
-      px-page:nth-child(3){
-        background: tomato;
-      }
-      px-page:nth-child(4){
-        background: blue;
-      }
-      px-page:nth-child(5){
-        background: purple;
-      }
-      px-page:nth-child(6){
-        background: black;
-      }
-      .demo-Page px-page{
-        background: blue;
-      }
-      .navbar{
-        padding: 10px;
-        text-align: center;
-      }
+    section div{
+      background: #eee;
+      padding: 35px;
+      border: 1px solid #bbb;
+      margin: 10px;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-      }
-
-      .wrap {
-        width: 320px;
-        border: 1px solid #ccc;
-        height: 480px;
-        overflow: auto;
-        position: relative;
-      }
-
-      .top-header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 320px;
-        height: 60px;
-      }
-      .top-header .menu-icon {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 18px 20px;
-      }
-      .fix-search .top-header {
-        background: #eee;
-      }
-
-      .search {
-        position: absolute;
-        top: 155px;
-        left: 20px;
-        right: 20px;
-      }
-      .search input {
-        width: 265px;
-        border: 1px solid #ccc;
-        padding: 8px;
-        font-size: 15px;
-        -webkit-transition: width 0.2s;
-                transition: width 0.2s;
-        -webkit-appearance: none;
-      }
-      .fix-search .search {
-        position: fixed;
-        top: 10px;
-      }
-      .fix-search .search input {
-        width: 250px;
-      }
-
-      .top {
-        height: 250px;
-        padding-top: 40px;
-      }
-
-      .hero {
-        width: 200px;
-        height: 100px;
-        background: #ccc;
-        margin: 0 auto;
-      }
-main {
-  padding: 0 20px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-}
-.demo-Page div {
-
-  background: #ccc;
-  margin: 0 0 20px 0;
-}
-
-.toolbar button{
-  height: 100px !important;
-  width: 150px !important;
-}
+    section {
+      position: relative;
+    }
+    section:before {
+      content: "section";
+      position: absolute;
+      color: #ccc;
+      top: 0px;
+      left: 13px;
+      background-color: #eee;
+      padding: 3px;
+      font-size: 13px;
+      border: 1px solid #bbb;
+    }
 
 
     </style>
   </head>
   <body>
+    <px-views id="views">
 
-    <px-view id="testview" title="px-pages component">
-      <div class="toolbar">
-        <button type="button" onclick="appPages.prev()">Prev</button>
-        <button type="button" onclick="appPages.next()">Next</button>
-      </div>
+          <px-view id="testview" title="px-pages component">
 
-        <px-pages id="appPages" main="true" selected="0" class="et-wrapper" in="rotateSlideIn" out="rotateSlideOut">
-          <px-page id="Page0" title="Main Page" route="/Page0" class="et-page">
-            <div class="demo-Page">
-              Page 0
-
-              <p>
-                Semantic HTML is the use of HTML markup to reinforce the semantics, or meaning, of the information in webpages and web applications rather than merely to define its presentation or look. Semantic HTML is processed by traditional web browsers as well as by many other user agents.
-              </p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut mi at nisi hendrerit tristique. Aenean nec erat lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam iaculis nibh leo, id aliquet nisi feugiat vitae. Nulla erat lorem, sodales quis dictum eu, molestie et elit. Vivamus aliquet feugiat quam nec aliquam. Quisque nec lorem ut nisi molestie lobortis at id ipsum. Vivamus in quam tortor. Cras sed ligula in diam malesuada pretium non quis quam.
-
-Praesent leo neque, porta eu consequat sed, bibendum nec nisi. Pellentesque sit amet venenatis sem. Maecenas ultricies justo eget augue lobortis, nec auctor lorem facilisis. Morbi sollicitudin elementum maximus. Integer bibendum a sem a accumsan. Duis sed elementum odio, ac feugiat ex. Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex.
-
-Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem.
-
-Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna.
-
-Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut vel neque viverra, sodales sapien a, ornare quam. Donec nisi dolor, placerat in tincidunt et, mattis interdum nunc. Donec vitae tristique sem. Aenean eget justo finibus, ultrices sapien at, venenatis neque. Quisque scelerisque faucibus lorem. Vivamus tempus eget purus non tristique. Curabitur a quam sit amet diam congue blandit non sit amet ligula. Maecenas aliquam nunc eget facilisis ullamcorper.
-              </p>
-
-              <div class="five-columns group">
-                <div class="col"><p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p></div>
-                <div class="col"><p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p></div>
-                <div class="col"><p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p></div>
-                <div class="col"><p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p></div>
-                <div class="col"><p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p></div>
-              </div>
+              <px-pages id="appPages" main="true" selected="0" class="et-wrapper" in="rotateSlideIn" out="rotateSlideOut">
+                <px-page id="Page0" title="Main Page" route="/Page0" class="et-page">
+                  <div class="toolbar">
+                    <button type="button" onclick="appPages.prev()">Prev</button>
+                    <button type="button" onclick="appPages.next()">Next</button>
+                  </div>
 
 
-            </div>
-          </px-page>
-          <px-page id="Page1" title="Page" route="/Page1">
-            <div class="demo-Page">
-              Page 1
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </px-page>
-          <px-page id="Page2" title="Page" route="/Page2">
-            <div class="demo-Page">
-              Page 2
-            </div>
-          </px-page>
-          <px-page id="Page3" title="Page" route="/Page3">
-            <div class="demo-Page">
-              Page 3
-            </div>
-          </px-page>
-          <px-page id="Page4" title="Page" route="/Page4">
-            <div class="demo-Page">
-              Page 4
-            </div>
-          </px-page>
-          <px-page id="Page5" title="Page" route="/Page5">
-            <div class="demo-Page">
-              Page 5
-            </div>
-          </px-page>
+                  <section>
+                    <div>
+                      <h1>Page 0</h1>
 
-        </px-pages>
-    </px-view>
+                      <p>
+                        Semantic HTML is the use of HTML markup to reinforce the semantics, or meaning, of the information in webpages and web applications rather than merely to define its presentation or look. Semantic HTML is processed by traditional web browsers as well as by many other user agents.
+                      </p>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut mi at nisi hendrerit tristique. Aenean nec erat lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam iaculis nibh leo, id aliquet nisi feugiat vitae. Nulla erat lorem, sodales quis dictum eu, molestie et elit. Vivamus aliquet feugiat quam nec aliquam. Quisque nec lorem ut nisi molestie lobortis at id ipsum. Vivamus in quam tortor. Cras sed ligula in diam malesuada pretium non quis quam.
+
+
+        Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem.
+
+        Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna.
+
+        Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut vel neque viverra, sodales sapien a, ornare quam. Donec nisi dolor, placerat in tincidunt et, mattis interdum nunc. Donec vitae tristique sem. Aenean eget justo finibus, ultrices sapien at, venenatis neque. Quisque scelerisque faucibus lorem. Vivamus tempus eget purus non tristique. Curabitur a quam sit amet diam congue blandit non sit amet ligula. Maecenas aliquam nunc eget facilisis ullamcorper.
+                      </p>
+
+        <p>
+          . Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex. Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem. Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna. Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut v
+        </p>
+        <p>
+          . Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex. Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem. Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna. Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut v
+        </p>
+
+
+                    </div>
+                  </section>
+                  <section>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </section>
+
+
+
+
+                </px-page>
+                <px-page id="Page1" title="Page" route="/Page1">
+                 <section>
+                   <div></div>
+                   <div></div>
+                   <div></div>
+
+
+                 </section>
+                 <section>
+                   <div></div>
+                   <div></div>
+                   <div></div>
+                   <div></div>
+                   <div></div>
+                 </section>
+                </px-page>
+                <px-page id="Page2" title="Page" route="/Page2">
+                  <div class="demo-Page">
+                    Page 2
+                  </div>
+                </px-page>
+                <px-page id="Page3" title="Page" route="/Page3">
+                  <div class="demo-Page">
+                    Page 3
+                  </div>
+                </px-page>
+                <px-page id="Page4" title="Page" route="/Page4">
+                  <div class="demo-Page">
+                    Page 4
+                  </div>
+                </px-page>
+                <px-page id="Page5" title="Page" route="/Page5">
+                  <div class="demo-Page">
+                    Page 5
+                  </div>
+                </px-page>
+
+              </px-pages>
+          </px-view>
+    </px-views>
 
 
   </body>
