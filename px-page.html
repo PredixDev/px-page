@@ -71,24 +71,20 @@ To use this component in your custom component do the following:
     transition: all 0.5s;
     box-sizing: border-box;
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    min-height: calc(90vh - 10px);
-    background: #efeff4;
+    width: 90vw;
+    height: 90vh;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
   }
 
   /* TODO: Grid Styles */
-  :host .page-content > ::content .grid section {
+  :host .page-content > ::content section {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
     justify-content: center;
   }
-  :host .page-content > ::content .grid section > div {
+  :host .page-content > ::content section > div {
     flex: 1;
     display: flex;
     align-items: stretch;
@@ -97,9 +93,11 @@ To use this component in your custom component do the following:
   }
   </style>
   <template>
-    <div class="page-content">
-      <content></content>
-    </div>
+    <section>
+      <div class="page-content">
+        <content></content>
+      </div>
+    </section>
   </template>
 </dom-module>
 <script type="text/javascript">

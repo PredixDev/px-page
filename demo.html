@@ -17,9 +17,7 @@
     section{
       background: yellow;
     }
-    section div:before{
-      color: #ccc;
-      text-align: center;
+    section div:before{ color: #ccc; text-align: center;
       content: 'div';
     }
 
@@ -44,21 +42,39 @@
       font-size: 13px;
       border: 1px solid #bbb;
     }
+    .navbar{
+      padding: 20px;
+      background: #111;
+      color: #fff;
 
+
+    }
+    px-pages, px-page, px-view{
+      padding: 10px;
+      margin: 10px;
+      color: #111;
+    }
+
+    px-views:before{content: 'views';}
+    px-view:before{content: 'view'; }
+    px-pages:before{content: 'pages'; }
+    px-page:before{content: 'page'; }
+    px-page{font-size: 3rem; text-align: center;}
 
     </style>
   </head>
   <body>
+    <div class="navbar">
+      <button type="button" onclick="appPages.prev()">Prev</button>
+      <button type="button" onclick="appPages.next()">Next</button>
+    </div>
     <px-views id="views">
 
           <px-view id="testview" title="px-pages component">
 
               <px-pages id="appPages" main="true" selected="0" class="et-wrapper" in="rotateSlideIn" out="rotateSlideOut">
                 <px-page id="Page0" title="Main Page" route="/Page0" class="et-page">
-                  <div class="toolbar">
-                    <button type="button" onclick="appPages.prev()">Prev</button>
-                    <button type="button" onclick="appPages.next()">Next</button>
-                  </div>
+
 
 
                   <section>
