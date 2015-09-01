@@ -65,14 +65,11 @@ To use this component in your custom component do the following:
 
   :host {
     display: block;
-    overflow-y: scroll;
-    overflow-x: hidden;
     -webkit-transition: all 0.5s;
     transition: all 0.5s;
     box-sizing: border-box;
     position: absolute;
-    width: 90vw;
-    height: 90vh;
+    min-height: 50vh;
     -webkit-transform: translate3d(0,0,0);
     transform: translate3d(0,0,0);
   }
@@ -93,7 +90,7 @@ To use this component in your custom component do the following:
   }
   </style>
   <template>
-    <section>
+    <section class="body row scroll-y">
       <div class="page-content">
         <content></content>
       </div>
