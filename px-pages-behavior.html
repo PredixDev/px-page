@@ -127,6 +127,12 @@
       //add to Page map
       this.PageMap[Page.id] = Page;
 
+      //Add to routeHandlers
+      if(Page.route){
+        this.routes[Page.route] = Page.id;
+      }
+      console.warn(Page.route);
+
       //log
       this.logApi('_addPage', Page);
     },
@@ -206,7 +212,7 @@
 
       } else if(this.PageList[indexOrId]){
         this.gotoIndex(indexOrId);
-        
+
         return this.PageList[indexOrId];
       }
     };
@@ -225,10 +231,12 @@
       this.children[index].removeClass('previous');
       this.children[index].removeClass('next');
     };
+
     px.pages.current = function(){
       this.gotoIndex(this.selected);
       console.warn('current');
     };
+
     px.pages.next = function(){
       if(this.selected >= this.PageList.length -1){
         if(this.loop){
@@ -240,6 +248,7 @@
         this.gotoIndex(this.selected + 1);
       }
     };
+
     px.pages.prev = function(){
       if(this.selected <= 0){
         if(this.loop){
@@ -251,10 +260,12 @@
         this.gotoIndex(this.selected -1);
       }
     };
+
     px.pages.removeTransition = function(index) {
       var page = this.PageList[index];
       page.content.css('transition', 'none');
     };
+
     px.pages.doTransition = function(index) {
       var page = this.PageList[index];
       var position = page.position();
@@ -262,4 +273,26 @@
         .css('transition', 'all 400ms ease')
         .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
     };
+
+    //Change the page
+    px.pages.change = function(name){
+      return this.goto(name);
+    };
+
+    //Load a page
+    px.pages.load = function(url){
+
+    };
+
+    //Get active page
+    px.pages.getActivePage = function(){
+      return this.PageList[this.selected];
+    };
+
+    //Add a px-page from page object
+    px.pages.addPage = function(obj){
+
+    };
+
+
 </script>

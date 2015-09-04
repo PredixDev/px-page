@@ -65,8 +65,8 @@ To use this component in your custom component do the following:
 
   :host {
     display: block;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
     box-sizing: border-box;
     position: absolute;
     min-height: 50vh;
@@ -87,6 +87,10 @@ To use this component in your custom component do the following:
     align-items: stretch;
     flex-direction: column;
     flex-grow: 1;
+  }
+  :host {
+    width: 100%;
+    height: 100%;
   }
   </style>
   <template>
@@ -131,6 +135,10 @@ To use this component in your custom component do the following:
 
       context : {
         type : Object
+      },
+
+      route: {
+        type: String
       }
     },
 
