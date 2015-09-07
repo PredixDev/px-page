@@ -5,24 +5,31 @@
 pageBeforeInit	Page Element
 <div class="page">
 Event will be triggered when Framework7 just inserts new page to DOM
+
 pageInit	Page Element
 <div class="page">
 Event will be triggered after Framework7 initialize required page's components and navbar
+
 pageReinit	Page Element
 <div class="page">
 This event will be triggered when cached page becomes visible. It is only applicaple for Inline Pages (DOM cached pages)
+
 pageBeforeAnimation	Page Element
 <div class="page">
 Event will be triggered when everything initialized and page (and navbar) is ready to be animated
+
 pageAfterAnimation	Page Element
 <div class="page">
 Event will be triggered after page (and navbar) animation
+
 pageBeforeRemove	Page Element
 <div class="page">
 Event will be triggered right before Page will be removed from DOM. This event could be very useful if you need to detach some events / destroy some plugins to free memory
+
 pageBack	Page Element
 <div class="page">
 Event will be triggered right before "back" transition. Difference with "pageBeforeAnimation" is that this event will be triggered for the "old" page - page that slides from center to right
+
 pageAfterBack
 
 
@@ -49,8 +56,141 @@ page.fromPage	object. Page Data object of the previously active page
  -->
 <script type="text/javascript">
   px.page = {
-    doSomething: function(){
+    properties : {
+      title : {
+        type : String,
+        value: null
+      },
 
+      backText:{
+        type: String,
+        value: null
+      },
+
+      backLink:{
+        type: String,
+        value: null
+      },
+
+      //Path to remote view that will be loaded
+      href:{
+        type: String,
+        notify: true,
+        value: null,
+        observer: '_tmplChanged'
+      },
+
+      active : {
+        type : Boolean,
+        value : false,
+      },
+
+      dialog : {
+        type : Boolean,
+        value : false,
+      },
+
+      //with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue"
+      query : {
+        type : Object
+      },
+
+      context : {
+        type : Object
+      },
+
+      //View instance that contains this page (if this View was initialized)
+      view : {
+        type : Object
+      },
+      //Page Data object of the previously active page
+      fromPage : {
+        type : Object
+      },
+
+      route: {
+        type: String
+      },
+
+      //Contains string URL of just loaded page
+      url: {
+        type: String
+      },
+      //Link to Page HTMLElement
+      container: {
+        type: String
+      }
+    },
+
+    created : function() {
+      var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:orange'}});
+      px.mobile.utils.addMixin(logger, this);
+      this.logApi('created', this.id);
+      px.mobile.PubSub.emit('page:'+this.id+':init', this);
+    },
+    ready : function() {
+      this.logApi('ready', this.id);
+      if(this.dialog){
+        this.toggleClass('dialog');
+      }
+      px.mobile.PubSub.emit('page:'+this.id+':ready', this);
+    },
+    show: function(){
+      console.warn('INFO', 'show view', this.id);
+      this.toggleClass('current', false, this);
+    },
+    hide: function(){
+      console.warn('INFO', 'hide view', this.id);
+      this.toggleClass('hidden', true, this);
+    },
+    update: function(){
+      console.warn('INFO', 'update view', this.id);
+    },
+    currentView: function(){
+      console.warn('INFO', 'current view', this.id);
+      this.child()[0].toggleClass('current', true, this);
+    },
+    nextView: function(){
+      console.warn('INFO', 'next view', this.id);
+      this.toggleClass('next', true, this);
+    },
+    previousView: function(){
+      console.warn('INFO', 'previous view', this.id);
+      this.toggleClass('previous', true, this);
+    },
+    contextChanged : function(newContext, oldContext) {
+      console.warn('contextChanged', newContext, oldContext);
+    },
+
+    //I handle loading a page from a url
+    _tmplChanged: function(newVal, oldVal){
+      var _this = this, html = '';
+      if(newVal){
+      	console.warn(this.id, 'Load remote html', newVal);
+
+        this.importHref(newVal, function(e) {
+        	html = e.target.import.body.innerHTML;
+        	_this.logApi('inject html', _this.id);
+          console.warn('inject px-view html', _this.id);
+          _this.html(html);
+        }, function(e) {
+            // loading error
+            console.error('Error loading page', e);
+        });
+      }
+    },
+    showMenu:function(){
+      px.mobile.dom('px-app').toggleClass('show-menu');
+    },
+    open: function(){
+      if(this.dialog){
+        this.toggleClass('open');
+      }
+    },
+    close: function(){
+      if(this.dialog){
+        this.toggleClass('open');
+      }
     }
   };
 

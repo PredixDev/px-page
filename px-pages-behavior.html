@@ -20,6 +20,10 @@
       },
 
       //The current context of the Page.
+      currentPage : {
+        type : Object,
+        value : {}
+      },
       context : {
         type : Object,
         value : {}
@@ -60,6 +64,15 @@
       }
     },
 
+    emit: function(event, data){
+      console.warn('emit:event', event, data);
+      return px.mobile.dom('*body').trigger('page:'+event, data);
+    },
+    on: function(event, cb){
+      console.warn('on:event', event, cb);
+      return px.mobile.dom('*body').on('page:'+event, cb);
+    },
+
     created : function() {
       var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:blue'}});
       px.mobile.utils.addMixin(logger, this);
@@ -85,8 +98,9 @@
     _initpages: function(){
       var self = this;
       this.logApi('_initpages', this);
-      var len = this.children.length;
+      var len = this.$.pages.children.length;
       for (var i = 0; i < len; i++) {
+        this.logApi('page', this);
         self._addPage(this.children[i]);
       }
       this.fire('px-pages-ready');
@@ -94,7 +108,7 @@
 
     //show Page
     showPage: function(index){
-      console.warn('INFO', 'show Page', this.id);
+      this.logApi('showPage', index);
       this.PageList[this.selected].toggleClass('et-page-current');
       this.selected = index;
       this.PageList[this.selected].child()[0].toggleClass('et-page-current');
@@ -102,17 +116,20 @@
 
     //hide Page
     hidePage: function(index){
-      console.warn('INFO', 'hide Page', this.id);
+      this.logApi('hidePage', index);
       this.toggleClass('hidden', true, this);
     },
 
     //update Page
-    updatePage: function(){
+    updatePage: function(page){
       console.warn('INFO', 'update Page', this.id);
+      this.logApi('updatePage', page);
     },
 
     //Handle adding a Page to the map
     _addPage: function(Page){
+
+      this.emit('add', Page);
 
       //add the index to the el
       Page.attr('index', this.PageList.length.toString());
@@ -131,7 +148,7 @@
       if(Page.route){
         this.routes[Page.route] = Page.id;
       }
-      console.warn(Page.route);
+
 
       //log
       this.logApi('_addPage', Page);
@@ -155,20 +172,24 @@
     var prevPage = this.children[oldIndex];
     var currPage = this.children[index];
 
+    this.emit('change', currPage);
+
     if(prevPage){
-      console.log('removing Current from', prevPage);
+      prevPage.removeClass('current');
       prevPage.removeClass('et-page-current');
       prevPage.addClass('previous');
     }
 
     if(currPage){
       currPage.removeClass('next');
+      currPage.addClass('current');
       currPage.addClass('et-page-current');
     }
   };
 
 
   px.pages.changePage = function(indexOrId){
+    this.emit('change', indexOrId);
     this.logApi('changePage', indexOrId);
     this._clearCurrent();
     if(this.PageList[indexOrId]){
@@ -206,38 +227,44 @@
     };
 
     px.pages.goto = function(indexOrId){
-      if(this.PageMap[indexOrId]){
+      var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
+
+      if(page){
         this.gotoPage(indexOrId);
-        return this.PageMap[indexOrId];
-
-      } else if(this.PageList[indexOrId]){
-        this.gotoIndex(indexOrId);
-
-        return this.PageList[indexOrId];
+        window.location.hash = page.route;
+        return page;
       }
+
     };
+
+
+
     px.pages.gotoPage = function(id){
       var index = 0;
       if(this.PageMap[id]){
         index = this.PageList.indexOf(this.PageMap[id]);
       }
       this.selected = index;
-      console.warn('gotoPage', id, index);
+      this.logApi('gotoPage', id, index);
     };
 
+
+
     px.pages.gotoIndex = function(index){
-      console.warn('gotoIndex', index);
-      this.selected = index;
+      this.logApi('gotoIndex', index);
       this.children[index].removeClass('previous');
       this.children[index].removeClass('next');
+      this.selected = index;
+
     };
 
     px.pages.current = function(){
+      this.logApi('current', this.selected);
       this.gotoIndex(this.selected);
-      console.warn('current');
     };
 
     px.pages.next = function(){
+      this.logApi('next', this.selected);
       if(this.selected >= this.PageList.length -1){
         if(this.loop){
             this.reset();
@@ -288,6 +315,8 @@
     px.pages.getActivePage = function(){
       return this.PageList[this.selected];
     };
+
+    //px.pages.currentPage = this.getActivePage();
 
     //Add a px-page from page object
     px.pages.addPage = function(obj){

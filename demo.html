@@ -3,26 +3,21 @@
 
     <!-- TODO: Dependencies -->
     <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="../polymer/polymer.html">
+    <link rel="import" href="/polymer/polymer.html">
 
     <!-- TODO: pxm components -->
     <link rel="import" href="px-pages.html">
     <link rel="import" href="px-page.html">
 
     <style >
+
     body{
       position: relative;
       overflow: hidden;
+      padding: 25px;
     }
-    .wrapper{
-      position: relative;
-      position: relative;
-      display: block;
-      margin: 50px;
-      border: 10px solid #000;
-      height: 100%;
-      overflow-x: scroll;
-    }
+
+
     .iphone {
 				margin: 25px auto;
 				border: 10px solid #000;
@@ -55,6 +50,21 @@
         color: #999;
         text-align: center;
       }
+
+      #dialogPage{
+        background: rgba(0, 0, 0, 0.7);
+        color: #fff;
+      }
+
+
+		/* overthrow layout enhancements */
+	    /* Enable overflow: auto on elements with overthrow class when html element has overthrow class too */
+		.overthrow-enabled .overthrow {
+	        overflow: auto;
+	        -webkit-overflow-scrolling: touch;
+	    	z-index: 1;
+
+	    }
     </style>
     <script type="text/javascript">
       function goto(){
@@ -75,6 +85,7 @@
         <button type="button" onclick="appPages.prev()">Prev</button>
         <button type="button" onclick="appPages.next()">Next</button>
         <button type="button" onclick="goto()">Goto</button>
+        <button type="button" onclick="dialogPage.open()">Open Dialog</button>
       </div>
     </div>
 
@@ -86,7 +97,7 @@
 
 
 
-          <section>
+          <section; class="overthrow">
             <div>
               <h1>Page 0</h1>
 
@@ -97,19 +108,19 @@
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut mi at nisi hendrerit tristique. Aenean nec erat lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam iaculis nibh leo, id aliquet nisi feugiat vitae. Nulla erat lorem, sodales quis dictum eu, molestie et elit. Vivamus aliquet feugiat quam nec aliquam. Quisque nec lorem ut nisi molestie lobortis at id ipsum. Vivamus in quam tortor. Cras sed ligula in diam malesuada pretium non quis quam.
 
 
-Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem.
+              Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem.
 
-Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna.
+              Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna.
 
-Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut vel neque viverra, sodales sapien a, ornare quam. Donec nisi dolor, placerat in tincidunt et, mattis interdum nunc. Donec vitae tristique sem. Aenean eget justo finibus, ultrices sapien at, venenatis neque. Quisque scelerisque faucibus lorem. Vivamus tempus eget purus non tristique. Curabitur a quam sit amet diam congue blandit non sit amet ligula. Maecenas aliquam nunc eget facilisis ullamcorper.
+              Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut vel neque viverra, sodales sapien a, ornare quam. Donec nisi dolor, placerat in tincidunt et, mattis interdum nunc. Donec vitae tristique sem. Aenean eget justo finibus, ultrices sapien at, venenatis neque. Quisque scelerisque faucibus lorem. Vivamus tempus eget purus non tristique. Curabitur a quam sit amet diam congue blandit non sit amet ligula. Maecenas aliquam nunc eget facilisis ullamcorper.
+                            </p>
+
+              <p>
+                . Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex. Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem. Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna. Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut v
               </p>
-
-<p>
-  . Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex. Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem. Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna. Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut v
-</p>
-<p>
-  . Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex. Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem. Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna. Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut v
-</p>
+              <p>
+                . Donec finibus mi ut nunc aliquet, a consectetur dui consequat. Duis sit amet elit nisl. Nunc aliquam, nunc a rhoncus consequat, dui quam scelerisque quam, ac mollis nisl lorem sed justo. In at malesuada purus, nec volutpat nulla. Aenean dapibus, arcu sed commodo faucibus, ligula elit congue odio, dictum facilisis arcu augue ut ex. Cras eu suscipit magna. Ut non lectus pellentesque, finibus velit eget, hendrerit massa. Aenean vitae nisi vitae dolor ultricies condimentum a sed nibh. Nunc vitae semper ipsum, id sagittis purus. Vivamus diam nisi, volutpat at convallis ut, auctor vitae arcu. Cras blandit dictum lectus, quis fringilla ligula cursus eget. Pellentesque semper fringilla ante et aliquam. Donec non felis efficitur, scelerisque lacus sed, interdum lorem. Sed porta dolor elit. Proin a felis eu urna vehicula condimentum. Curabitur facilisis justo eget magna ornare vestibulum. Duis dui tellus, hendrerit in ante nec, tempus tincidunt leo. Donec turpis nulla, hendrerit eget tellus eget, egestas tristique turpis. Maecenas sollicitudin, sem ut tristique egestas, leo ex tincidunt mauris, ac iaculis felis nulla id urna. Pellentesque dignissim at eros id vestibulum. Etiam tincidunt ligula iaculis porttitor fringilla. Maecenas ullamcorper augue eget justo posuere tincidunt sollicitudin vitae urna. Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus. In cursus sem at tortor pulvinar, malesuada fringilla mauris molestie. Aliquam vulputate porta pretium. Morbi mi nisi, pretium ut euismod non, semper nec ligula. Ut v
+              </p>
 
 
             </div>
@@ -152,25 +163,28 @@ Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus.
            <div></div>
            <div></div>
          </section>
-
         </px-page>
+
         <px-page id="Page2" title="Page" route="/Page2">
           <div class="demo-Page">
             <img src="http://placehold.it/350x150">
             Page 2
           </div>
         </px-page>
+
         <px-page id="Page3" title="Page" route="/Page3">
           <div class="demo-Page"><img src="http://placehold.it/350x150">
             Page 3
           </div>
         </px-page>
+
         <px-page id="Page4" title="Page" route="/Page4">
           <div class="demo-Page">
             Page 4
             <img src="http://placehold.it/350x150">
           </div>
         </px-page>
+
         <px-page id="Page5" title="Page" route="/Page5">
           <div class="demo-Page">
             <img src="http://placehold.it/350x150">
@@ -178,7 +192,13 @@ Aenean cursus dictum tempus. Nulla posuere orci volutpat nulla pulvinar rhoncus.
           </div>
         </px-page>
 
+        <px-page id="dialogPage" title="Dialog" dialog>
+
+          Page content
+
+        </px-page>
       </px-pages>
+
     </section>
 
 

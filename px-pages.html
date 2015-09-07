@@ -10,7 +10,7 @@
 
 
 <!--
-<link rel="stylesheet" href="px-page.css"/>
+
 
 # Overview
 This provides a wrapper for px-page elements.
@@ -48,14 +48,14 @@ To use this component in your custom component do the following:
   :host{
     display: block;
     position: relative;
-    -webkit-transition: all 0.2s ease-out;
-    transition: all 0.5s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
     -webkit-overflow-scrolling: touch;
   }
 
   ::content px-page {
-    -webkit-transition: all 0.2s ease-out;
-    transition: all 0.2s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
   }
 
   ::content px-page.et-page-current{
@@ -79,7 +79,9 @@ To use this component in your custom component do the following:
   }
   </style>
   <template>
-    <content></content>
+    <article id="pages">
+      <content></content>
+    </article>
   </template>
 </dom-module>
 <script type="text/javascript">
