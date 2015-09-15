@@ -62,16 +62,9 @@ To use this component in your custom component do the following:
 -->
 <dom-module id="px-page">
   <style>
-
   :host {
     display: block;
-    -webkit-transition: all 0.2s;
-    transition: all 0.2s;
     box-sizing: border-box;
-    position: absolute;
-    min-height: 20vh;
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
   }
 
   :host.dialog{
@@ -87,21 +80,9 @@ To use this component in your custom component do the following:
 
   </style>
   <template>
-    <article class="container">
-      <div class="col-12">
-        <section class="page">
-          <header>
-            <h2 class="no-margin no-padding">{{title}}</h2>
-          </header>
-          <div class="page-content overthrow">
-            <content></content>
-          </div>
-          <footer>
-            <span>{{route}}</span>
-          </footer>
-        </section>
-      </div>
-    </article>
+    <section class="page-content overthrow">
+      <content></content>
+    </section>
   </template>
 </dom-module>
 <script type="text/javascript">

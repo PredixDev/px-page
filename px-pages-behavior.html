@@ -60,7 +60,7 @@
       //Loop pages once end is reached.
       loop: {
         type: Boolean,
-        value: true
+        value: false
       }
     },
 
@@ -98,10 +98,11 @@
     _initpages: function(){
       var self = this;
       this.logApi('_initpages', this);
-      var len = this.$.pages.children.length;
+      var pages = Polymer.dom(this).querySelectorAll('px-page');
+      var len = pages.length;
       for (var i = 0; i < len; i++) {
-        this.logApi('page', this);
-        self._addPage(this.children[i]);
+        this.logApi('page', pages[i]);
+        self._addPage(pages[i]);
       }
       this.fire('px-pages-ready');
     },
