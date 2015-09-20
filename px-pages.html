@@ -19,6 +19,21 @@ This provides a wrapper for px-page elements.
 To use this component in your custom component do the following:
 
 ```
+<px-pages selected="0">
+  <px-page>One</px-page>
+  <px-page>Two</px-page>
+  <px-page>Three</px-page>
+</px-pages>
+
+<script>
+  document.addEventListener('click', function(e) {
+    var pages = document.querySelector('px-pages');
+    pages.next();
+  });
+</script>
+```
+
+```
 <dom-module id="demo-view">
   <template>
     <px-pages id="app-views">
@@ -51,14 +66,13 @@ To use this component in your custom component do the following:
     -webkit-transition: all 1s ease-out;
     transition: all 1s ease-out;
     -webkit-overflow-scrolling: touch;
-    height: 100%;
+    height: calc(100% - 20px);
     width: 100%;
-    background-color: crimson;
   }
 
   ::content px-page {
-    -webkit-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
   }
 
   ::content px-page.et-page-current{
@@ -71,7 +85,7 @@ To use this component in your custom component do the following:
   ::content px-page.next {
     -webkit-transform: translate(100%, 0);
     transform: translate(100%, 0);
-  
+
     visibility: visible;
   }
   ::content px-page.previous {

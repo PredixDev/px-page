@@ -2,12 +2,12 @@
 <script type="text/javascript">
   px.pages = {
     // add properties and methods on the element's prototype
-    properties : {
+    properties: {
 
       // declare properties for the element's public API
-      title : {
-        type : String,
-        value : 'Predix Mobile Page'
+      title: {
+        type: String,
+        value: 'Predix Mobile Page'
       },
 
       //The default selected Page
@@ -20,31 +20,31 @@
       },
 
       //The current context of the Page.
-      currentPage : {
-        type : Object,
-        value : {}
+      currentPage: {
+        type: Object,
+        value: {}
       },
-      context : {
-        type : Object,
-        value : {}
+      context: {
+        type: Object,
+        value: {}
       },
 
       //The list of pages
-      pages : {
-        type : Array
+      pages: {
+        type: Array
       },
 
-      PageList : {
-        type : Array
+      PageList: {
+        type: Array
       },
 
-      selectedIndex:{
+      selectedIndex: {
         type: Number
       },
       //The pages routes
-      routes : {
-        type : Object,
-        value : {}
+      routes: {
+        type: Object,
+        value: {}
       },
 
       //The in effect
@@ -64,16 +64,16 @@
       }
     },
 
-    emit: function(event, data){
+    emit: function (event, data) {
       console.warn('emit:event', event, data);
-      return px.mobile.dom('*body').trigger('page:'+event, data);
+      return px.mobile.dom('*body').trigger('page:' + event, data);
     },
-    on: function(event, cb){
+    on: function (event, cb) {
       console.warn('on:event', event, cb);
-      return px.mobile.dom('*body').on('page:'+event, cb);
+      return px.mobile.dom('*body').on('page:' + event, cb);
     },
 
-    created : function() {
+    created: function () {
       var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:blue'}});
       px.mobile.utils.addMixin(logger, this);
 
@@ -82,11 +82,11 @@
       this.PageMap = {};
       this.PageList = [];
     },
-    ready : function() {
+    ready: function () {
       this.logApi(this.id, 'ready');
     },
 
-    attached : function() {
+    attached: function () {
       this.logApi('attached', this.id + ' - ' + this.selected);
       if (!this.id) {
         throw 'pages' + this.tagName + ' cannot be created without an id!';
@@ -95,7 +95,7 @@
       this.gotoIndex(this.selected);
       this.addClass('et-wrapper');
     },
-    _initpages: function(){
+    _initpages: function () {
       var self = this;
       this.logApi('_initpages', this);
       var pages = Polymer.dom(this).querySelectorAll('px-page');
@@ -108,7 +108,7 @@
     },
 
     //show Page
-    showPage: function(index){
+    showPage: function (index) {
       this.logApi('showPage', index);
       this.PageList[this.selected].toggleClass('et-page-current');
       this.selected = index;
@@ -116,19 +116,19 @@
     },
 
     //hide Page
-    hidePage: function(index){
+    hidePage: function (index) {
       this.logApi('hidePage', index);
       this.toggleClass('hidden', true, this);
     },
 
     //update Page
-    updatePage: function(page){
+    updatePage: function (page) {
       console.warn('INFO', 'update Page', this.id);
       this.logApi('updatePage', page);
     },
 
     //Handle adding a Page to the map
-    _addPage: function(Page){
+    _addPage: function (Page) {
 
       this.emit('add', Page);
 
@@ -146,7 +146,7 @@
       this.PageMap[Page.id] = Page;
 
       //Add to routeHandlers
-      if(Page.route){
+      if (Page.route) {
         this.routes[Page.route] = Page.id;
       }
 
@@ -156,11 +156,11 @@
     },
 
     //Handle clearing all the 'current' classes.
-    _clearCurrent: function(){
+    _clearCurrent: function () {
       this.logApi('_clearCurrent');
       var _pages = Polymer.dom(this).querySelectorAll('px-page');
-      if(_pages){
-        _pages.forEach(function(Page){
+      if (_pages) {
+        _pages.forEach(function (Page) {
           Page.removeClass('current');
         });
       }
@@ -168,20 +168,20 @@
   };
 
 
-  px.pages._setCurrent = function(index, oldIndex){
+  px.pages._setCurrent = function (index, oldIndex) {
     this.logApi('_setCurrent', index);
     var prevPage = this.children[oldIndex];
     var currPage = this.children[index];
 
     this.emit('change', currPage);
 
-    if(prevPage){
+    if (prevPage) {
       prevPage.removeClass('current');
       prevPage.removeClass('et-page-current');
       prevPage.addClass('previous');
     }
 
-    if(currPage){
+    if (currPage) {
       currPage.removeClass('next');
       currPage.addClass('current');
       currPage.addClass('et-page-current');
@@ -189,140 +189,172 @@
   };
 
 
-  px.pages.changePage = function(indexOrId){
+  px.pages.changePage = function (indexOrId) {
     this.emit('change', indexOrId);
     this.logApi('changePage', indexOrId);
     this._clearCurrent();
-    if(this.PageList[indexOrId]){
+    if (this.PageList[indexOrId]) {
       this._setCurrent(indexOrId);
-    } else if(this.PageMap[indexOrId]){
+    } else if (this.PageMap[indexOrId]) {
       this._setCurrent(this.PageList.indexOf(this.PageMap[indexOrId]));
     }
   };
 
 
   // TODO: New IMplmenation
-    px.pages.currentIndex = 0;
-    px.pages.reset = function(reverse){
-      var _pages = this.children;
-      var len = this.children.length;
-      for (var i = 0; i < len; i++) {
-        this.children[i].removeClass('current');
+  px.pages.currentIndex = 0;
+  px.pages.reset = function (reverse) {
+    var _pages = this.children;
+    var len = this.children.length;
+    for (var i = 0; i < len; i++) {
+      this.children[i].removeClass('current');
 
-        if(reverse){
-          this.children[i].addClass('previous');
-          this.children[i].removeClass('next');
-        } else {
-          this.children[i].addClass('next');
-          this.children[i].removeClass('previous');
-        }
-      }
-      this.children[this.selected].removeClass('next');
-      if(reverse){
-        this.selected = this.PageList.length - 1;
+      if (reverse) {
+        this.children[i].addClass('previous');
+        this.children[i].removeClass('next');
       } else {
-        this.selected = this.selected - (this.PageList.length - 1);
+        this.children[i].addClass('next');
+        this.children[i].removeClass('previous');
       }
+    }
+    this.children[this.selected].removeClass('next');
+    if (reverse) {
+      this.selected = this.PageList.length - 1;
+    } else {
+      this.selected = this.selected - (this.PageList.length - 1);
+    }
 
-      this.current();
-    };
+    this.current();
+  };
 
-    px.pages.goto = function(indexOrId){
-      var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
+  px.pages.goto = function (indexOrId) {
+    var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
 
-      if(page){
-        this.gotoPage(indexOrId);
-        window.location.hash = page.route;
-        return page;
-      }
+    if (page) {
+      this.gotoPage(indexOrId);
+      window.location.hash = page.route;
+      return page;
+    }
 
-    };
-
-
-
-    px.pages.gotoPage = function(id){
-      var index = 0;
-      if(this.PageMap[id]){
-        index = this.PageList.indexOf(this.PageMap[id]);
-      }
-      this.selected = index;
-      this.logApi('gotoPage', id, index);
-    };
+  };
 
 
+  /**
+   * Goto a page
+   */
+  px.pages.gotoPage = function (id) {
+    var index = 0;
+    if (this.PageMap[id]) {
+      index = this.PageList.indexOf(this.PageMap[id]);
+    }
+    this.selected = index;
+    this.logApi('gotoPage', id, index);
+  };
 
-    px.pages.gotoIndex = function(index){
-      this.logApi('gotoIndex', index);
-      this.children[index].removeClass('previous');
-      this.children[index].removeClass('next');
-      this.selected = index;
+  /**
+   * Goto a page by index
+   * @param index
+   */
+  px.pages.gotoIndex = function (index) {
+    this.logApi('gotoIndex', index);
+    this.children[index].removeClass('previous');
+    this.children[index].removeClass('next');
+    this.selected = index;
 
-    };
+  };
 
-    px.pages.current = function(){
-      this.logApi('current', this.selected);
-      this.gotoIndex(this.selected);
-    };
+  /**
+   * The current page
+   */
+  px.pages.current = function () {
+    this.logApi('current', this.selected);
+    this.gotoIndex(this.selected);
+  };
 
-    px.pages.next = function(){
-      this.logApi('next', this.selected);
-      if(this.selected >= this.PageList.length -1){
-        if(this.loop){
-            this.reset();
-        } else {
-          this.current();
-        }
+  /**
+   * The next page
+   */
+  px.pages.next = function () {
+    this.logApi('next', this.selected);
+    if (this.selected >= this.PageList.length - 1) {
+      if (this.loop) {
+        this.reset();
       } else {
-        this.gotoIndex(this.selected + 1);
+        this.current();
       }
-    };
+    } else {
+      this.gotoIndex(this.selected + 1);
+    }
+  };
 
-    px.pages.prev = function(){
-      if(this.selected <= 0){
-        if(this.loop){
-          this.reset(true);
-        } else {
-          this.current();
-        }
+  /**
+   * The previous page
+   */
+  px.pages.prev = function () {
+    if (this.selected <= 0) {
+      if (this.loop) {
+        this.reset(true);
       } else {
-        this.gotoIndex(this.selected -1);
+        this.current();
       }
-    };
+    } else {
+      this.gotoIndex(this.selected - 1);
+    }
+  };
 
-    px.pages.removeTransition = function(index) {
-      var page = this.PageList[index];
-      page.content.css('transition', 'none');
-    };
+  /**
+   * Remove transition from page
+   * @param index
+   */
+  px.pages.removeTransition = function (index) {
+    var page = this.PageList[index];
+    page.content.css('transition', 'none');
+  };
 
-    px.pages.doTransition = function(index) {
-      var page = this.PageList[index];
-      var position = page.position();
-       page
-        .css('transition', 'all 400ms ease')
-        .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
-    };
+  /**
+   * Do a transition
+   */
+  px.pages.doTransition = function (index) {
+    var page = this.PageList[index];
+    var position = page.position();
+    page
+      .css('transition', 'all 400ms ease')
+      .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
+  };
 
-    //Change the page
-    px.pages.change = function(name){
-      return this.goto(name);
-    };
+  /**
+   * Change the page
+   * @param name
+   */
+  px.pages.change = function (name) {
+    return this.goto(name);
+  };
 
-    //Load a page
-    px.pages.load = function(url){
+  /**
+   * Load a page
+   * @param url
+   */
+  px.pages.load = function (url) {
 
-    };
+  };
 
-    //Get active page
-    px.pages.getActivePage = function(){
-      return this.PageList[this.selected];
-    };
+  /**
+   * Get the active page
+   * @returns {*}
+   */
+  px.pages.getActivePage = function () {
+    return this.PageList[this.selected];
+  };
 
-    //px.pages.currentPage = this.getActivePage();
+  //px.pages.currentPage = this.getActivePage();
 
-    //Add a px-page from page object
-    px.pages.addPage = function(obj){
+  /**
+   * Add a px-page from page object
+   * @param obj
+   */
+  px.pages.addPage = function (obj) {
 
-    };
+  };
 
 
 </script>
