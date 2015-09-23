@@ -24,6 +24,7 @@
         type: Object,
         value: {}
       },
+
       context: {
         type: Object,
         value: {}
@@ -65,11 +66,12 @@
     },
 
     emit: function (event, data) {
-      console.warn('emit:event', event, data);
+      this.logApi('emit:event', event, data);
       return px.mobile.dom('*body').trigger('page:' + event, data);
     },
+
     on: function (event, cb) {
-      console.warn('on:event', event, cb);
+      this.logApi('on:event', event);
       return px.mobile.dom('*body').on('page:' + event, cb);
     },
 
@@ -82,19 +84,25 @@
       this.PageMap = {};
       this.PageList = [];
     },
+
     ready: function () {
       this.logApi(this.id, 'ready');
+      this._initpages();
+      this.addClass('et-wrapper');
     },
 
     attached: function () {
+      var _this = this;
       this.logApi('attached', this.id + ' - ' + this.selected);
       if (!this.id) {
         throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
-      this._initpages();
-      this.gotoIndex(this.selected);
-      this.addClass('et-wrapper');
+      this.debounce('selected', function() {
+        _this.gotoIndex(_this.selected);
+        console.warn('selected', _this.selected);
+      }, 500);
     },
+
     _initpages: function () {
       var self = this;
       this.logApi('_initpages', this);
@@ -104,7 +112,6 @@
         this.logApi('page', pages[i]);
         self._addPage(pages[i]);
       }
-      this.fire('px-pages-ready');
     },
 
     //show Page
@@ -123,13 +130,11 @@
 
     //update Page
     updatePage: function (page) {
-      console.warn('INFO', 'update Page', this.id);
       this.logApi('updatePage', page);
     },
 
     //Handle adding a Page to the map
     _addPage: function (Page) {
-
       this.emit('add', Page);
 
       //add the index to the el
@@ -150,9 +155,6 @@
         this.routes[Page.route] = Page.id;
       }
 
-
-      //log
-      this.logApi('_addPage', Page);
     },
 
     //Handle clearing all the 'current' classes.
@@ -170,8 +172,8 @@
 
   px.pages._setCurrent = function (index, oldIndex) {
     this.logApi('_setCurrent', index);
-    var prevPage = this.children[oldIndex];
-    var currPage = this.children[index];
+    var prevPage = this.PageList[oldIndex];
+    var currPage = this.PageList[index];
 
     this.emit('change', currPage);
 
@@ -204,20 +206,19 @@
   // TODO: New IMplmenation
   px.pages.currentIndex = 0;
   px.pages.reset = function (reverse) {
-    var _pages = this.children;
-    var len = this.children.length;
+    var _pages = this.PageList;
+    var len = this.PageList.length;
     for (var i = 0; i < len; i++) {
-      this.children[i].removeClass('current');
-
+      this.PageList[i].removeClass('current');
       if (reverse) {
-        this.children[i].addClass('previous');
-        this.children[i].removeClass('next');
+        this.PageList[i].addClass('previous');
+        this.PageList[i].removeClass('next');
       } else {
-        this.children[i].addClass('next');
-        this.children[i].removeClass('previous');
+        this.PageList[i].addClass('next');
+        this.PageList[i].removeClass('previous');
       }
     }
-    this.children[this.selected].removeClass('next');
+    this.PageList[this.selected].removeClass('next');
     if (reverse) {
       this.selected = this.PageList.length - 1;
     } else {
@@ -228,16 +229,14 @@
   };
 
   px.pages.goto = function (indexOrId) {
-    var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
 
-    if (page) {
-      this.gotoPage(indexOrId);
-      window.location.hash = page.route;
-      return page;
+    if (this.PageMap[indexOrId]) {
+      return this.gotoPage(indexOrId);
+    } else if(this.PageList[indexOrId]){
+      return this.gotoIndex(indexOrId);
     }
 
   };
-
 
   /**
    * Goto a page
@@ -257,10 +256,14 @@
    */
   px.pages.gotoIndex = function (index) {
     this.logApi('gotoIndex', index);
-    this.children[index].removeClass('previous');
-    this.children[index].removeClass('next');
-    this.selected = index;
-
+    index = index || 0;
+    if (this.PageList[index]) {
+      this.PageList[index].removeClass('previous');
+      this.PageList[index].removeClass('next');
+      this.selected = index;
+    } else {
+      this.selected = 0;
+    }
   };
 
   /**
@@ -355,6 +358,42 @@
   px.pages.addPage = function (obj) {
 
   };
+
+  px.pages.getCurrentPage = function () {
+    return this.PageList[this.selected];
+  };
+
+  px.pages.handleTrack = function (e) {
+    var message = '';
+
+    var currentIndex = this.selected;
+    var containerWidth = this.offsetWidth;
+
+    var containerLeft = 0;
+    var distance = (currentIndex * containerWidth);
+
+    var totaldist = distance + containerLeft;
+
+    console.log(e);
+    switch (e.detail.state) {
+      case 'start':
+        message = 'Tracking started!';
+        break;
+
+      //Finger is down and moving
+      case 'track':
+
+        var move = Math.min(e.detail.ddx, (currentIndex + 1) * distance);
+        console.log('Tracking started!', move, e.detail.ddx, e.detail.dx, containerWidth);
+        break;
+
+      case 'end':
+        message = 'Tracking ended!';
+        break;
+    }
+    console.warn(message);
+  };
+
 
 
 </script>

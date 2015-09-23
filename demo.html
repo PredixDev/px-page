@@ -13,8 +13,7 @@
 
     body {
       position: relative;
-
-      padding: 25px;
+      padding: 5px;
     }
 
     .iphone {
@@ -43,8 +42,8 @@
     px-page {
       font-size: 2em;
       text-align: center;
+      border: 10px solid #000;
     }
-
 
     #dialogPage {
       background: rgba(0, 0, 0, 0.7);
@@ -79,6 +78,7 @@
   <p>
     The px-pages element helps manage a set of pages.
   </p>
+
   <div class="buttons">
     <button type="button" onclick="appPages.reset()">Reset</button>
     <button type="button" onclick="appPages.prev()">Prev</button>
@@ -89,7 +89,6 @@
 </div>
 
 
-
 <div class="container">
   <div class="col-12">
 
@@ -97,7 +96,52 @@
       <px-pages id="appPages" main="true" selected="0" loop>
 
         <px-page id="Page0" title="Main Page" route="/Page0">
-          <h2>page0</h2>
+
+          <header>
+            <nav>
+              <ul>
+                <li>Your menu</li>
+              </ul>
+            </nav>
+          </header>
+
+          <section>
+
+            <article>
+              <header>
+                <h2>Article title</h2>
+
+                <p>Posted on
+                  <time datetime="2009-09-04T16:31:24+02:00">September 4th 2009</time>
+                  by <a href="#">Writer</a> - <a href="#comments">6 comments</a></p>
+              </header>
+              <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+            </article>
+
+            <article>
+              <header>
+                <h2>Article title</h2>
+
+                <p>Posted on
+                  <time datetime="2009-09-04T16:31:24+02:00">September 4th 2009</time>
+                  by <a href="#">Writer</a> - <a href="#comments">6 comments</a></p>
+              </header>
+              <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+            </article>
+
+          </section>
+
+          <aside>
+            <h2>About section</h2>
+
+            <p>Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend
+              leo.</p>
+          </aside>
+
+          <footer>
+            <p>Copyright 2009 Your name</p>
+          </footer>
+
         </px-page>
 
         <px-page id="Page1" title="Page" route="/Page1">

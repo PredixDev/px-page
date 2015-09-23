@@ -63,11 +63,13 @@ To use this component in your custom component do the following:
   :host{
     display: block;
     position: relative;
+  }
+  :host px-page {
     -webkit-transition: all 1s ease-out;
     transition: all 1s ease-out;
     -webkit-overflow-scrolling: touch;
-    height: calc(100% - 20px);
-    width: 100%;
+    height: calc(100vh - 10px);
+    width:100%;
   }
 
   ::content px-page {
@@ -75,7 +77,7 @@ To use this component in your custom component do the following:
     transition: all 0.5s ease-out;
   }
 
-  ::content px-page.et-page-current{
+  ::content px-page.current{
     opacity: 1;
     visibility: visible;
     -webkit-transform: translate(0, 0);
@@ -96,7 +98,9 @@ To use this component in your custom component do the following:
   }
   </style>
   <template>
-    <content></content>
+    <div  on-track="handleTrack">
+      <content></content>
+    </div>
   </template>
 </dom-module>
 <script type="text/javascript">
