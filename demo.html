@@ -1,131 +1,128 @@
 <html>
-<head>
 
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <link rel='stylesheet prefetch' href='https://predixdev.github.io/px-library-design/css/style.css'>
+
+  <title>px-page demo</title>
   <!-- TODO: Dependencies -->
   <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
-  <link rel="import" href="../polymer/polymer.html">
+  <link rel="import" href="../iron-demo-helpers/demo-snippet.html" />
 
-  <!-- TODO: pxm components -->
   <link rel="import" href="px-pages.html">
   <link rel="import" href="px-page.html">
-
+  <link rel="import" href="../px-navbar/px-navbar.html">
   <style>
-
     body {
       position: relative;
-
-      padding: 25px;
-    }
-
-    .iphone {
-      margin: 25px auto;
-      border: 10px solid #000;
-      overflow: hidden;
-    }
-
-    .device {
-      position: relative;
-      top: 50px;
-      display: block;
-      width: 395px;
-      height: 613px;
-      margin-left: -20px;
-      font-family: "Helvetica Neue", sans-serif;
-      background-image: url(../www/assets/device-sprite.png);
-      background-repeat: no-repeat;
-      background-position: 0 0;
-      background-size: 300%;
-      -webkit-transition: background-image .1s linear;
-      -moz-transition: background-image .1s linear;
-      transition: background-image .1s linear;
-    }
-
-    px-page {
-      font-size: 2em;
-      text-align: center;
-    }
-
-
-    #dialogPage {
-      background: rgba(0, 0, 0, 0.7);
-      color: #fff;
-    }
-
-    /* overthrow layout enhancements */
-    /* Enable overflow: auto on elements with overthrow class when html element has overthrow class too */
-    .overthrow-enabled .overthrow {
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-      z-index: 1;
-
-    }
-
-    .img-responsive {
-      width: 100%;
+      padding: 5px;
     }
   </style>
-  <script type="text/javascript">
-    function goto() {
-      var ask = window.prompt('What page?');
-      appPages.goto(ask);
-    }
-  </script>
+
 </head>
+
 <body>
 
-<div class="content">
-  <h1>px-pages</h1>
-
-  <p>
-    The px-pages element helps manage a set of pages.
-  </p>
-  <div class="buttons">
-    <button type="button" onclick="appPages.reset()">Reset</button>
-    <button type="button" onclick="appPages.prev()">Prev</button>
-    <button type="button" onclick="appPages.next()">Next</button>
-    <button type="button" onclick="goto()">Goto</button>
-    <button type="button" onclick="dialogPage.open()">Open Dialog</button>
+  <div class="content">
+    <h1>px-pages</h1>
+    <p>
+      The px-pages element helps manage a set of pages.
+    </p>
   </div>
-</div>
+  <div>
+    <demo-snippet>
+      <template>
+        <style media="screen">
+          .demo {
+            position: relative;
+          }
 
+          px-page h2 {
+            font-size: 2em;
+            text-align: center;
+          }
 
+          px-page:nth-child(odd) {}
 
-<div class="container">
-  <div class="col-12">
+          px-page:nth-child(even) {
+            background: fuchsia;
+          }
+        </style>
+        <template id="demoPages" is="dom-bind">
+          <div class="buttons flex">
+            <button class="btn" type="button" onclick="appPages.reset()">Reset</button>
+            <button class="btn" type="button" onclick="appPages.prev()">Prev</button>
+            <button class="btn" type="button" onclick="appPages.next()">Next</button>
+            <button class="btn" type="button" onclick="goto()">Goto</button>
+            <button class="btn" type="button" onclick="dialogPage.open()">Open Dialog</button>
+          </div>
+          <div class="demo">
+            <px-pages id="appPages" selected="0">
 
-    <section class="wrapper">
-      <px-pages id="appPages" main="true" selected="0" loop>
+              <px-page id="Page0" title="Main Page" route="/Page0" main="true">
+                <px-navbar title="Main" theme="dark"></px-navbar>
+                <ul id="list1" class="list-ui">
+                  <li>Item 1</li>
+                </ul>
 
-        <px-page id="Page0" title="Main Page" route="/Page0">
-          <h2>page0</h2>
-        </px-page>
+              </px-page>
 
-        <px-page id="Page1" title="Page" route="/Page1">
-          <h2>page1</h2>
-        </px-page>
+              <px-page id="Page1" title="Page" route="/Page1">
+                <h2>page1</h2>
+              </px-page>
 
-        <px-page id="Page2" title="Page" route="/Page2">
-          <h2>page2</h2>
-        </px-page>
+              <px-page id="Page2" title="Page" route="/Page2">
+                <h2>page2</h2>
+              </px-page>
 
-        <px-page id="Page3" title="Page" route="/Page3">
-          <h2>page3</h2>
-        </px-page>
+              <px-page id="Page3" title="Page" route="/Page3">
+                <h2>page3</h2>
+              </px-page>
 
-        <px-page id="Page4" title="Page" route="/Page4">
-          <h2>page4</h2>
-        </px-page>
+              <px-page id="Page4" title="Page" route="/Page4">
+                <h2>page4</h2>
+              </px-page>
 
-        <px-page id="Page5" title="Page" route="/Page5">
-          <h2>Page 5</h2>
-        </px-page>
+              <px-page id="Page5" title="Page" route="/Page5">
+                <h2>Page 5</h2>
+              </px-page>
 
-      </px-pages>
-    </section>
+              <px-page id="dialogPage" title="Page" route="/Page6" dialog>
+                <h2>Dialog Page</h2>
+              </px-page>
+
+            </px-pages>
+          </div>
+          <script type="text/javascript">
+            var pages = document.getElementById('appPages');
+
+            function goto() {
+              var ask = window.prompt('What page?');
+              pages.goto(ask);
+            }
+            pages.addEventListener('change', function(e) {
+              console.log('Page Changed', e);
+            });
+
+            function createDemoList(id, count) {
+              var _out = [];
+              var a, li, list,
+                $el = document.querySelector(id);
+              for (var i = 0; i < count; i++) {
+                li = document.createElement('li');
+                li.innerText = 'Item ' + i;
+                $el.appendChild(li);
+              }
+            }
+            createDemoList('#list1', 150);
+          </script>
+        </template>
+
+      </template>
+    </demo-snippet>
 
   </div>
-</div>
-
-
 </body>
+
 </html>
