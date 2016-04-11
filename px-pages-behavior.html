@@ -1,7 +1,8 @@
 <script src="../px-mobile.js/dist/px-mobile.js"></script>
-
+<link rel="import" href="../px-base-element/px-base-element.html">
 <script type="text/javascript">
   var PagesBehavior = {
+    behaviors: [BaseElement],
     // add properties and methods on the element's prototype
     properties: {
 
@@ -93,27 +94,27 @@
     },
     emit: function(event, data) {
       console.warn('emit:event', event, data);
-      return px.mobile.dom('*body').trigger('page:' + event, data);
+      return pxMobile.dom('*body').trigger('page:' + event, data);
     },
     on: function(event, cb) {
       console.warn('on:event', event, cb);
-      return px.mobile.dom('*body').on('page:' + event, cb);
+      return pxMobile.dom('*body').on('page:' + event, cb);
     },
 
     created: function() {
 
-      this.logApi(this.id, 'created');
+      this.logger.logApi(this.id, 'created');
 
       this.PageMap = {};
       this.PageList = [];
     },
 
     ready: function() {
-      this.logApi(this.id, 'ready');
+      this.logger.logApi(this.id, 'ready');
     },
 
     attached: function() {
-      this.logApi('attached', this.id + ' - ' + this.selected);
+      this.logger.logApi('attached', this.id + ' - ' + this.selected);
       if (!this.id) {
         throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
@@ -124,13 +125,13 @@
     },
     _initpages: function() {
       var self = this;
-      this.logApi('_initpages', this);
+      this.logger.logApi('_initpages', this);
       var pages = Polymer.dom(this).querySelectorAll('px-page');
 
     //  var pages = Polymer.dom(this).getEffectiveChildren();
       var len = pages.length;
       for (var i = 0; i < len; i++) {
-        this.logApi('page', pages[i]);
+        this.logger.logApi('page', pages[i]);
         self._addPage(pages[i]);
       }
       this.fire('px-pages-ready');
@@ -139,7 +140,7 @@
 
     //show Page
     showPage: function(index) {
-      this.logApi('showPage', index);
+      this.logger.logApi('showPage', index);
       this.PageList[this.selected].toggleClass('et-page-current');
       this.selected = index;
       this.PageList[this.selected].child()[0].toggleClass('et-page-current');
@@ -147,14 +148,14 @@
 
     //hide Page
     hidePage: function(index) {
-      this.logApi('hidePage', index);
+      this.logger.logApi('hidePage', index);
       this.toggleClass('hidden', true, this);
     },
 
     //update Page
     updatePage: function(page) {
       console.warn('INFO', 'update Page', this.id);
-      this.logApi('updatePage', page);
+      this.logger.logApi('updatePage', page);
     },
 
     //Handle adding a Page to the map
@@ -187,12 +188,12 @@
 
 
       //log
-      this.logApi('_addPage', Page);
+      this.logger.logApi('_addPage', Page);
     },
 
     //Handle clearing all the 'current' classes.
     _clearCurrent: function() {
-      this.logApi('_clearCurrent');
+      this.logger.logApi('_clearCurrent');
       var _pages = Polymer.dom(this).querySelectorAll('px-page');
       if (_pages) {
         _pages.forEach(function(Page) {
@@ -204,7 +205,7 @@
 
 
   PagesBehavior._setCurrent = function(index, oldIndex) {
-    this.logApi('_setCurrent', index);
+    this.logger.logApi('_setCurrent', index);
     var prevPage = this.children[oldIndex];
     var currPage = this.children[index];
 
@@ -234,7 +235,7 @@
 
   PagesBehavior.changePage = function(indexOrId) {
     var p = null;
-    this.logApi('changePage', indexOrId);
+    this.logger.logApi('changePage', indexOrId);
     this._clearCurrent();
 
     if (this.PageList[indexOrId]) {
@@ -297,7 +298,7 @@
       index = this.PageList.indexOf(this.PageMap[id]);
     }
     this.selected = index;
-    this.logApi('gotoPage', id, index);
+    this.logger.logApi('gotoPage', id, index);
   };
 
   /**
@@ -305,7 +306,7 @@
    * @param index
    */
   PagesBehavior.gotoIndex = function(index) {
-    this.logApi('gotoIndex', index);
+    this.logger.logApi('gotoIndex', index);
     this.children[index].removeClass('previous');
     this.children[index].removeClass('next');
     this.selected = index;
@@ -316,7 +317,7 @@
    * The current page
    */
   PagesBehavior.current = function() {
-    this.logApi('current', this.selected);
+    this.logger.logApi('current', this.selected);
     this.gotoIndex(this.selected);
   };
 
@@ -324,7 +325,7 @@
    * The next page
    */
   PagesBehavior.next = function() {
-    this.logApi('next', this.selected);
+    this.logger.logApi('next', this.selected);
     if (this.selected >= this.PageList.length - 1) {
       if (this.loop) {
         this.reset();

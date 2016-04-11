@@ -1,51 +1,8 @@
 <!-- TODO: Dependencies -->
 <link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="../px-base-element/px-base-element.html" />
-
-<!-- TODO: px components
-<link rel="import" href="../pg-card/pg-card.html"/>
-
-<link rel="import" href="../px-card/px-deck.html"/>
-<link rel="import" href="../px-card/px-card.html"/>
--->
-<script src="overthrow/overthrow-detect.js"></script>
-<script src="overthrow/overthrow-polyfill.js"></script>
-
-<script src="overthrow/overthrow-toss.js"></script>
-<script src="overthrow/overthrow-init.js"></script>
-<script src="overthrow/extensions/anchorscroll.overthrow.js"></script>
-<script src="../px-mobile.js/dist/px-mobile.js"></script>
-<script type="text/javascript">
-  window.px = window.px || {};
-  window.px.mobile = pxMobile;
-</script>
 <link rel="import" href="px-page-behavior.html" />
 
 <!--
-<link rel="stylesheet" href="px-page.css"/>
-# Overview
-This provides a wrapper for px-deck and px-card elements.
-
-### Page Data Properties
-page.name	Contains string value of data-page attribute
-page.url	Contains string URL of just loaded page
-page.query	object with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue" then page.query will contain:
-{
-  id: '10',
-  count: '20',
-  color: 'blue'
-}
-page.view	object. View instance that contains this page (if this View was initialized)
-page.container	Link to Page HTMLElement
-page.from	string - direction of where Page comes from. It will be "right" if you load new page, and "left" - if page comes after you click on "Back" button
-page.navbarInnerContainer	Link to related "navbar-inner" HTMLElement. Only for Dynamic Navbars
-page.swipeBack	boolean. Equals to true if page animation was initiated by swipe back. Available only within onPageBefore/AfterAnimation callbacks/events.
-page.context	object. Template7 context that was passed for this page when using Template7 pages
-page.fromPage	object. Page Data object of the previously active page
-
-## Usage
-To use this component in your custom component do the following:
-
 ```
 <dom-module id="demo-view">
   <template>
@@ -72,17 +29,13 @@ To use this component in your custom component do the following:
 @homepage index.html
 -->
 <dom-module id="px-page">
+  <template>
   <style>
     :host {
       display: block;
       box-sizing: border-box;
     }
-    /* Overthrow CSS:
-       Enable overflow: auto on elements with overthrow class when html element has overthrow class too */
-    :host .overthrow {
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+
     :host.dialog {
       -webkit-transition: all 0.3s ease;
       transition: all 0.3s ease;
@@ -97,13 +50,21 @@ To use this component in your custom component do the following:
     :host.dialog:not(.open) {
       transform: translateY(100%);
     }
+
     :host .page-content{
       height: 90%;
     }
+    :host .overthrow {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .overthrow {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
   </style>
-  <template>
     <section class="page-content overthrow">
-      <content></content>
+      <content id="pageContent" select="*"></content>
     </section>
   </template>
 </dom-module>

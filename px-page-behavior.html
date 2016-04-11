@@ -1,67 +1,10 @@
 <link rel="import" href="../px-base-element/px-base-element.html" />
-<script src="../px-mobile.js/dist/px-mobile.js"></script>
-<script type="text/javascript">
-  window.px = window.px || {};
-  window.px.mobile = pxMobile;
-</script>
-<!-- TODO:
-
-
-pageBeforeInit	Page Element
-<div class="page">
-Event will be triggered when Framework7 just inserts new page to DOM
-
-pageInit	Page Element
-<div class="page">
-Event will be triggered after Framework7 initialize required page's components and navbar
-
-pageReinit	Page Element
-<div class="page">
-This event will be triggered when cached page becomes visible. It is only applicaple for Inline Pages (DOM cached pages)
-
-pageBeforeAnimation	Page Element
-<div class="page">
-Event will be triggered when everything initialized and page (and navbar) is ready to be animated
-
-pageAfterAnimation	Page Element
-<div class="page">
-Event will be triggered after page (and navbar) animation
-
-pageBeforeRemove	Page Element
-<div class="page">
-Event will be triggered right before Page will be removed from DOM. This event could be very useful if you need to detach some events / destroy some plugins to free memory
-
-pageBack	Page Element
-<div class="page">
-Event will be triggered right before "back" transition. Difference with "pageBeforeAnimation" is that this event will be triggered for the "old" page - page that slides from center to right
-
-pageAfterBack
-
-
-
-
-
-
-Page Data Properties
-page.name	Contains string value of data-page attribute
-page.url	Contains string URL of just loaded page
-page.query	object with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue" then page.query will contain:
-{
-  id: '10',
-  count: '20',
-  color: 'blue'
-}
-page.view	object. View instance that contains this page (if this View was initialized)
-page.container	Link to Page HTMLElement
-page.from	string - direction of where Page comes from. It will be "right" if you load new page, and "left" - if page comes after you click on "Back" button
-page.navbarInnerContainer	Link to related "navbar-inner" HTMLElement. Only for Dynamic Navbars
-page.swipeBack	boolean. Equals to true if page animation was initiated by swipe back. Available only within onPageBefore/AfterAnimation callbacks/events.
-page.context	object. Template7 context that was passed for this page when using Template7 pages
-page.fromPage	object. Page Data object of the previously active page
- -->
+<script src="overthrow/overthrow-detect.js"></script>
+<script src="overthrow/overthrow-polyfill.js"></script>
+<script src="overthrow/overthrow-toss.js"></script>
+<script src="overthrow/overthrow-init.js"></script>
 <script type="text/javascript">
   var PageBehavior = {
-
     properties : {
       title : {
         type : String,
@@ -79,7 +22,7 @@ page.fromPage	object. Page Data object of the previously active page
       },
 
       //Path to remote view that will be loaded
-      href:{
+      import:{
         type: String,
         notify: true,
         value: null,
@@ -129,42 +72,46 @@ page.fromPage	object. Page Data object of the previously active page
       //Link to Page HTMLElement
       container: {
         type: String
+      },
+      //Reference to the page navbar.
+      navbar: {
+        type: Object
       }
     },
-
     created : function() {
-      var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:orange'}});
-      px.mobile.utils.addMixin(logger, this);
-      this.logApi('created', this.id);
-      px.mobile.PubSub.emit('page:'+this.id+':init', this);
+      this.logger.logApi('created', this.id);
+      pxMobile.PubSub.emit('page:'+this.id+':init', this);
     },
     ready : function() {
-      this.logApi('ready', this.id);
+      this.logger.logApi('ready', this.id);
       if(this.dialog){
         this.toggleClass('dialog');
       }
-
-
       this.fire('page:ready', this);
-      px.mobile.PubSub.emit('page:'+this.id+':ready', this);
+      pxMobile.PubSub.emit('page:'+this.id+':ready', this);
     },
     attached: function(){
-
-
       this._fixNavbar();
-
     },
     _fixNavbar: function(){
       var w = this.parentNode.offsetWidth;
       var h = this.parentNode.offsetHeight;
-      var pageContent = this.querySelector('.page-content');
-      var pageNavbar = this.querySelector('px-navbar');
+      var pageContent = this.$.pageContent;
+      var pageNavbar = this.queryEffectiveChildren('px-navbar');
+
       if(pageNavbar){
-        console.log('Fixing navbar');
+
         pageContent.css('margin-top', pageNavbar.offsetHeight + 'px');
+
+        if(this.theme){
+          pageNavbar.theme = this.theme;
+        }
+
+        if(this.title){
+          pageNavbar.title = this.title;
+        }
+        this.navbar = pageNavbar;
       }
-
-
     },
     show: function(){
       console.warn('INFO', 'show view', this.id);
@@ -201,7 +148,7 @@ page.fromPage	object. Page Data object of the previously active page
 
         this.importHref(newVal, function(e) {
         	html = e.target.import.body.innerHTML;
-        	_this.logApi('inject html', _this.id);
+        	_this.logger.logApi('inject html', _this.id);
           console.warn('inject px-view html', _this.id);
           _this.html(html);
         }, function(e) {
@@ -211,7 +158,7 @@ page.fromPage	object. Page Data object of the previously active page
       }
     },
     showMenu:function(){
-      px.mobile.dom('px-app').toggleClass('show-menu');
+      pxMobile.dom('px-app').toggleClass('show-menu');
     },
     open: function(){
       if(this.dialog){

@@ -1,77 +1,107 @@
 <!doctype html>
 <html>
-
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+	<link rel='stylesheet prefetch' href='https://predixdev.github.io/px-library-design/css/style.css'>
 	<meta charset="UTF-8">
-	<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../webcomponentsjs/webcomponents.js"></script>
 	<script src="../web-component-tester/browser.js"></script>
 
 	<link rel="import" href="../px-navbar/px-navbar.html">
 	<link rel="import" href="px-pages.html">
 	<link rel="import" href="px-page.html">
 	<title>wct - px-page</title>
+	<style media="screen">
+		.demo{
+			position: relative;
+		}
+	</style>
 </head>
 
 <body>
 
 
-	<px-navbar id="navbar1" theme="primary" title="Pages">
-		<div></div>
-		<button onclick="fixture1.next()">Next</button>
-	</px-navbar>
 
-	<px-pages id="fixture1" title="Test Element">
-		<px-page id="page1" title="Test Element" main>
-			<h3>Page 1</h3>
-		</px-page>
-		<px-page id="page2" title="Test Element">
-			<h3>Page 2</h3>
-			<button onclick="fixture1.prev()">prev</button>
-			<button onclick="fixture1.next()">next</button>
-		</px-page>
-		<px-page id="page3" title="Test Element">
-			<h3>Page 3</h3>
-			<button onclick="fixture1.prev()">prev</button>
-			<button onclick="fixture1.next()">next</button>
-		</px-page>
-		<px-page id="page4" title="Test Element">
-			<h3>Page 4</h3>
-			<button onclick="fixture1.prev()">prev</button>
-			<button onclick="fixture1.next()">next</button>
-		</px-page>
-		<px-page id="page5" title="Test Element">
-			<h3>Page 5</h3>
-			<button onclick="fixture1.prev()">prev</button>
-			<button onclick="fixture1.next()">next</button>
-		</px-page>
-		<px-page id="page6" title="Test Element">
-			<h3>Page 6</h3>
-			<button onclick="fixture1.prev()">prev</button>
-			<button onclick="fixture1.next()">next</button>
-		</px-page>
-	</px-pages>
+		<div class="demo">
+			<px-pages id="fixture1" title="Test Pages">
+				<px-page id="page1" title="Test Page-1" main>
+					<px-navbar>
+						<div class="">
+							<button onclick="fixture1.prev()">prev</button>
+						</div>
+						<div>
+							<button onclick="fixture1.next()">next</button>
+						</div>
+					</px-navbar>
+					<h3>Page 1</h3>
+				</px-page>
+				<px-page id="page2" title="Test Page-2">
+					<px-navbar>
+						<button onclick="fixture1.prev()">prev</button>
+						<button onclick="fixture1.next()">next</button>
+					</px-navbar>
+					<h3>Page 2</h3>
+
+				</px-page>
+				<px-page id="page3" title="Test Page-3" theme="dark">
+					<px-navbar>
+						<button onclick="fixture1.prev()">prev</button>
+						<button onclick="fixture1.next()">next</button>
+					</px-navbar>
+					<h3>Page 3</h3>
+
+				</px-page>
+				<px-page id="page4" title="Test Page-4">
+					<px-navbar>
+						<button onclick="fixture1.prev()">prev</button>
+						<button onclick="fixture1.next()">next</button>
+					</px-navbar>
+					<h3>Page 4</h3>
+
+				</px-page>
+				<px-page id="page5" title="Test Page-5">
+					<px-navbar>
+						<button onclick="fixture1.prev()">prev</button>
+						<button onclick="fixture1.next()">next</button>
+					</px-navbar>
+					<h3>Page 5</h3>
+
+				</px-page>
+				<px-page id="page6" title="Test Page-6">
+					<px-navbar>
+						<button onclick="fixture1.prev()">prev</button>
+						<button onclick="fixture1.next()">next</button>
+					</px-navbar>
+					<h3>Page 6</h3>
+				</px-page>
+				<px-page id="pageModal" title="Test Page-7" modal dialog>
+
+					<h3>Page 6</h3>
+				</px-page>
+			</px-pages>
 
 
+		</div>
 	<script>
 		suite('<px-pages>', function() {
 			var element = document.getElementById('fixture1');
+
 			test('renders', function() {
 				assert.ok(element);
 			});
+
 			test('changes to next page', function() {
 				element.next();
-				assert.equal(element.getCurrent().id, 'page2');
+				assert.equal(element.getCurrentPage().id, 'page2');
 			});
+
 			test('changes to prev page', function() {
 				element.prev();
-				assert.equal(element.getCurrent().id, 'page1');
+				assert.equal(element.getCurrentPage().id, 'page1');
 			});
-			test('resets pages', function() {
-				element.next();
-				element.next();
-				element.reset();
-				assert.equal(element.getCurrent().id, 'page1');
-			});
+
+
 		});
 
 		suite('<px-page>', function() {
