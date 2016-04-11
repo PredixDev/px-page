@@ -1,5 +1,6 @@
 <!-- TODO: Dependencies -->
-<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../px-base-element/px-base-element.html" />
 
 <!-- TODO: px components
 <link rel="import" href="../pg-card/pg-card.html"/>
@@ -7,8 +8,18 @@
 <link rel="import" href="../px-card/px-deck.html"/>
 <link rel="import" href="../px-card/px-card.html"/>
 -->
-<link rel="import" href="../px-mobile/px-mobile.html"/>
-<link rel="import" href="px-page-behavior.html"/>
+<script src="overthrow/overthrow-detect.js"></script>
+<script src="overthrow/overthrow-polyfill.js"></script>
+
+<script src="overthrow/overthrow-toss.js"></script>
+<script src="overthrow/overthrow-init.js"></script>
+<script src="overthrow/extensions/anchorscroll.overthrow.js"></script>
+<script src="../px-mobile.js/dist/px-mobile.js"></script>
+<script type="text/javascript">
+  window.px = window.px || {};
+  window.px.mobile = pxMobile;
+</script>
+<link rel="import" href="px-page-behavior.html" />
 
 <!--
 <link rel="stylesheet" href="px-page.css"/>
@@ -62,22 +73,33 @@ To use this component in your custom component do the following:
 -->
 <dom-module id="px-page">
   <style>
-  :host {
-    display: block;
-    box-sizing: border-box;
-    min-height: 30vh;
-  }
-  :host.dialog{
-    position: fixed;
-    left: 0;
-    right: 0;
-    transform: translate(0,0);
-  }
+    :host {
+      display: block;
+      box-sizing: border-box;
+    }
+    /* Overthrow CSS:
+       Enable overflow: auto on elements with overthrow class when html element has overthrow class too */
+    :host .overthrow {
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    :host.dialog {
+      -webkit-transition: all 0.3s ease;
+      transition: all 0.3s ease;
+      position: fixed;
+      left: 0;
+      right: 0;
+      transform: translateY(0);
+      z-index: 100;
+      background: #fff;
+    }
 
-  :host.dialog:not(.open){
-    transform: translate(0,100%);
-  }
-
+    :host.dialog:not(.open) {
+      transform: translateY(100%);
+    }
+    :host .page-content{
+      height: 90%;
+    }
   </style>
   <template>
     <section class="page-content overthrow">
@@ -87,8 +109,7 @@ To use this component in your custom component do the following:
 </dom-module>
 <script type="text/javascript">
   Polymer({
-    is : 'px-page',
-  behaviors : [ px.page]
+    is: 'px-page',
+    behaviors: [BaseElement, PageBehavior]
   });
-
 </script>

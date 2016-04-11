@@ -1,6 +1,7 @@
-<link rel="import" href="../px-mobile/px-mobile.html"/>
+<script src="../px-mobile.js/dist/px-mobile.js"></script>
+
 <script type="text/javascript">
-  px.pages = {
+  var PagesBehavior = {
     // add properties and methods on the element's prototype
     properties: {
 
@@ -24,7 +25,6 @@
         type: Object,
         value: {}
       },
-
       context: {
         type: Object,
         value: {}
@@ -49,12 +49,12 @@
       },
 
       //The in effect
-      in: {
+      inTransition: {
         type: String
       },
 
       //The out effect
-      out: {
+      outTransition: {
         type: String
       },
 
@@ -64,20 +64,43 @@
         value: false
       }
     },
+    handleTrack: function(e) {
+      var message;
+      //pos = (this.containerSize / 100) * (((paneIndex - showIndex) * 100) + percent);
+      var contextWidth = this.offsetWidth;
+      var translateWidth = (contextWidth / 100) + e.detail.x;
+      var pos = Math.abs(translateWidth);
+      var transform = 'translateX( '+ pos +' )'
+      var currentPage = null;
+      console.log('handleTrack', e);
+      switch(e.detail.state) {
+        case 'start':
+          message = 'Tracking started!';
+          break;
+        case 'track':
+          message = 'Tracking in progress... ' +
+            e.detail.x + ', ' + e.detail.y;
+            this.transform('translateX('+pos+'px)', this.currentPage);
+          break;
+        case 'end':
+          message = 'Tracking ended!';
+          break;
+      }
 
-    emit: function (event, data) {
-      this.logApi('emit:event', event, data);
+
+
+      console.log('handleTrack', message, pos, contextWidth, translateWidth, transform);
+    },
+    emit: function(event, data) {
+      console.warn('emit:event', event, data);
       return px.mobile.dom('*body').trigger('page:' + event, data);
     },
-
-    on: function (event, cb) {
-      this.logApi('on:event', event);
+    on: function(event, cb) {
+      console.warn('on:event', event, cb);
       return px.mobile.dom('*body').on('page:' + event, cb);
     },
 
-    created: function () {
-      var logger = new px.mobile.Logger(this.tagName, {colors: {debug: 'color:blue'}});
-      px.mobile.utils.addMixin(logger, this);
+    created: function() {
 
       this.logApi(this.id, 'created');
 
@@ -85,37 +108,37 @@
       this.PageList = [];
     },
 
-    ready: function () {
+    ready: function() {
       this.logApi(this.id, 'ready');
-      this._initpages();
-      this.addClass('et-wrapper');
     },
 
-    attached: function () {
-      var _this = this;
+    attached: function() {
       this.logApi('attached', this.id + ' - ' + this.selected);
       if (!this.id) {
         throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
-      this.debounce('selected', function() {
-        _this.gotoIndex(_this.selected);
-        console.warn('selected', _this.selected);
-      }, 500);
+    //  this.listen(this, 'track', 'handleTrack');
+      this._initpages();
+      this.gotoIndex(this.selected);
+      this.addClass('et-wrapper');
     },
-
-    _initpages: function () {
+    _initpages: function() {
       var self = this;
       this.logApi('_initpages', this);
       var pages = Polymer.dom(this).querySelectorAll('px-page');
+
+    //  var pages = Polymer.dom(this).getEffectiveChildren();
       var len = pages.length;
       for (var i = 0; i < len; i++) {
         this.logApi('page', pages[i]);
         self._addPage(pages[i]);
       }
+      this.fire('px-pages-ready');
+      this.fire('ready');
     },
 
     //show Page
-    showPage: function (index) {
+    showPage: function(index) {
       this.logApi('showPage', index);
       this.PageList[this.selected].toggleClass('et-page-current');
       this.selected = index;
@@ -123,19 +146,26 @@
     },
 
     //hide Page
-    hidePage: function (index) {
+    hidePage: function(index) {
       this.logApi('hidePage', index);
       this.toggleClass('hidden', true, this);
     },
 
     //update Page
-    updatePage: function (page) {
+    updatePage: function(page) {
+      console.warn('INFO', 'update Page', this.id);
       this.logApi('updatePage', page);
     },
 
     //Handle adding a Page to the map
-    _addPage: function (Page) {
+    _addPage: function(Page) {
+
       this.emit('add', Page);
+
+      if (Page.modal) {
+        console.warn('Not adding Page.modal', Page);
+        return;
+      }
 
       //add the index to the el
       Page.attr('index', this.PageList.length.toString());
@@ -155,14 +185,17 @@
         this.routes[Page.route] = Page.id;
       }
 
+
+      //log
+      this.logApi('_addPage', Page);
     },
 
     //Handle clearing all the 'current' classes.
-    _clearCurrent: function () {
+    _clearCurrent: function() {
       this.logApi('_clearCurrent');
       var _pages = Polymer.dom(this).querySelectorAll('px-page');
       if (_pages) {
-        _pages.forEach(function (Page) {
+        _pages.forEach(function(Page) {
           Page.removeClass('current');
         });
       }
@@ -170,10 +203,11 @@
   };
 
 
-  px.pages._setCurrent = function (index, oldIndex) {
+  PagesBehavior._setCurrent = function(index, oldIndex) {
     this.logApi('_setCurrent', index);
-    var prevPage = this.PageList[oldIndex];
-    var currPage = this.PageList[index];
+    var prevPage = this.children[oldIndex];
+    var currPage = this.children[index];
+
 
     this.emit('change', currPage);
 
@@ -188,37 +222,51 @@
       currPage.addClass('current');
       currPage.addClass('et-page-current');
     }
+    this.currentPage = currPage;
+    this.fire('current', currPage);
+
   };
 
+  PagesBehavior.getCurrentPage = function(){
+    this.currentPage = this.PageList[this.selected];
+    return this.currentPage;
+  };
 
-  px.pages.changePage = function (indexOrId) {
-    this.emit('change', indexOrId);
+  PagesBehavior.changePage = function(indexOrId) {
+    var p = null;
     this.logApi('changePage', indexOrId);
     this._clearCurrent();
+
     if (this.PageList[indexOrId]) {
+      p = this.PageList[indexOrId];
       this._setCurrent(indexOrId);
     } else if (this.PageMap[indexOrId]) {
-      this._setCurrent(this.PageList.indexOf(this.PageMap[indexOrId]));
+      p = this.PageMap[indexOrId];
+      this._setCurrent(this.PageList.indexOf(p));
     }
+    this.emit('change', indexOrId);
+    this.currentPage = p;
+    this.fire('change', p);
   };
 
 
   // TODO: New IMplmenation
-  px.pages.currentIndex = 0;
-  px.pages.reset = function (reverse) {
-    var _pages = this.PageList;
-    var len = this.PageList.length;
+  PagesBehavior.currentIndex = 0;
+  PagesBehavior.reset = function(reverse) {
+    var _pages = this.children;
+    var len = this.children.length;
     for (var i = 0; i < len; i++) {
-      this.PageList[i].removeClass('current');
+      this.children[i].removeClass('current');
+
       if (reverse) {
-        this.PageList[i].addClass('previous');
-        this.PageList[i].removeClass('next');
+        this.children[i].addClass('previous');
+        this.children[i].removeClass('next');
       } else {
-        this.PageList[i].addClass('next');
-        this.PageList[i].removeClass('previous');
+        this.children[i].addClass('next');
+        this.children[i].removeClass('previous');
       }
     }
-    this.PageList[this.selected].removeClass('next');
+    this.children[this.selected].removeClass('next');
     if (reverse) {
       this.selected = this.PageList.length - 1;
     } else {
@@ -228,20 +276,22 @@
     this.current();
   };
 
-  px.pages.goto = function (indexOrId) {
+  PagesBehavior.goto = function(indexOrId) {
+    var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
 
-    if (this.PageMap[indexOrId]) {
-      return this.gotoPage(indexOrId);
-    } else if(this.PageList[indexOrId]){
-      return this.gotoIndex(indexOrId);
+    if (page) {
+      this.gotoPage(indexOrId);
+      window.location.hash = page.route;
+      return page;
     }
 
   };
 
+
   /**
    * Goto a page
    */
-  px.pages.gotoPage = function (id) {
+  PagesBehavior.gotoPage = function(id) {
     var index = 0;
     if (this.PageMap[id]) {
       index = this.PageList.indexOf(this.PageMap[id]);
@@ -254,22 +304,18 @@
    * Goto a page by index
    * @param index
    */
-  px.pages.gotoIndex = function (index) {
+  PagesBehavior.gotoIndex = function(index) {
     this.logApi('gotoIndex', index);
-    index = index || 0;
-    if (this.PageList[index]) {
-      this.PageList[index].removeClass('previous');
-      this.PageList[index].removeClass('next');
-      this.selected = index;
-    } else {
-      this.selected = 0;
-    }
+    this.children[index].removeClass('previous');
+    this.children[index].removeClass('next');
+    this.selected = index;
+
   };
 
   /**
    * The current page
    */
-  px.pages.current = function () {
+  PagesBehavior.current = function() {
     this.logApi('current', this.selected);
     this.gotoIndex(this.selected);
   };
@@ -277,7 +323,7 @@
   /**
    * The next page
    */
-  px.pages.next = function () {
+  PagesBehavior.next = function() {
     this.logApi('next', this.selected);
     if (this.selected >= this.PageList.length - 1) {
       if (this.loop) {
@@ -293,7 +339,7 @@
   /**
    * The previous page
    */
-  px.pages.prev = function () {
+  PagesBehavior.prev = function() {
     if (this.selected <= 0) {
       if (this.loop) {
         this.reset(true);
@@ -309,7 +355,7 @@
    * Remove transition from page
    * @param index
    */
-  px.pages.removeTransition = function (index) {
+  PagesBehavior.removeTransition = function(index) {
     var page = this.PageList[index];
     page.content.css('transition', 'none');
   };
@@ -317,7 +363,7 @@
   /**
    * Do a transition
    */
-  px.pages.doTransition = function (index) {
+  PagesBehavior.doTransition = function(index) {
     var page = this.PageList[index];
     var position = page.position();
     page
@@ -329,7 +375,7 @@
    * Change the page
    * @param name
    */
-  px.pages.change = function (name) {
+  PagesBehavior.change = function(name) {
     return this.goto(name);
   };
 
@@ -337,63 +383,39 @@
    * Load a page
    * @param url
    */
-  px.pages.load = function (url) {
-
+  PagesBehavior.load = function(url) {
+    console.warn('PagesBehavior.load', 'NOT IMPLEMENTED');
+    return false;
   };
 
   /**
    * Get the active page
    * @returns {*}
    */
-  px.pages.getActivePage = function () {
+  PagesBehavior.getActivePage = function() {
     return this.PageList[this.selected];
   };
 
-  //px.pages.currentPage = this.getActivePage();
+  //PagesBehavior.currentPage = this.getActivePage();
 
   /**
    * Add a px-page from page object
    * @param obj
    */
-  px.pages.addPage = function (obj) {
-
+  PagesBehavior.addPage = function(obj) {
+    console.warn('PagesBehavior.addPage', 'NOT IMPLEMENTED');
+    return false;
   };
 
-  px.pages.getCurrentPage = function () {
-    return this.PageList[this.selected];
+  //Handle setting the height of the current page to the height of the container.
+  PagesBehavior._fixHeight = function() {
+    var pHeight = this.offsetHeight;
+    var pageHeight = this.currentPage.offsetHeight;
+    var pageContent = this.querySelector('.page-content');
+    var contentHeight = pageContent.offsetHeight;
+    pageContent.css('height', pageHeight+ 'px')
+    console.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
+
+    return pageContent;
   };
-
-  px.pages.handleTrack = function (e) {
-    var message = '';
-
-    var currentIndex = this.selected;
-    var containerWidth = this.offsetWidth;
-
-    var containerLeft = 0;
-    var distance = (currentIndex * containerWidth);
-
-    var totaldist = distance + containerLeft;
-
-    console.log(e);
-    switch (e.detail.state) {
-      case 'start':
-        message = 'Tracking started!';
-        break;
-
-      //Finger is down and moving
-      case 'track':
-
-        var move = Math.min(e.detail.ddx, (currentIndex + 1) * distance);
-        console.log('Tracking started!', move, e.detail.ddx, e.detail.dx, containerWidth);
-        break;
-
-      case 'end':
-        message = 'Tracking ended!';
-        break;
-    }
-    console.warn(message);
-  };
-
-
-
 </script>

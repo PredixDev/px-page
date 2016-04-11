@@ -1,4 +1,9 @@
-<link rel="import" href="../px-mobile/px-mobile.html"/>
+<link rel="import" href="../px-base-element/px-base-element.html" />
+<script src="../px-mobile.js/dist/px-mobile.js"></script>
+<script type="text/javascript">
+  window.px = window.px || {};
+  window.px.mobile = pxMobile;
+</script>
 <!-- TODO:
 
 
@@ -55,7 +60,8 @@ page.context	object. Template7 context that was passed for this page when using 
 page.fromPage	object. Page Data object of the previously active page
  -->
 <script type="text/javascript">
-  px.page = {
+  var PageBehavior = {
+
     properties : {
       title : {
         type : String,
@@ -85,6 +91,10 @@ page.fromPage	object. Page Data object of the previously active page
         value : false,
       },
 
+      modal : {
+        type : Boolean,
+        value : false,
+      },
       dialog : {
         type : Boolean,
         value : false,
@@ -133,7 +143,28 @@ page.fromPage	object. Page Data object of the previously active page
       if(this.dialog){
         this.toggleClass('dialog');
       }
+
+
+      this.fire('page:ready', this);
       px.mobile.PubSub.emit('page:'+this.id+':ready', this);
+    },
+    attached: function(){
+
+
+      this._fixNavbar();
+
+    },
+    _fixNavbar: function(){
+      var w = this.parentNode.offsetWidth;
+      var h = this.parentNode.offsetHeight;
+      var pageContent = this.querySelector('.page-content');
+      var pageNavbar = this.querySelector('px-navbar');
+      if(pageNavbar){
+        console.log('Fixing navbar');
+        pageContent.css('margin-top', pageNavbar.offsetHeight + 'px');
+      }
+
+
     },
     show: function(){
       console.warn('INFO', 'show view', this.id);
