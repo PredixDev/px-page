@@ -19,6 +19,21 @@ This provides a wrapper for px-page elements.
 To use this component in your custom component do the following:
 
 ```
+<px-pages selected="0">
+  <px-page>One</px-page>
+  <px-page>Two</px-page>
+  <px-page>Three</px-page>
+</px-pages>
+
+<script>
+  document.addEventListener('click', function(e) {
+    var pages = document.querySelector('px-pages');
+    pages.next();
+  });
+</script>
+```
+
+```
 <dom-module id="demo-view">
   <template>
     <px-pages id="app-views">
@@ -48,20 +63,21 @@ To use this component in your custom component do the following:
   :host{
     display: block;
     position: relative;
+  }
+  :host px-page {
     -webkit-transition: all 1s ease-out;
     transition: all 1s ease-out;
     -webkit-overflow-scrolling: touch;
-    height: 100%;
-    width: 100%;
-    background-color: crimson;
+    height: calc(100vh - 10px);
+    width:100%;
   }
 
   ::content px-page {
-    -webkit-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
   }
 
-  ::content px-page.et-page-current{
+  ::content px-page.current{
     opacity: 1;
     visibility: visible;
     -webkit-transform: translate(0, 0);
@@ -71,7 +87,7 @@ To use this component in your custom component do the following:
   ::content px-page.next {
     -webkit-transform: translate(100%, 0);
     transform: translate(100%, 0);
-  
+
     visibility: visible;
   }
   ::content px-page.previous {
@@ -82,7 +98,9 @@ To use this component in your custom component do the following:
   }
   </style>
   <template>
-    <content></content>
+    <div  on-track="handleTrack">
+      <content></content>
+    </div>
   </template>
 </dom-module>
 <script type="text/javascript">
