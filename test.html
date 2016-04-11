@@ -1,84 +1,86 @@
 <!doctype html>
-<html class="pxm">
+<html>
 
 <head>
 	<meta charset="UTF-8">
-	<script src="../../../../webcomponentsjs/webcomponents-lite.js"></script>
-	<script src="../../../..//web-component-tester/browser.js"></script>
-	<link rel="import" href="../../../../polymer/polymer.html">
-	<link rel="import" href="../../../dist/px-mobile.min.html">
-	<link rel="import" href="../pxm-example/component.html">
+	<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+	<script src="../web-component-tester/browser.js"></script>
+
+	<link rel="import" href="../px-navbar/px-navbar.html">
+	<link rel="import" href="px-pages.html">
+	<link rel="import" href="px-page.html">
+	<title>wct - px-page</title>
 </head>
 
 <body>
 
-	<pxm-example-device>
-    <pxm-navbar id="navbar1" theme="primary" title="Pages">
-      <div>
 
-      </div>
-      	<button onclick="fixture1.next()">Next</button>
-    </pxm-navbar>
-		<pxm-pages id="fixture1" title="Test Element" >
-			<pxm-page id="page1" title="Test Element" main>
-				<h3>Page 1</h3>
+	<px-navbar id="navbar1" theme="primary" title="Pages">
+		<div></div>
+		<button onclick="fixture1.next()">Next</button>
+	</px-navbar>
 
-			</pxm-page>
-			<pxm-page id="page2" title="Test Element">
-				<h3>Page 2</h3>
-				<button onclick="fixture1.prev()">prev</button>
-				<button onclick="fixture1.next()">next</button>
-			</pxm-page>
-			<pxm-page id="page3" title="Test Element">
-				<h3>Page 3</h3>
-				<button onclick="fixture1.prev()">prev</button>
-				<button onclick="fixture1.next()">next</button>
-			</pxm-page>
-			<pxm-page id="page4" title="Test Element">
-				<h3>Page 4</h3>
-				<button onclick="fixture1.prev()">prev</button>
-				<button onclick="fixture1.next()">next</button>
-			</pxm-page>
-			<pxm-page id="page5" title="Test Element">
-				<h3>Page 5</h3>
-				<button onclick="fixture1.prev()">prev</button>
-				<button onclick="fixture1.next()">next</button>
-			</pxm-page>
-			<pxm-page id="page6" title="Test Element">
-				<h3>Page 6</h3>
-				<button onclick="fixture1.prev()">prev</button>
-				<button onclick="fixture1.next()">next</button>
-			</pxm-page>
-		</pxm-pages>
-	</pxm-example-device>
+	<px-pages id="fixture1" title="Test Element">
+		<px-page id="page1" title="Test Element" main>
+			<h3>Page 1</h3>
+		</px-page>
+		<px-page id="page2" title="Test Element">
+			<h3>Page 2</h3>
+			<button onclick="fixture1.prev()">prev</button>
+			<button onclick="fixture1.next()">next</button>
+		</px-page>
+		<px-page id="page3" title="Test Element">
+			<h3>Page 3</h3>
+			<button onclick="fixture1.prev()">prev</button>
+			<button onclick="fixture1.next()">next</button>
+		</px-page>
+		<px-page id="page4" title="Test Element">
+			<h3>Page 4</h3>
+			<button onclick="fixture1.prev()">prev</button>
+			<button onclick="fixture1.next()">next</button>
+		</px-page>
+		<px-page id="page5" title="Test Element">
+			<h3>Page 5</h3>
+			<button onclick="fixture1.prev()">prev</button>
+			<button onclick="fixture1.next()">next</button>
+		</px-page>
+		<px-page id="page6" title="Test Element">
+			<h3>Page 6</h3>
+			<button onclick="fixture1.prev()">prev</button>
+			<button onclick="fixture1.next()">next</button>
+		</px-page>
+	</px-pages>
+
 
 	<script>
-		suite('<pxm-pages>', function() {
+		suite('<px-pages>', function() {
 			var element = document.getElementById('fixture1');
 			test('renders', function() {
 				assert.ok(element);
 			});
-      test('changes to next page', function(){
-        element.next();
-        assert.equal(element.getCurrent().id, 'page2');
-      });
-      test('changes to prev page', function(){
-        element.prev();
-        assert.equal(element.getCurrent().id, 'page1');
-      });
-			test('resets pages', function(){
+			test('changes to next page', function() {
+				element.next();
+				assert.equal(element.getCurrent().id, 'page2');
+			});
+			test('changes to prev page', function() {
+				element.prev();
+				assert.equal(element.getCurrent().id, 'page1');
+			});
+			test('resets pages', function() {
 				element.next();
 				element.next();
-        element.reset();
-        assert.equal(element.getCurrent().id, 'page1');
-      });
+				element.reset();
+				assert.equal(element.getCurrent().id, 'page1');
+			});
 		});
-		suite('<pxm-page>', function() {
+
+		suite('<px-page>', function() {
 			var element = document.getElementById('page1');
 			test('renders', function() {
 				assert.ok(element);
 			});
 		});
+
 	</script>
 </body>
 
