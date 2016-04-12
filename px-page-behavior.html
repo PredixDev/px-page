@@ -88,9 +88,17 @@
         this.toggleClass('dialog');
       }
       this.fire('page:ready', this);
+
+
       pxMobile.PubSub.emit('page:'+this.id+':ready', this);
     },
     attached: function(){
+      this.navbar = this.querySelector('px-navbar');
+      if(this.navbar){
+        this.toggleClass('has-navbar', true);
+        this.navbar.title = this.title;
+      }
+
       this._fixNavbar();
     },
     _fixNavbar: function(){
@@ -98,6 +106,10 @@
       var h = this.parentNode.offsetHeight;
       var pageContent = this.$.pageContent;
       var pageNavbar = this.queryEffectiveChildren('px-navbar');
+      var pageNavbar = this.$.pageContent.child[0]
+
+
+      this.logger.logApi('_fixNavbar');
 
       if(pageNavbar){
 

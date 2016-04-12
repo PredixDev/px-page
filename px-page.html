@@ -48,6 +48,7 @@
     }
 
     :host.dialog:not(.open) {
+      z-index: -1;
       transform: translateY(100%);
     }
 
@@ -61,6 +62,9 @@
     .overthrow {
         overflow: auto;
         -webkit-overflow-scrolling: touch;
+    }
+    :host.has-navbar .page-content{
+      margin-top: 55px;
     }
   </style>
     <section class="page-content overthrow">

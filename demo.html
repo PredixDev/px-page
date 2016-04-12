@@ -12,6 +12,7 @@
 
   <link rel="import" href="px-pages.html">
   <link rel="import" href="px-page.html">
+  <link rel="import" href="../px-table-view/px-table-view.html">
   <link rel="import" href="../px-navbar/px-navbar.html">
   <style>
     body {
@@ -51,7 +52,6 @@
         </style>
         <template id="demoPages" is="dom-bind">
           <div class="buttons flex">
-            <button class="btn" type="button" onclick="appPages.reset()">Reset</button>
             <button class="btn" type="button" onclick="appPages.prev()">Prev</button>
             <button class="btn" type="button" onclick="appPages.next()">Next</button>
             <button class="btn" type="button" onclick="goto()">Goto</button>
@@ -61,34 +61,56 @@
             <px-pages id="appPages" selected="0">
 
               <px-page id="Page0" title="Main Page" route="/Page0" main="true">
-                <px-navbar title="Main" theme="dark"></px-navbar>
-                <ul id="list1" class="list-ui">
-                  <li>Item 1</li>
+                <px-navbar>
+                  <div></div>
+                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+                </px-navbar>
+                <ul id="list1" class="table-view table-view--small">
+                  <li class="table-row table-row--nav-right">Item</li>
                 </ul>
-
               </px-page>
 
-              <px-page id="Page1" title="Page" route="/Page1">
+              <px-page id="Page1" title="Page 1" route="/Page1">
+                <px-navbar>
+                  <div></div>
+                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+                </px-navbar>
                 <h2>page1</h2>
               </px-page>
 
-              <px-page id="Page2" title="Page" route="/Page2">
+              <px-page id="Page2" title="Page 2" route="/Page2">
+                <px-navbar>
+                  <div></div>
+                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+                </px-navbar>
                 <h2>page2</h2>
               </px-page>
 
-              <px-page id="Page3" title="Page" route="/Page3">
+              <px-page id="Page3" title="Page 3" route="/Page3">
+                <px-navbar>
+                  <div></div>
+                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+                </px-navbar>
                 <h2>page3</h2>
               </px-page>
 
-              <px-page id="Page4" title="Page" route="/Page4">
+              <px-page id="Page4" title="Page 4" route="/Page4">
+                <px-navbar>
+                  <div></div>
+                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+                </px-navbar>
                 <h2>page4</h2>
               </px-page>
 
-              <px-page id="Page5" title="Page" route="/Page5">
+              <px-page id="Page5" title="Page 5" route="/Page5">
+                <px-navbar>
+                  <div></div>
+                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+                </px-navbar>
                 <h2>Page 5</h2>
               </px-page>
 
-              <px-page id="dialogPage" title="Page" route="/Page6" dialog>
+              <px-page id="dialogPage" title="Page 6" route="/Page6" modal dialog>
                 <h2>Dialog Page</h2>
               </px-page>
 
@@ -111,7 +133,11 @@
                 $el = document.querySelector(id);
               for (var i = 0; i < count; i++) {
                 li = document.createElement('li');
+                li.className = 'table-row table-row--nav-right';
                 li.innerText = 'Item ' + i;
+                li.addEventListener('click', function(){
+                  appPages.next();
+                });
                 $el.appendChild(li);
               }
             }
