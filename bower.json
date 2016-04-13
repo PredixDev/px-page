@@ -18,8 +18,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "~1.0.9",
-    "px-mobile": "https://github.build.ge.com/PredixComponents/px-mobile.git"
+    "polymer": "latest",
+    "px-mobile.js": "https://github.build.ge.com/PredixComponents/px-mobile.js.git"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5"
