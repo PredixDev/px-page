@@ -98,6 +98,9 @@
         this.toggleClass('has-navbar', true);
         this.navbar.title = this.title;
       }
+      if(this.parentNode && this.parentNode.localName === 'PX-PAGES'){
+        this.viewContainer = this.parentNode;
+      }
 
       this._fixNavbar();
     },

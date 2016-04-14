@@ -71,17 +71,17 @@
       var contextWidth = this.offsetWidth;
       var translateWidth = (contextWidth / 100) + e.detail.x;
       var pos = Math.abs(translateWidth);
-      var transform = 'translateX( '+ pos +' )'
+      var transform = 'translateX( ' + pos + ' )'
       var currentPage = null;
       console.log('handleTrack', e);
-      switch(e.detail.state) {
+      switch (e.detail.state) {
         case 'start':
           message = 'Tracking started!';
           break;
         case 'track':
           message = 'Tracking in progress... ' +
             e.detail.x + ', ' + e.detail.y;
-            this.transform('translateX('+pos+'px)', this.currentPage);
+          this.transform('translateX(' + pos + 'px)', this.currentPage);
           break;
         case 'end':
           message = 'Tracking ended!';
@@ -93,42 +93,34 @@
       console.log('handleTrack', message, pos, contextWidth, translateWidth, transform);
     },
     emit: function(event, data) {
-      console.warn('emit:event', event, data);
+      //  console.warn('emit:event', event, data);
       return pxMobile.dom('*body').trigger('page:' + event, data);
     },
     on: function(event, cb) {
-      console.warn('on:event', event, cb);
+      //  console.warn('on:event', event, cb);
       return pxMobile.dom('*body').on('page:' + event, cb);
     },
 
     created: function() {
-
-      this.logger.logApi(this.id, 'created');
-
       this.PageMap = {};
       this.PageList = [];
     },
 
-    ready: function() {
-      this.logger.logApi(this.id, 'ready');
-    },
 
     attached: function() {
-      this.logger.logApi('attached', this.id + ' - ' + this.selected);
       if (!this.id) {
         throw 'pages' + this.tagName + ' cannot be created without an id!';
       }
-    //  this.listen(this, 'track', 'handleTrack');
+      //  this.listen(this, 'track', 'handleTrack');
       this._initpages();
       this.gotoIndex(this.selected);
       this.addClass('et-wrapper');
     },
     _initpages: function() {
       var self = this;
-      this.logger.logApi('_initpages', this);
       var pages = Polymer.dom(this).querySelectorAll('px-page');
 
-    //  var pages = Polymer.dom(this).getEffectiveChildren();
+      //  var pages = Polymer.dom(this).getEffectiveChildren();
       var len = pages.length;
       for (var i = 0; i < len; i++) {
         this.logger.logApi('page', pages[i]);
@@ -140,7 +132,7 @@
 
     //show Page
     showPage: function(index) {
-      this.logger.logApi('showPage', index);
+
       this.PageList[this.selected].toggleClass('et-page-current');
       this.selected = index;
       this.PageList[this.selected].child()[0].toggleClass('et-page-current');
@@ -148,15 +140,12 @@
 
     //hide Page
     hidePage: function(index) {
-      this.logger.logApi('hidePage', index);
+
       this.toggleClass('hidden', true, this);
     },
 
     //update Page
-    updatePage: function(page) {
-      console.warn('INFO', 'update Page', this.id);
-      this.logger.logApi('updatePage', page);
-    },
+    updatePage: function(page) {},
 
     //Handle adding a Page to the map
     _addPage: function(Page) {
@@ -164,7 +153,6 @@
       this.emit('add', Page);
 
       if (Page.modal) {
-        console.warn('Not adding Page.modal', Page);
         return;
       }
 
@@ -185,15 +173,10 @@
       if (Page.route) {
         this.routes[Page.route] = Page.id;
       }
-
-
-      //log
-      this.logger.logApi('_addPage', Page);
     },
 
     //Handle clearing all the 'current' classes.
     _clearCurrent: function() {
-      this.logger.logApi('_clearCurrent');
       var _pages = Polymer.dom(this).querySelectorAll('px-page');
       if (_pages) {
         _pages.forEach(function(Page) {
@@ -205,7 +188,6 @@
 
 
   PagesBehavior._setCurrent = function(index, oldIndex) {
-    this.logger.logApi('_setCurrent', index);
     var prevPage = this.children[oldIndex];
     var currPage = this.children[index];
 
@@ -228,14 +210,13 @@
 
   };
 
-  PagesBehavior.getCurrentPage = function(){
+  PagesBehavior.getCurrentPage = function() {
     this.currentPage = this.PageList[this.selected];
     return this.currentPage;
   };
 
   PagesBehavior.changePage = function(indexOrId) {
     var p = null;
-    this.logger.logApi('changePage', indexOrId);
     this._clearCurrent();
 
     if (this.PageList[indexOrId]) {
@@ -414,7 +395,7 @@
     var pageHeight = this.currentPage.offsetHeight;
     var pageContent = this.querySelector('.page-content');
     var contentHeight = pageContent.offsetHeight;
-    pageContent.css('height', pageHeight+ 'px')
+    pageContent.css('height', pageHeight + 'px')
     console.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
 
     return pageContent;
