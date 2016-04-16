@@ -123,7 +123,7 @@
       //  var pages = Polymer.dom(this).getEffectiveChildren();
       var len = pages.length;
       for (var i = 0; i < len; i++) {
-        this.logger.logApi('page', pages[i]);
+      //  console.log('page', pages[i]);
         self._addPage(pages[i]);
       }
       this.fire('px-pages-ready');
@@ -279,7 +279,7 @@
       index = this.PageList.indexOf(this.PageMap[id]);
     }
     this.selected = index;
-    this.logger.logApi('gotoPage', id, index);
+  //  console.log('gotoPage', id, index);
   };
 
   /**
@@ -287,7 +287,7 @@
    * @param index
    */
   PagesBehavior.gotoIndex = function(index) {
-    this.logger.logApi('gotoIndex', index);
+    console.log('gotoIndex', index);
     this.children[index].removeClass('previous');
     this.children[index].removeClass('next');
     this.selected = index;
@@ -298,7 +298,7 @@
    * The current page
    */
   PagesBehavior.current = function() {
-    this.logger.logApi('current', this.selected);
+    console.log('current', this.selected);
     this.gotoIndex(this.selected);
   };
 
@@ -306,7 +306,7 @@
    * The next page
    */
   PagesBehavior.next = function() {
-    this.logger.logApi('next', this.selected);
+    console.log('next', this.selected);
     if (this.selected >= this.PageList.length - 1) {
       if (this.loop) {
         this.reset();

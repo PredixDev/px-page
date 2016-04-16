@@ -79,11 +79,11 @@
       }
     },
     created : function() {
-      this.logger.logApi('created', this.id);
+      console.log('created', this.id);
       pxMobile.PubSub.emit('page:'+this.id+':init', this);
     },
     ready : function() {
-      this.logger.logApi('ready', this.id);
+      console.log('ready', this.id);
       if(this.dialog){
         this.toggleClass('dialog');
       }
@@ -112,7 +112,7 @@
       var pageNavbar = this.$.pageContent.child[0]
 
 
-      this.logger.logApi('_fixNavbar');
+      console.log('_fixNavbar');
 
       if(pageNavbar){
 
@@ -163,7 +163,7 @@
 
         this.importHref(newVal, function(e) {
         	html = e.target.import.body.innerHTML;
-        	_this.logger.logApi('inject html', _this.id);
+        	_console.log('inject html', _this.id);
           console.warn('inject px-view html', _this.id);
           _this.html(html);
         }, function(e) {
