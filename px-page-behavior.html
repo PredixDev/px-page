@@ -34,6 +34,10 @@
         value : false,
       },
 
+      main : {
+        type : Boolean,
+        value : false,
+      },
       modal : {
         type : Boolean,
         value : false,
@@ -98,7 +102,9 @@
         this.toggleClass('has-navbar', true);
         this.navbar.title = this.title;
       }
-      if(this.parentNode && this.parentNode.localName === 'PX-PAGES'){
+      console.warn('Navbar attached', this.parentNode.localName);
+      if(this.parentNode && this.parentNode.localName === 'px-pages'){
+        this.navbar.views = this.parentNode;
         this.viewContainer = this.parentNode;
       }
 

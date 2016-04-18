@@ -1,8 +1,9 @@
 <!-- TODO: Dependencies -->
-<link rel="import" href="../polymer/polymer.html"/>
-<link rel="import" href="px-pages-behavior.html"/>
+<link rel="import" href="../polymer/polymer.html" />
+
+<link rel="import" href="px-pages-behavior.html" />
 <link rel="stylesheet" href="elementTransitions.css">
-<link rel="import" href="../px-base-element/px-base-element.html"/>
+<link rel="import" href="../px-base-element/px-base-element.html" />
 <!--
 
 
@@ -54,49 +55,51 @@ To use this component in your custom component do the following:
 -->
 <dom-module id="px-pages">
   <template>
-  <style>
-  :host{
-    display: block;
-    position: relative;
-    -webkit-transition: all 3s ease-out;
-    transition: all 3s ease-out;
-    -webkit-overflow-scrolling: touch;
-    height: 100%;
-    height: calc(100% - 10px);
-    min-height: 99vh;
-    width: 100%;
-  }
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        -webkit-transition: all 3s ease-out;
+        transition: all 3s ease-out;
+        -webkit-overflow-scrolling: touch;
+        height: 100%;
+        height: calc(100% - 10px);
+        min-height: 99vh;
+        width: 100%;
+      }
 
-  ::content px-page {
-    opacity: 0;
-    -webkit-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
-  }
+      ::content px-page {
+        opacity: 0;
+        -webkit-transition: all 0.4s ease-out;
+        transition: all 0.4s ease-out;
+      }
 
-  ::content px-page.et-page-current{
-    opacity: 1;
-    visibility: visible;
-    -webkit-transform: translate(0, 0);
-    transform: translate(0, 0);
-  }
+      ::content px-page.et-page-current {
+        opacity: 1;
+        visibility: visible;
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+      }
 
-  ::content px-page.next {
-    transform: translate(0%, 0);
-    visibility: visible;
-  }
+      ::content px-page.next {
+        transform: translate(50%, 0);
+        visibility: visible;
+      }
 
-  ::content px-page.previous {
-    transform: translate(-0%, 0);
-    visibility: visible;
-  }
-  </style>
-    <content select="*"></content>
+      ::content px-page.previous {
+        transform: translate(-50%, 0);
+        visibility: visible;
+      }
+    </style>
+
+      <content select="*"></content>
+
+
   </template>
 </dom-module>
 <script type="text/javascript">
   Polymer({
-    is : 'px-pages',
-    behaviors : [ BaseElement,  PagesBehavior ]
+    is: 'px-pages',
+    behaviors: [BaseElement, PagesBehavior]
   });
-
 </script>

@@ -191,9 +191,6 @@
     var prevPage = this.children[oldIndex];
     var currPage = this.children[index];
 
-
-    this.emit('change', currPage);
-
     if (prevPage) {
       prevPage.removeClass('current');
       prevPage.removeClass('et-page-current');
@@ -204,10 +201,11 @@
       currPage.removeClass('next');
       currPage.addClass('current');
       currPage.addClass('et-page-current');
+      this.currentPage = currPage;
+      this.fire('change', currPage);
     }
-    this.currentPage = currPage;
-    this.fire('current', currPage);
 
+  //  this.fire('px:page:change', currPage);
   };
 
   PagesBehavior.getCurrentPage = function() {
@@ -226,9 +224,10 @@
       p = this.PageMap[indexOrId];
       this._setCurrent(this.PageList.indexOf(p));
     }
-    this.emit('change', indexOrId);
+  //  this.emit('change', indexOrId);
     this.currentPage = p;
-    this.fire('change', p);
+    //this.fire('px:page:change', p);
+  //  this.fire('change', p);
   };
 
 
@@ -280,6 +279,7 @@
     }
     this.selected = index;
   //  console.log('gotoPage', id, index);
+
   };
 
   /**
@@ -376,6 +376,12 @@
    */
   PagesBehavior.getActivePage = function() {
     return this.PageList[this.selected];
+  };
+  PagesBehavior.getCurrent = function() {
+    return this.PageList[this.selected];
+  };
+  PagesBehavior.back = function() {
+    this.prev();
   };
 
   //PagesBehavior.currentPage = this.getActivePage();
