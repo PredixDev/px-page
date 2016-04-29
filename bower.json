@@ -4,7 +4,7 @@
   "authors": [
     "Jonnie Spratley <jonnie.spratley@ge.com>"
   ],
-  "description": "A web component for a view",
+  "description": "A web component for a page",
   "main": "px-page.html",
   "keywords": [
     "px"
@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "polymer": "latest",
-    "px-mobile.js": "https://github.build.ge.com/PredixComponents/px-mobile.js.git"
+    "px-mobile.js": "https://github.com/PredixDev/px-mobile.js.git"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5"
