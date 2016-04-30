@@ -83,11 +83,11 @@
       }
     },
     created : function() {
-      console.log('created', this.id);
+
       pxMobile.PubSub.emit('page:'+this.id+':init', this);
     },
     ready : function() {
-      console.log('ready', this.id);
+
       if(this.dialog){
         this.toggleClass('dialog');
       }
@@ -102,9 +102,9 @@
         this.toggleClass('has-navbar', true);
         this.navbar.title = this.title;
       }
-      console.warn('Navbar attached', this.parentNode.localName);
+
       if(this.parentNode && this.parentNode.localName === 'px-pages'){
-        this.navbar.views = this.parentNode;
+      //  this.navbar.views = this.parentNode;
         this.viewContainer = this.parentNode;
       }
 
@@ -118,7 +118,7 @@
       var pageNavbar = this.$.pageContent.child[0]
 
 
-      console.log('_fixNavbar');
+
 
       if(pageNavbar){
 
@@ -135,42 +135,42 @@
       }
     },
     show: function(){
-      console.warn('INFO', 'show view', this.id);
+      console.log('INFO', 'show view', this.id);
       this.toggleClass('current', false, this);
     },
     hide: function(){
-      console.warn('INFO', 'hide view', this.id);
+      console.log('INFO', 'hide view', this.id);
       this.toggleClass('hidden', true, this);
     },
     update: function(){
-      console.warn('INFO', 'update view', this.id);
+      console.log('INFO', 'update view', this.id);
     },
     currentView: function(){
-      console.warn('INFO', 'current view', this.id);
+      console.log('INFO', 'current view', this.id);
       this.child()[0].toggleClass('current', true, this);
     },
     nextView: function(){
-      console.warn('INFO', 'next view', this.id);
+      console.log('INFO', 'next view', this.id);
       this.toggleClass('next', true, this);
     },
     previousView: function(){
-      console.warn('INFO', 'previous view', this.id);
+      console.log('INFO', 'previous view', this.id);
       this.toggleClass('previous', true, this);
     },
     contextChanged : function(newContext, oldContext) {
-      console.warn('contextChanged', newContext, oldContext);
+      console.log('contextChanged', newContext, oldContext);
     },
 
     //I handle loading a page from a url
     _tmplChanged: function(newVal, oldVal){
       var _this = this, html = '';
       if(newVal){
-      	console.warn(this.id, 'Load remote html', newVal);
+      	console.log(this.id, 'Load remote html', newVal);
 
         this.importHref(newVal, function(e) {
         	html = e.target.import.body.innerHTML;
         	_console.log('inject html', _this.id);
-          console.warn('inject px-view html', _this.id);
+          console.log('inject px-view html', _this.id);
           _this.html(html);
         }, function(e) {
             // loading error
@@ -183,12 +183,14 @@
     },
     open: function(){
       if(this.dialog){
-        this.toggleClass('open');
+        this.toggleClass('et-page-current');
+        this.toggleClass('is-open');
       }
     },
     close: function(){
       if(this.dialog){
-        this.toggleClass('open');
+        this.toggleClass('et-page-current');
+        this.toggleClass('is-open');
       }
     }
   };

@@ -45,9 +45,10 @@
       transform: translateY(0);
       z-index: 100;
       background: #fff;
+      height: 100%;
     }
 
-    :host.dialog:not(.open) {
+    :host.dialog:not(.is-open) {
       z-index: -1;
       transform: translateY(100%);
     }
@@ -67,12 +68,9 @@
       margin-top: 55px;
     }
   </style>
-
     <section class="page-content overthrow">
-      <content id="pageContent" select="*"></content>
+      <content id="pageContent"></content>
     </section>
- 
-
   </template>
 </dom-module>
 <script type="text/javascript">

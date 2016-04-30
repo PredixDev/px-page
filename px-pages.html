@@ -1,55 +1,52 @@
 <!-- TODO: Dependencies -->
 <link rel="import" href="../polymer/polymer.html" />
 
+
 <link rel="import" href="px-pages-behavior.html" />
-<link rel="stylesheet" href="elementTransitions.css">
+
 <link rel="import" href="../px-base-element/px-base-element.html" />
+
+
 <!--
-
-
-# Overview
-This provides a wrapper for px-page elements.
+## Overview
+This element is for use with child px-page elements.
+The element keeps track of the pages similar to iron-pages.
 
 ## Usage
-To use this component in your custom component do the following:
+To use this component do the following:
 
 ```
-<px-pages selected="0">
-  <px-page>One</px-page>
-  <px-page>Two</px-page>
-  <px-page>Three</px-page>
-</px-pages>
+<style>
+	px-page{
+		font-size: 2rem;
+		text-align:center;
+		padding: 5rem;
+	}
 
-<script>
-  document.addEventListener('click', function(e) {
-    var pages = document.querySelector('px-pages');
-    pages.next();
-  });
-</script>
+	px-page:nth-child(odd) {
+		background: lime;
+	}
+
+	px-page:nth-child(even) {
+		background: fuchsia;
+	}
+</style>
+<div class="viewport">
+	<div class="flex">
+	<button class="btn btn--full" onclick="document.getElementById('pages').prev()">Prev</button>
+<button class="btn btn--full" onclick="document.getElementById('pages').next()">Next</button>
+</div>
+	<px-pages id="pages" selected="0" debug loop>
+	  <px-page id="page1">One</px-page>
+	  <px-page id="page2">Two</px-page>
+	  <px-page id="page3">Three</px-page>
+	  <px-page id="page4">four</px-page>
+	</px-pages>
+</div>
 ```
 
-```
-<dom-module id="demo-view">
-  <template>
-    <px-pages id="app-views">
-      <px-page id="demo-card-view">
-        [View Content]
-      <px-page>
-    </px-pages>
-  </template>
-</dom-module>
-<script>
-  Polymer({
-  is: 'demo-view',
-    init: function(){
-      // this is where you can do some initialization of your card
-    },
-    behaviors: [px.view]
-  });
-</script>
-```
 @element px-pages
-@blurb Element containing basic styling and behaviors (API) for card
+@blurb
 @demo demo.html
 @homepage index.html
 -->
@@ -82,12 +79,12 @@ To use this component in your custom component do the following:
       }
 
       ::content px-page.next {
-        transform: translate(50%, 0);
+        transform: translate(0, 0);
         visibility: visible;
       }
 
       ::content px-page.previous {
-        transform: translate(-50%, 0);
+        transform: translate(0, 0);
         visibility: visible;
       }
     </style>

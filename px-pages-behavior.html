@@ -1,4 +1,6 @@
 <script src="../px-mobile.js/dist/px-mobile.js"></script>
+<script src="px-page-transitions.js"></script>
+<link rel="stylesheet" href="elementTransitions.css">
 <link rel="import" href="../px-base-element/px-base-element.html">
 <script type="text/javascript">
   var PagesBehavior = {
@@ -26,6 +28,12 @@
         type: Object,
         value: {}
       },
+      //The main page of all pages.
+      mainPage: {
+        type: Object,
+        value: {}
+      },
+
       context: {
         type: Object,
         value: {}
@@ -63,6 +71,11 @@
       loop: {
         type: Boolean,
         value: false
+      },
+      //Enable debug logging
+      debug: {
+        type: Boolean,
+        value: false
       }
     },
     handleTrack: function(e) {
@@ -73,7 +86,7 @@
       var pos = Math.abs(translateWidth);
       var transform = 'translateX( ' + pos + ' )'
       var currentPage = null;
-      console.log('handleTrack', e);
+      PagesBehavior.log('handleTrack', e);
       switch (e.detail.state) {
         case 'start':
           message = 'Tracking started!';
@@ -90,14 +103,14 @@
 
 
 
-      console.log('handleTrack', message, pos, contextWidth, translateWidth, transform);
+      PagesBehavior.log('handleTrack', message, pos, contextWidth, translateWidth, transform);
     },
     emit: function(event, data) {
-      //  console.warn('emit:event', event, data);
+      //  PagesBehavior.warn('emit:event', event, data);
       return pxMobile.dom('*body').trigger('page:' + event, data);
     },
     on: function(event, cb) {
-      //  console.warn('on:event', event, cb);
+      //  PagesBehavior.warn('on:event', event, cb);
       return pxMobile.dom('*body').on('page:' + event, cb);
     },
 
@@ -120,10 +133,10 @@
       var self = this;
       var pages = Polymer.dom(this).querySelectorAll('px-page');
 
-      //  var pages = Polymer.dom(this).getEffectiveChildren();
+      //var pages = Polymer.dom(this).getEffectiveChildren();
       var len = pages.length;
       for (var i = 0; i < len; i++) {
-      //  console.log('page', pages[i]);
+      //  PagesBehavior.log('page', pages[i]);
         self._addPage(pages[i]);
       }
       this.fire('px-pages-ready');
@@ -156,6 +169,11 @@
         return;
       }
 
+      if (Page.main) {
+        PagesBehavior.warn('Got main page, saving', Page);
+        this.mainPage = Page;
+      }
+
       //add the index to the el
       Page.attr('index', this.PageList.length.toString());
 
@@ -186,6 +204,18 @@
     }
   };
 
+  PagesBehavior.warn = function(type, message){
+    if(this.debug){
+      console.warn('PagesBehavior.' +type, message);
+    }
+  }
+
+  PagesBehavior.log = function(type, message){
+    if(this.debug){
+      console.log('PagesBehavior.' +type, message);
+    }
+  }
+
 
   PagesBehavior._setCurrent = function(index, oldIndex) {
     var prevPage = this.children[oldIndex];
@@ -209,8 +239,13 @@
   };
 
   PagesBehavior.getCurrentPage = function() {
-    this.currentPage = this.PageList[this.selected];
-    return this.currentPage;
+    return this.PageList[this.selected];
+  };
+  PagesBehavior.getPrevPage = function() {
+    return this.PageList[this.selected - 1];
+  };
+  PagesBehavior.getNextPage = function() {
+    return this.PageList[this.selected + 1];
   };
 
   PagesBehavior.changePage = function(indexOrId) {
@@ -278,7 +313,7 @@
       index = this.PageList.indexOf(this.PageMap[id]);
     }
     this.selected = index;
-  //  console.log('gotoPage', id, index);
+  //  PagesBehavior.log('gotoPage', id, index);
 
   };
 
@@ -287,7 +322,7 @@
    * @param index
    */
   PagesBehavior.gotoIndex = function(index) {
-    console.log('gotoIndex', index);
+    PagesBehavior.log('gotoIndex', index);
     this.children[index].removeClass('previous');
     this.children[index].removeClass('next');
     this.selected = index;
@@ -298,7 +333,7 @@
    * The current page
    */
   PagesBehavior.current = function() {
-    console.log('current', this.selected);
+    this.log('current', this.selected);
     this.gotoIndex(this.selected);
   };
 
@@ -306,7 +341,7 @@
    * The next page
    */
   PagesBehavior.next = function() {
-    console.log('next', this.selected);
+    PagesBehavior.log('next', this.selected);
     if (this.selected >= this.PageList.length - 1) {
       if (this.loop) {
         this.reset();
@@ -366,7 +401,7 @@
    * @param url
    */
   PagesBehavior.load = function(url) {
-    console.warn('PagesBehavior.load', 'NOT IMPLEMENTED');
+    this.log('PagesBehavior.load', 'NOT IMPLEMENTED');
     return false;
   };
 
@@ -391,7 +426,7 @@
    * @param obj
    */
   PagesBehavior.addPage = function(obj) {
-    console.warn('PagesBehavior.addPage', 'NOT IMPLEMENTED');
+    PagesBehavior.warn('PagesBehavior.addPage', 'NOT IMPLEMENTED');
     return false;
   };
 
@@ -402,7 +437,7 @@
     var pageContent = this.querySelector('.page-content');
     var contentHeight = pageContent.offsetHeight;
     pageContent.css('height', pageHeight + 'px')
-    console.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
+    PagesBehavior.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
 
     return pageContent;
   };

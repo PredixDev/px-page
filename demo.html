@@ -52,65 +52,62 @@
         </style>
         <template id="demoPages" is="dom-bind">
           <div class="buttons flex">
-            <button class="btn" type="button" onclick="appPages.prev()">Prev</button>
-            <button class="btn" type="button" onclick="appPages.next()">Next</button>
-            <button class="btn" type="button" onclick="goto()">Goto</button>
-            <button class="btn" type="button" onclick="dialogPage.open()">Open Dialog</button>
+            <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
+            <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
+
+            <button class="btn" type="button" onclick="document.getElementById('dialogPage').open()">Open Dialog</button>
           </div>
           <div class="demo">
-            <px-pages id="appPages" selected="0">
+            <px-pages id="appPages" selected="0" loop debug>
 
-              <px-page id="Page0" title="Main Page" route="/Page0" main="true">
+              <px-page id="Page0" title="Main Page" route="/Page0" main>
                 <px-navbar>
                   <div></div>
                   <button class="btn" type="button" onclick="appPages.next()">Next</button>
                 </px-navbar>
                 <ul id="list1" class="table-view table-view--small">
-                  <li class="table-row table-row--nav-right">Item</li>
                 </ul>
               </px-page>
 
-              <px-page id="Page1" title="Page 1" route="/Page1">
+              <px-page id="Page1" title="Page 1" route="/Page1" onclick="appPages.next()">
                 <px-navbar>
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
                 </px-navbar>
                 <h2>page1</h2>
               </px-page>
 
-              <px-page id="Page2" title="Page 2" route="/Page2">
+              <px-page id="Page2" title="Page 2" route="/Page2" onclick="appPages.next()">
                 <px-navbar>
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+
                 </px-navbar>
                 <h2>page2</h2>
               </px-page>
 
-              <px-page id="Page3" title="Page 3" route="/Page3">
+              <px-page id="Page3" title="Page 3" route="/Page3" onclick="appPages.next()">
                 <px-navbar>
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+
                 </px-navbar>
                 <h2>page3</h2>
               </px-page>
 
-              <px-page id="Page4" title="Page 4" route="/Page4">
+              <px-page id="Page4" title="Page 4" route="/Page4" onclick="appPages.next()">
                 <px-navbar>
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+
                 </px-navbar>
                 <h2>page4</h2>
               </px-page>
 
-              <px-page id="Page5" title="Page 5" route="/Page5">
+              <px-page id="Page5" title="Page 5" route="/Page5" onclick="appPages.next()">
                 <px-navbar>
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
+
                 </px-navbar>
                 <h2>Page 5</h2>
               </px-page>
 
               <px-page id="dialogPage" title="Page 6" route="/Page6" modal dialog>
+                <px-navbar theme="dark">
+                  <div></div>
+                  <button class="btn navbar__button" onclick="document.getElementById('dialogPage').open()">Close</button>
+                </px-navbar>
                 <h2>Dialog Page</h2>
               </px-page>
 
