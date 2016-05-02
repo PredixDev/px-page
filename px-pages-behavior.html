@@ -3,442 +3,433 @@
 <link rel="stylesheet" href="elementTransitions.css">
 <link rel="import" href="../px-base-element/px-base-element.html">
 <script type="text/javascript">
-  var PagesBehavior = {
-    behaviors: [BaseElement],
-    // add properties and methods on the element's prototype
-    properties: {
-
-      // declare properties for the element's public API
-      title: {
-        type: String,
-        value: 'Predix Mobile Page'
-      },
-
-      //The default selected Page
-      selected: {
-        type: Number,
-        reflectToAttribute: true,
-        notify: true,
-        observer: '_setCurrent',
-        value: 0
-      },
-
-      //The current context of the Page.
-      currentPage: {
-        type: Object,
-        value: {}
-      },
-      //The main page of all pages.
-      mainPage: {
-        type: Object,
-        value: {}
-      },
-
-      context: {
-        type: Object,
-        value: {}
-      },
-
-      //The list of pages
-      pages: {
-        type: Array
-      },
-
-      PageList: {
-        type: Array
-      },
-
-      selectedIndex: {
-        type: Number
-      },
-      //The pages routes
-      routes: {
-        type: Object,
-        value: {}
-      },
-
-      //The in effect
-      inTransition: {
-        type: String
-      },
-
-      //The out effect
-      outTransition: {
-        type: String
-      },
-
-      //Loop pages once end is reached.
-      loop: {
-        type: Boolean,
-        value: false
-      },
-      //Enable debug logging
-      debug: {
-        type: Boolean,
-        value: false
-      }
+var PagesBehavior = {
+  behaviors: [BaseElement],
+  // add properties and methods on the element's prototype
+  properties: {
+    // declare properties for the element's public API
+    title: {
+      type: String,
+      value: 'Predix Mobile Page'
     },
-    handleTrack: function(e) {
-      var message;
-      //pos = (this.containerSize / 100) * (((paneIndex - showIndex) * 100) + percent);
-      var contextWidth = this.offsetWidth;
-      var translateWidth = (contextWidth / 100) + e.detail.x;
-      var pos = Math.abs(translateWidth);
-      var transform = 'translateX( ' + pos + ' )'
-      var currentPage = null;
-      PagesBehavior.log('handleTrack', e);
-      switch (e.detail.state) {
-        case 'start':
-          message = 'Tracking started!';
-          break;
-        case 'track':
-          message = 'Tracking in progress... ' +
-            e.detail.x + ', ' + e.detail.y;
-          this.transform('translateX(' + pos + 'px)', this.currentPage);
-          break;
-        case 'end':
-          message = 'Tracking ended!';
-          break;
-      }
-
-
-
-      PagesBehavior.log('handleTrack', message, pos, contextWidth, translateWidth, transform);
+    //The default selected Page
+    selected: {
+      type: Number,
+      reflectToAttribute: true,
+      notify: true,
+      observer: '_setCurrent',
+      value: 0
     },
-    emit: function(event, data) {
-      //  PagesBehavior.warn('emit:event', event, data);
-      return pxMobile.dom('*body').trigger('page:' + event, data);
+    //The current context of the Page.
+    currentPage: {
+      type: Object,
+      value: {}
     },
-    on: function(event, cb) {
-      //  PagesBehavior.warn('on:event', event, cb);
-      return pxMobile.dom('*body').on('page:' + event, cb);
+    //The main page of all pages.
+    mainPage: {
+      type: Object,
+      value: {}
     },
-
-    created: function() {
-      this.PageMap = {};
-      this.PageList = [];
+    context: {
+      type: Object,
+      value: {}
     },
-
-
-    attached: function() {
-      if (!this.id) {
-        throw 'pages' + this.tagName + ' cannot be created without an id!';
-      }
-      //  this.listen(this, 'track', 'handleTrack');
-      this._initpages();
-      this.gotoIndex(this.selected);
-      this.addClass('et-wrapper');
+    //The list of pages
+    pages: {
+      type: Array
     },
-    _initpages: function() {
-      var self = this;
-      var pages = Polymer.dom(this).querySelectorAll('px-page');
-
-      //var pages = Polymer.dom(this).getEffectiveChildren();
-      var len = pages.length;
-      for (var i = 0; i < len; i++) {
-      //  PagesBehavior.log('page', pages[i]);
-        self._addPage(pages[i]);
-      }
-      this.fire('px-pages-ready');
-      this.fire('ready');
+    PageList: {
+      type: Array
     },
-
-    //show Page
-    showPage: function(index) {
-
-      this.PageList[this.selected].toggleClass('et-page-current');
-      this.selected = index;
-      this.PageList[this.selected].child()[0].toggleClass('et-page-current');
+    selectedIndex: {
+      type: Number
     },
-
-    //hide Page
-    hidePage: function(index) {
-
-      this.toggleClass('hidden', true, this);
+    //The pages routes
+    routes: {
+      type: Object,
+      value: {}
     },
-
-    //update Page
-    updatePage: function(page) {},
-
-    //Handle adding a Page to the map
-    _addPage: function(Page) {
-
-      this.emit('add', Page);
-
-      if (Page.modal) {
-        return;
-      }
-
-      if (Page.main) {
-        PagesBehavior.warn('Got main page, saving', Page);
-        this.mainPage = Page;
-      }
-
-      //add the index to the el
-      Page.attr('index', this.PageList.length.toString());
-
-      //push to Page list
-      this.PageList.push(Page);
-
-      //add next class to element
-      Page.addClass('et-page');
-      Page.addClass('next');
-
-      //add to Page map
-      this.PageMap[Page.id] = Page;
-
-      //Add to routeHandlers
-      if (Page.route) {
-        this.routes[Page.route] = Page.id;
-      }
+    //The in effect
+    inTransition: {
+      type: String
     },
-
-    //Handle clearing all the 'current' classes.
-    _clearCurrent: function() {
-      var _pages = Polymer.dom(this).querySelectorAll('px-page');
-      if (_pages) {
-        _pages.forEach(function(Page) {
-          Page.removeClass('current');
-        });
-      }
+    //The out effect
+    outTransition: {
+      type: String
+    },
+    //Loop pages once end is reached.
+    loop: {
+      type: Boolean,
+      value: false
+    },
+    //Enable debug logging
+    debug: {
+      type: Boolean,
+      value: false
     }
-  };
-
-  PagesBehavior.warn = function(type, message){
-    if(this.debug){
-      console.warn('PagesBehavior.' +type, message);
+  },
+  handleTrack: function(e) {
+    var message;
+    //pos = (this.containerSize / 100) * (((paneIndex - showIndex) * 100) + percent);
+    var contextWidth = this.offsetWidth;
+    var translateWidth = (contextWidth / 100) + e.detail.x;
+    var pos = Math.abs(translateWidth);
+    var transform = 'translateX( ' + pos + ' )'
+    var currentPage = null;
+    PagesBehavior.log('handleTrack', e);
+    switch (e.detail.state) {
+      case 'start':
+        message = 'Tracking started!';
+        break;
+      case 'track':
+        message = 'Tracking in progress... ' +
+          e.detail.x + ', ' + e.detail.y;
+        this.transform('translateX(' + pos + 'px)', this.currentPage);
+        break;
+      case 'end':
+        message = 'Tracking ended!';
+        break;
     }
-  }
-
-  PagesBehavior.log = function(type, message){
-    if(this.debug){
-      console.log('PagesBehavior.' +type, message);
+    PagesBehavior.log('handleTrack', message, pos, contextWidth, translateWidth, transform);
+  },
+  emit: function(event, data) {
+    //  PagesBehavior.warn('emit:event', event, data);
+    return pxMobile.dom('*body').trigger('page:' + event, data);
+  },
+  on: function(event, cb) {
+    //  PagesBehavior.warn('on:event', event, cb);
+    return pxMobile.dom('*body').on('page:' + event, cb);
+  },
+  created: function() {
+    this.PageMap = {};
+    this.PageList = [];
+  },
+  attached: function() {
+    var _this = this;
+    if (!this.id) {
+      throw 'pages' + this.tagName + ' cannot be created without an id!';
     }
-  }
-
-
-  PagesBehavior._setCurrent = function(index, oldIndex) {
-    var prevPage = this.children[oldIndex];
-    var currPage = this.children[index];
-
-    if (prevPage) {
-      prevPage.removeClass('current');
-      prevPage.removeClass('et-page-current');
-      prevPage.addClass('previous');
-    }
-
-    if (currPage) {
-      currPage.removeClass('next');
-      currPage.addClass('current');
-      currPage.addClass('et-page-current');
-      this.currentPage = currPage;
-      this.fire('change', currPage);
-    }
-
-  //  this.fire('px:page:change', currPage);
-  };
-
-  PagesBehavior.getCurrentPage = function() {
-    return this.PageList[this.selected];
-  };
-  PagesBehavior.getPrevPage = function() {
-    return this.PageList[this.selected - 1];
-  };
-  PagesBehavior.getNextPage = function() {
-    return this.PageList[this.selected + 1];
-  };
-
-  PagesBehavior.changePage = function(indexOrId) {
-    var p = null;
-    this._clearCurrent();
-
-    if (this.PageList[indexOrId]) {
-      p = this.PageList[indexOrId];
-      this._setCurrent(indexOrId);
-    } else if (this.PageMap[indexOrId]) {
-      p = this.PageMap[indexOrId];
-      this._setCurrent(this.PageList.indexOf(p));
-    }
-  //  this.emit('change', indexOrId);
-    this.currentPage = p;
-    //this.fire('px:page:change', p);
-  //  this.fire('change', p);
-  };
-
-
-  // TODO: New IMplmenation
-  PagesBehavior.currentIndex = 0;
-  PagesBehavior.reset = function(reverse) {
-    var _pages = this.children;
-    var len = this.children.length;
+    //  this.listen(this, 'track', 'handleTrack');
+    this.async(function() {
+      _this._initpages();
+      _this.gotoIndex(_this.selected);
+      _this.toggleClass('et-wrapper');
+    });
+  },
+  _initpages: function() {
+    var self = this;
+    var pages = Polymer.dom(this).querySelectorAll('px-page');
+    //var pages = Polymer.dom(this).getEffectiveChildren();
+    var len = pages.length;
     for (var i = 0; i < len; i++) {
-      this.children[i].removeClass('current');
-
-      if (reverse) {
-        this.children[i].addClass('previous');
-        this.children[i].removeClass('next');
-      } else {
-        this.children[i].addClass('next');
-        this.children[i].removeClass('previous');
-      }
+      //  PagesBehavior.log('page', pages[i]);
+      self._addPage(pages[i]);
     }
-    this.children[this.selected].removeClass('next');
+    this.fire('px-pages-ready');
+    this.fire('ready');
+  },
+  //show Page
+  showPage: function(index) {
+    this.PageList[this.selected].toggleClass('et-page-current');
+    this.selected = index;
+    this.PageList[this.selected].child()[0].toggleClass('et-page-current');
+  },
+  //hide Page
+  hidePage: function(index) {
+    this.toggleClass('hidden', true, this);
+  },
+  //update Page
+  updatePage: function(page) {}
+};
+//Handle adding a Page to the map
+PagesBehavior._addPage = function(Page) {
+  this.emit('add', Page);
+  if (Page.modal) {
+    return;
+  }
+  if (Page.main) {
+    PagesBehavior.warn('Got main page, saving', Page);
+    this.mainPage = Page;
+  }
+  //add the index to the el
+  Page.attr('index', this.PageList.length.toString());
+  //push to Page list
+  this.PageList.push(Page);
+  //add next class to element
+  Page.addClass('et-page');
+  Page.addClass('next');
+  //add to Page map
+  this.PageMap[Page.id] = Page;
+  //Add to routeHandlers
+  if (Page.route) {
+    this.routes[Page.route] = Page.id;
+  }
+};
+//Handle clearing all the 'current' classes.
+PagesBehavior._clearCurrent = function() {
+  var _pages = Polymer.dom(this).querySelectorAll('px-page');
+  if (_pages) {
+    _pages.forEach(function(Page) {
+      Page.removeClass('current');
+    });
+  }
+};
+//
+PagesBehavior.warn = function(type, message) {
+    if (this.debug) {
+      console.warn('PagesBehavior.' + type, message);
+    }
+  }
+  //
+PagesBehavior.log = function(type, message) {
+    if (this.debug) {
+      console.log('PagesBehavior.' + type, message);
+    }
+  }
+  /**
+   * Set the current page
+   */
+PagesBehavior._setCurrent = function(index, oldIndex) {
+  var _this = this;
+  var prevPage = _this.getContentChildren()[index - 1];
+  var currPage = _this.getContentChildren()[index];
+  var nextPage = _this.getContentChildren()[index + 1];
+  if (nextPage) {
+    nextPage.addClass('next');
+    nextPage.removeClass('current');
+    nextPage.removeClass('et-page-current');
+    nextPage.removeClass('previous');
+  }
+  if (prevPage) {
+    prevPage.removeClass('next');
+    prevPage.removeClass('current');
+    prevPage.removeClass('et-page-current');
+    prevPage.addClass('previous');
+  }
+  if (currPage) {
+    currPage.removeClass('previous');
+    currPage.removeClass('next');
+    currPage.addClass('current');
+    currPage.addClass('et-page-current');
+    _this.currentPage = currPage;
+    _this.fire('change', currPage);
+  }
+};
+/**
+ * Get the current page
+ */
+PagesBehavior.getCurrentPage = function() {
+  return this.PageList[this.selected];
+};
+/**
+ * Get the prev page
+ */
+PagesBehavior.getPrevPage = function() {
+  return this.PageList[this.selected - 1];
+};
+/**
+ * Get the next page
+ */
+PagesBehavior.getNextPage = function() {
+  return this.PageList[this.selected + 1];
+};
+/**
+ * Change a page
+ */
+PagesBehavior.changePage = function(indexOrId) {
+  var p = null;
+  this._clearCurrent();
+  if (this.PageList[indexOrId]) {
+    p = this.PageList[indexOrId];
+    this._setCurrent(indexOrId);
+  } else if (this.PageMap[indexOrId]) {
+    p = this.PageMap[indexOrId];
+    this._setCurrent(this.PageList.indexOf(p));
+  }
+  //  this.emit('change', indexOrId);
+  this.currentPage = p;
+  //this.fire('px:page:change', p);
+  //  this.fire('change', p);
+};
+// TODO: New IMplmenation
+PagesBehavior.currentIndex = 0;
+/**
+ * Reset page
+ */
+PagesBehavior.reset = function(reverse) {
+  var _pages = this.getContentChildren();
+  var len = _pages.length;
+  for (var i = 0; i < len; i++) {
+    console.log('resetting', i, _pages[i]);
+    _pages[i].removeClass('et-page-current');
+    _pages[i].removeClass('next');
+    _pages[i].removeClass('previous');
+    _pages[i].removeClass('current');
     if (reverse) {
-      this.selected = this.PageList.length - 1;
+      _pages[i].addClass('previous');
+      _pages[i].removeClass('next');
     } else {
-      this.selected = this.selected - (this.PageList.length - 1);
+      _pages[i].addClass('next');
     }
-
-    this.current();
-  };
-
-  PagesBehavior.goto = function(indexOrId) {
-    var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
-
-    if (page) {
-      this.gotoPage(indexOrId);
-      window.location.hash = page.route;
-      return page;
+  }
+  _pages[this.selected].removeClass('next');
+  if (reverse) {
+    this.selected = _pages.length - 1;
+  } else {
+    this.selected = this.selected - (_pages.length - 1);
+  }
+  this.current();
+};
+/**
+ * Goto a page
+ */
+PagesBehavior.goto = function(indexOrId) {
+  var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
+  if (page) {
+    this.gotoPage(indexOrId);
+    window.location.hash = page.route;
+    return page;
+  }
+};
+/**
+ * Goto a page
+ */
+PagesBehavior.gotoPage = function(id) {
+  console.log('gotoPage', id);
+  var index = 0;
+  if (this.PageMap[id]) {
+    index = this.PageList.indexOf(this.PageMap[id]);
+    if (index) {
+      this.selected = index;
+    } else {
+      this.selected = 0;
     }
-
-  };
-
-
-  /**
-   * Goto a page
-   */
-  PagesBehavior.gotoPage = function(id) {
-    var index = 0;
-    if (this.PageMap[id]) {
-      index = this.PageList.indexOf(this.PageMap[id]);
-    }
-    this.selected = index;
+  }
   //  PagesBehavior.log('gotoPage', id, index);
-
-  };
-
-  /**
-   * Goto a page by index
-   * @param index
-   */
-  PagesBehavior.gotoIndex = function(index) {
+};
+/**
+ * Goto a page by index
+ * @param index
+ */
+PagesBehavior.gotoIndex = function(index) {
+  console.log('gotoIndex', index);
+  index = index || 0;
+  var _this = this;
+  this.async(function() {
     PagesBehavior.log('gotoIndex', index);
-    this.children[index].removeClass('previous');
-    this.children[index].removeClass('next');
-    this.selected = index;
-
-  };
-
-  /**
-   * The current page
-   */
-  PagesBehavior.current = function() {
-    this.log('current', this.selected);
-    this.gotoIndex(this.selected);
-  };
-
-  /**
-   * The next page
-   */
-  PagesBehavior.next = function() {
-    PagesBehavior.log('next', this.selected);
-    if (this.selected >= this.PageList.length - 1) {
-      if (this.loop) {
-        this.reset();
-      } else {
-        this.current();
-      }
+    var _pages = _this.getContentChildren();
+    if (_pages[index]) {
+      _pages[index].removeClass('previous');
+      _pages[index].removeClass('next');
+      _this.selected = index;
     } else {
-      this.gotoIndex(this.selected + 1);
+      _this.selected = 0;
     }
-  };
-
-  /**
-   * The previous page
-   */
-  PagesBehavior.prev = function() {
-    if (this.selected <= 0) {
-      if (this.loop) {
-        this.reset(true);
-      } else {
-        this.current();
-      }
+  });
+};
+/**
+ * The current page
+ */
+PagesBehavior.current = function() {
+  this.log('current', this.selected);
+  this.gotoIndex(this.selected);
+};
+/**
+ * The next page
+ */
+PagesBehavior.next = function() {
+  PagesBehavior.log('next', this.selected);
+  if (this.selected >= this.PageList.length - 1) {
+    if (this.loop) {
+      this.reset();
     } else {
-      this.gotoIndex(this.selected - 1);
+      this.current();
     }
-  };
-
-  /**
-   * Remove transition from page
-   * @param index
-   */
-  PagesBehavior.removeTransition = function(index) {
-    var page = this.PageList[index];
-    page.content.css('transition', 'none');
-  };
-
-  /**
-   * Do a transition
-   */
-  PagesBehavior.doTransition = function(index) {
-    var page = this.PageList[index];
-    var position = page.position();
-    page
-      .css('transition', 'all 400ms ease')
-      .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
-  };
-
-  /**
-   * Change the page
-   * @param name
-   */
-  PagesBehavior.change = function(name) {
-    return this.goto(name);
-  };
-
-  /**
-   * Load a page
-   * @param url
-   */
-  PagesBehavior.load = function(url) {
-    this.log('PagesBehavior.load', 'NOT IMPLEMENTED');
-    return false;
-  };
-
-  /**
-   * Get the active page
-   * @returns {*}
-   */
-  PagesBehavior.getActivePage = function() {
-    return this.PageList[this.selected];
-  };
-  PagesBehavior.getCurrent = function() {
-    return this.PageList[this.selected];
-  };
-  PagesBehavior.back = function() {
-    this.prev();
-  };
-
-  //PagesBehavior.currentPage = this.getActivePage();
-
-  /**
-   * Add a px-page from page object
-   * @param obj
-   */
-  PagesBehavior.addPage = function(obj) {
-    PagesBehavior.warn('PagesBehavior.addPage', 'NOT IMPLEMENTED');
-    return false;
-  };
-
-  //Handle setting the height of the current page to the height of the container.
-  PagesBehavior._fixHeight = function() {
-    var pHeight = this.offsetHeight;
-    var pageHeight = this.currentPage.offsetHeight;
-    var pageContent = this.querySelector('.page-content');
-    var contentHeight = pageContent.offsetHeight;
-    pageContent.css('height', pageHeight + 'px')
-    PagesBehavior.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
-
-    return pageContent;
-  };
+  } else {
+    this.gotoIndex(this.selected + 1);
+  }
+};
+/**
+ * The previous page
+ */
+PagesBehavior.prev = function() {
+  if (this.selected <= 0) {
+    if (this.loop) {
+      this.reset(true);
+    } else {
+      this.current();
+    }
+  } else {
+    this.gotoIndex(this.selected - 1);
+  }
+};
+/**
+ * Remove transition from page
+ * @param index
+ */
+PagesBehavior.removeTransition = function(index) {
+  var page = this.PageList[index];
+  page.content.css('transition', 'none');
+};
+/**
+ * Do a transition
+ */
+PagesBehavior.doTransition = function(index) {
+  var page = this.PageList[index];
+  var position = page.position();
+  page
+    .css('transition', 'all 400ms ease')
+    .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
+};
+/**
+ * Change the page
+ * @param name
+ */
+PagesBehavior.change = function(name) {
+  return this.goto(name);
+};
+/**
+ * Load a page
+ * @param url
+ */
+PagesBehavior.load = function(url) {
+  this.log('PagesBehavior.load', 'NOT IMPLEMENTED');
+  return false;
+};
+/**
+ * Get the active page
+ * @returns {*}
+ */
+PagesBehavior.getActivePage = function() {
+  return this.PageList[this.selected];
+};
+PagesBehavior.getCurrent = function() {
+  return this.PageList[this.selected];
+};
+PagesBehavior.back = function() {
+  this.prev();
+};
+//PagesBehavior.currentPage = this.getActivePage();
+/**
+ * Add a px-page from page object
+ * @param obj
+ */
+PagesBehavior.addPage = function(obj) {
+  PagesBehavior.warn('PagesBehavior.addPage', 'NOT IMPLEMENTED');
+  return false;
+};
+//Handle setting the height of the current page to the height of the container.
+PagesBehavior._fixHeight = function() {
+  var pHeight = this.offsetHeight;
+  var pageHeight = this.currentPage.offsetHeight;
+  var pageContent = this.querySelector('.page-content');
+  var contentHeight = pageContent.offsetHeight;
+  pageContent.css('height', pageHeight + 'px')
+  PagesBehavior.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
+  return pageContent;
+};
+PagesBehavior.getPages = function() {
+  var _pages = this.getContentChildren();
+  return _pages;
+}
 </script>
