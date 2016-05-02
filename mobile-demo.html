@@ -1,132 +1,118 @@
 <html>
 
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
-  <script type="text/javascript">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+    <script type="text/javascript">
     if ('addEventListener' in document) {
       document.addEventListener('DOMContentLoaded', function() {
         FastClick.attach(document.body);
       }, false);
     }
-  </script>
-  <link rel='stylesheet prefetch' href='http://predixdev.github.io/px-library-design/css/style.css'>
+    </script>
+    <link rel='stylesheet prefetch' href='http://predixdev.github.io/px-library-design/css/style.css'>
 
+    <title>px-page mobile-demo</title>
+    <!-- TODO: Dependencies -->
+    <script src="../webcomponentsjs/webcomponents.min.js"></script>
 
-  <title>px-page demo</title>
-  <!-- TODO: Dependencies -->
-  <script src="../webcomponentsjs/webcomponents.min.js"></script>
-
-  <link rel="import" href="px-pages.html">
-  <link rel="import" href="px-page.html">
-  <link rel="import" href="../px-table-view/px-table-view.html">
-  <link rel="import" href="../px-navbar/px-navbar.html">
-  <style>
+    <link rel="import" href="px-pages.html">
+    <link rel="import" href="px-page.html">
+    <link rel="import" href="../px-table-view/px-table-view.html">
+    <link rel="import" href="../px-navbar/px-navbar.html">
+    <style>
     body {
       position: relative;
-      padding: 5px;
     }
-  </style>
+    </style>
 
-</head>
+  </head>
 
-<body unresolved>
+  <body unresolved>
 
-        <template id="demoPages" is="dom-bind">
+    <template id="demoPages" is="dom-bind">
 
-          <div class="demo">
-            <px-pages id="appPages" selected="0" loop>
-              <px-page id="Page0" title="Main Page" route="/Page0" main="true">
-                <px-navbar view-container="appPages">
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
-                </px-navbar>
-                <ul id="list1" class="table-view table-view--small">
-                  <li class="table-row table-row--nav-right">Item</li>
-                </ul>
-              </px-page>
+      <div class="demo">
+        <px-pages id="appPages" selected="0" loop>
+          <px-page id="Page0" title="Main Page" main>
+            <px-navbar view-container="appPages">
+              <button class="btn navbar__button" type="button" onclick="appPages.next()">Next</button>
+            </px-navbar>
+            <ul id="list1" class="list-ui table-view table-view--small">
+              <li class="table-row table-row--nav-right">Item</li>
+            </ul>
+          </px-page>
 
-              <px-page id="Page1" title="Page 1" route="/Page1">
-                <px-navbar view-container="appPages">
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
-                </px-navbar>
-                <ul id="list2" class="table-view table-view--small">
-                  <li class="table-row table-row--nav-right">Sub Item</li>
-                </ul>
-              </px-page>
+          <px-page id="Page1" title="Page 1">
+            <px-navbar view-container="appPages">
+              <button class="btn navbar__button" type="button" onclick="appPages.next()">Next</button>
+            </px-navbar>
+            <ul id="list2" class="list-ui table-view table-view--small">
+              <li class="table-row table-row--nav-right">Sub Item</li>
+            </ul>
+          </px-page>
 
-              <px-page id="Page2" title="Page 2" route="/Page2">
-                <px-navbar view-container="appPages">
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
-                </px-navbar>
-                <h2>page2</h2>
-              </px-page>
+          <px-page id="Page2" title="Page 2">
+            <px-navbar view-container="appPages">
+              <button class="btn navbar__button" type="button" onclick="appPages.next()">Next</button>
+            </px-navbar>
+          </px-page>
 
-              <px-page id="Page3" title="Page 3" route="/Page3">
-                <px-navbar view-container="appPages">
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
-                </px-navbar>
-                <h2>page3</h2>
-              </px-page>
+          <px-page id="Page3" title="Page 3">
+            <px-navbar view-container="appPages">
+              <button class="navbar__button btn" type="button" onclick="appPages.next()">Next</button>
+            </px-navbar>
+          </px-page>
 
-              <px-page id="Page4" title="Page 4" route="/Page4">
-                <px-navbar view-container="appPages">
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
-                </px-navbar>
-                <h2>page4</h2>
-              </px-page>
+          <px-page id="Page4" title="Page 4">
+            <px-navbar view-container="appPages">
+              <button class="navbar__button btn" type="button" onclick="appPages.next()">Next</button>
+            </px-navbar>
+          </px-page>
 
-              <px-page id="Page5" title="Page 5" route="/Page5">
-                <px-navbar>
-                  <div></div>
-                  <button class="btn" type="button" onclick="appPages.next()">Next</button>
-                </px-navbar>
-                <h2>Page 5</h2>
-              </px-page>
+          <px-page id="Page5" title="Page 5">
+            <px-navbar view-container="appPages">
+              <button class="btn" type="button" onclick="appPages.next()">Next</button>
+            </px-navbar>
+          </px-page>
 
-              <px-page id="dialogPage" title="Page 6" route="/Page6" modal dialog>
-                <h2>Dialog Page</h2>
-              </px-page>
+          <px-page id="dialogPage" title="Page 6" route="/Page6" modal dialog>
+            <h2>Dialog Page</h2>
+          </px-page>
 
-            </px-pages>
-          </div>
-          <script type="text/javascript">
-            var pages = document.getElementById('appPages');
+        </px-pages>
+      </div>
+      <script type="text/javascript">
+      var pages = document.getElementById('appPages');
 
-            function goto() {
-              var ask = window.prompt('What page?');
-              pages.goto(ask);
-            }
-            pages.addEventListener('change', function(e) {
-              console.log('Page Changed', e);
-            });
+      function goto() {
+        var ask = window.prompt('What page?');
+        pages.goto(ask);
+      }
+      pages.addEventListener('change', function(e) {
+        console.log('Page Changed', e);
+      });
 
-            function createDemoList(id, count) {
-              var _out = [];
-              var a, li, list,
-                $el = document.querySelector(id);
-              for (var i = 0; i < count; i++) {
-                li = document.createElement('li');
-                li.className = 'table-row table-row--nav-right';
-                li.innerText = 'Item ' + i;
-                li.addEventListener('click', function(){
-                  appPages.next();
-                });
-                $el.appendChild(li);
-              }
-            }
-            createDemoList('#list1', 25);
-            createDemoList('#list2', 25);
-          </script>
-        </template>
+      function createDemoList(id, count) {
+        var _out = [];
+        var a, li, list,
+          $el = document.querySelector(id);
+        for (var i = 0; i < count; i++) {
+          li = document.createElement('li');
+          li.className = 'table-row table-row--nav-right';
+          li.innerText = 'Item ' + i;
+          li.addEventListener('click', function() {
+            appPages.next();
+          });
+          $el.appendChild(li);
+        }
+      }
+      createDemoList('#list1', 225);
+      createDemoList('#list2', 25);
+      </script>
+    </template>
 
-  </div>
-</body>
+    </div>
+  </body>
 
 </html>
