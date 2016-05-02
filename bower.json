@@ -5,7 +5,7 @@
     "Jonnie Spratley <jonnie.spratley@ge.com>"
   ],
   "description": "A web component for a page",
-  "main": "px-page.html",
+  "main": "px-pages.html",
   "keywords": [
     "px"
   ],
@@ -19,9 +19,13 @@
   ],
   "dependencies": {
     "polymer": "latest",
+    "px-base-element": "https://github.com/PredixDev/px-base-element.git",
     "px-mobile.js": "https://github.com/PredixDev/px-mobile.js.git"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#~1.0.5"
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
+    "px-navbar": "https://github.com/PredixDev/px-navbar.git",
+    "px-table-view": "https://github.com/PredixDev/px-table-view.git"
   }
 }

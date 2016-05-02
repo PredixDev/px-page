@@ -1,36 +1,19 @@
 <!-- TODO: Dependencies -->
 <link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../px-base-element/px-base-element.html" />
 <link rel="import" href="px-page-behavior.html" />
 
 <!--
 ```
-<dom-module id="demo-view">
-  <template>
-    <px-page id="demo-card-view">
-      <px-card header-text="Sample Card">
-        Card content
-      <px-card>
-    </px-page>
-  </template>
-</dom-module>
-<script>
-  Polymer({
-  is: 'demo-view',
-    init: function(){
-      // this is where you can do some initialization of your card
-    },
-    behaviors: [px.view]
-  });
-</script>
+
 ```
 @element px-page
-@blurb Element containing basic styling and behaviors (API) for card
 @demo demo.html
 @homepage index.html
 -->
 <dom-module id="px-page">
   <template>
-  <style>
+    <style>
     :host {
       display: block;
       box-sizing: border-box;
@@ -53,29 +36,35 @@
       transform: translateY(100%);
     }
 
-    :host .page-content{
+    :host .page-content {
       height: 90%;
     }
+
     :host .overthrow {
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
+
     .overthrow {
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    :host.has-navbar .page-content{
+
+    :host.has-navbar .page-content {
       margin-top: 55px;
     }
-  </style>
+    </style>
     <section class="page-content overthrow">
       <content id="pageContent"></content>
     </section>
   </template>
 </dom-module>
 <script type="text/javascript">
-  Polymer({
-    is: 'px-page',
-    behaviors: [BaseElement, PageBehavior]
-  });
+Polymer({
+  is: 'px-page',
+  behaviors: [BaseElement, PageBehavior],
+  created: function() {
+    this.toggleClass('px-page');
+  }
+});
 </script>
