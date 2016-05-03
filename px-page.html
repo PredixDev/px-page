@@ -36,8 +36,8 @@
       transform: translateY(100%);
     }
 
-    :host .page-content {
-      height: 90%;
+    :host ::content section{
+      height: 100%;
     }
 
     :host .overthrow {
@@ -64,18 +64,9 @@ Polymer({
   is: 'px-page',
   behaviors: [BaseElement, PageBehavior],
   properties : {
+    //The title for the page
     title : {
       type : String,
-      value: null
-    },
-
-    backText:{
-      type: String,
-      value: null
-    },
-
-    backLink:{
-      type: String,
       value: null
     },
 
@@ -87,19 +78,19 @@ Polymer({
       observer: '_tmplChanged'
     },
 
+    //If the page is currently active in the viewport
     active : {
       type : Boolean,
       value : false,
     },
 
+    //If the page is the main page
     main : {
       type : Boolean,
       value : false,
     },
-    modal : {
-      type : Boolean,
-      value : false,
-    },
+
+    //If the page is a dialog
     dialog : {
       type : Boolean,
       value : false,
@@ -110,19 +101,17 @@ Polymer({
       type : Object
     },
 
+    //The context data object associated with the page
     context : {
       type : Object
     },
 
-    //View instance that contains this page (if this View was initialized)
-    view : {
-      type : Object
-    },
-    //Page Data object of the previously active page
+    //The page that came before this page
     fromPage : {
       type : Object
     },
 
+    //The route to set in the windows hash
     route: {
       type: String
     },
@@ -131,17 +120,19 @@ Polymer({
     url: {
       type: String
     },
+
     //Link to Page HTMLElement
     container: {
       type: String
     },
-    //Reference to the page navbar.
+
+    //Reference to the navbar component if it exists in the page
     navbar: {
       type: Object
     }
   },
-  created: function() {
-    this.toggleClass('px-page');
+  created: function(){
+    this.toggleClass('page');
   }
 });
 </script>

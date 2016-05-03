@@ -1,21 +1,12 @@
 <html>
-
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
-    <script type="text/javascript">
-    if ('addEventListener' in document) {
-      document.addEventListener('DOMContentLoaded', function() {
-        FastClick.attach(document.body);
-      }, false);
-    }
-    </script>
-    <link rel='stylesheet prefetch' href='http://predixdev.github.io/px-library-design/css/style.css'>
+
+    <link rel='stylesheet prefetch' href='//predixdev.github.io/px-library-design/css/style.css'>
 
     <title>px-page mobile-demo</title>
-    <!-- TODO: Dependencies -->
-    <script src="../webcomponentsjs/webcomponents.min.js"></script>
 
+    <script src="../webcomponentsjs/webcomponents.min.js"></script>
     <link rel="import" href="px-pages.html">
     <link rel="import" href="px-page.html">
     <link rel="import" href="../px-table-view/px-table-view.html">
@@ -23,92 +14,75 @@
     <style>
     body {
       position: relative;
+      overflow: hidden;
+    }
+    px-page:nth-child(odd) {
+      background: lime;
+    }
+
+    px-page:nth-child(even) {
+      background: fuchsia;
     }
     </style>
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+    <script type="text/javascript">
+    if ('addEventListener' in document) {
+      document.addEventListener('DOMContentLoaded', function() {
+        FastClick.attach(document.body);
+      }, false);
+    }
+    </script>
   </head>
-
   <body unresolved>
-
     <template id="demoPages" is="dom-bind">
-
       <div class="demo">
-        <px-pages id="appPages" selected="0" loop>
-          <px-page id="Page0" title="Main Page" main>
-            <px-navbar view-container="appPages">
-              <button class="btn navbar__button" type="button" onclick="appPages.next()">Next</button>
-            </px-navbar>
+        <px-pages id="appPages" selected="0" debug>
+          <px-page id="Page0" title="Home" main>
+            <px-navbar view-container="appPages"></px-navbar>
             <ul id="list1" class="list-ui table-view table-view--small">
-              <li class="table-row table-row--nav-right">Item</li>
             </ul>
           </px-page>
-
-          <px-page id="Page1" title="Page 1">
-            <px-navbar view-container="appPages">
-              <button class="btn navbar__button" type="button" onclick="appPages.next()">Next</button>
-            </px-navbar>
+          <px-page id="Page1" title="List">
+            <px-navbar view-container="appPages" back-label="Home"></px-navbar>
             <ul id="list2" class="list-ui table-view table-view--small">
-              <li class="table-row table-row--nav-right">Sub Item</li>
             </ul>
           </px-page>
-
-          <px-page id="Page2" title="Page 2">
+          <px-page id="Page2" title="Details">
             <px-navbar view-container="appPages">
-              <button class="btn navbar__button" type="button" onclick="appPages.next()">Next</button>
+              <div class="navbar__right">
+                <button class="btn" type="button" onclick="document.getElementById('appPages').goto('Page3')">Edit</button>
+              </div>
             </px-navbar>
+            <h2>Details Page</h2>
           </px-page>
-
-          <px-page id="Page3" title="Page 3">
-            <px-navbar view-container="appPages">
-              <button class="navbar__button btn" type="button" onclick="appPages.next()">Next</button>
-            </px-navbar>
+          <px-page id="Page3" title="Edit">
+            <px-navbar view-container="appPages" back-label="Cancel"></px-navbar>
+            <h2>Edit Page</h2>
           </px-page>
-
-          <px-page id="Page4" title="Page 4">
-            <px-navbar view-container="appPages">
-              <button class="navbar__button btn" type="button" onclick="appPages.next()">Next</button>
-            </px-navbar>
-          </px-page>
-
-          <px-page id="Page5" title="Page 5">
-            <px-navbar view-container="appPages">
-              <button class="btn" type="button" onclick="appPages.next()">Next</button>
-            </px-navbar>
-          </px-page>
-
-          <px-page id="dialogPage" title="Page 6" route="/Page6" modal dialog>
-            <h2>Dialog Page</h2>
-          </px-page>
-
         </px-pages>
       </div>
       <script type="text/javascript">
       var pages = document.getElementById('appPages');
-
-      function goto() {
-        var ask = window.prompt('What page?');
-        pages.goto(ask);
-      }
       pages.addEventListener('change', function(e) {
         console.log('Page Changed', e);
       });
 
-      function createDemoList(id, count) {
+      function createDemoList(id, label, count) {
         var _out = [];
         var a, li, list,
           $el = document.querySelector(id);
         for (var i = 0; i < count; i++) {
           li = document.createElement('li');
           li.className = 'table-row table-row--nav-right';
-          li.innerText = 'Item ' + i;
+          li.innerText = label + i;
           li.addEventListener('click', function() {
             appPages.next();
           });
           $el.appendChild(li);
         }
       }
-      createDemoList('#list1', 225);
-      createDemoList('#list2', 25);
+      createDemoList('#list1', 'Category ', 100);
+      createDemoList('#list2', 'Sub Category ', 100);
       </script>
     </template>
 

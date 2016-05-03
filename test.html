@@ -14,6 +14,13 @@
 			.demo {
 				position: relative;
 			}
+			px-page:nth-child(odd) {
+				background: lime;
+			}
+
+			px-page:nth-child(even) {
+				background: fuchsia;
+			}
 		</style>
 	</head>
 	<body>
@@ -23,19 +30,21 @@
 				<button onclick="fixture1.prev()" class="btn">prev</button>
 				<button onclick="fixture1.next()" class="btn">next</button>
 			</div>
-			<px-pages id="fixture1" title="Test Pages" debug>
+			<px-pages id="fixture1" title="Test Pages" debug loop>
 				<px-page id="page1" title="Test Page-1" main>
-					<px-navbar view-container="fixture1"></px-navbar>
+					<px-navbar id="page1-navbar" view-container="fixture1"></px-navbar>
 
 				</px-page>
 				<px-page id="page2" title="Test Page-2">
 					<px-navbar view-container="fixture1"></px-navbar>
 				</px-navbar>
 			</px-page>
-			<px-page id="page3" title="Test Page-3" theme="dark">
+			<px-page id="page3" title="Test Page-3">
 				<px-navbar view-container="fixture1"></px-navbar>
 			</px-page>
-
+			<px-page id="page4" title="Test Page-4">
+				<px-navbar view-container="fixture1"></px-navbar>
+			</px-page>
 			<px-page id="pageModal" title="Test Page-7"  dialog>
 				<h3>Page 6</h3>
 			</px-page>
@@ -47,37 +56,94 @@
 			test('renders', function () {
 				assert.ok(element);
 			});
+			test('attaches .px-pages__wrapper class', function () {
+				assert.ok(element.hasClass('px-pages__wrapper'));
+			});
 			test('has main page', function () {
 				assert.equal(element.getCurrentPage().main, true);
 			});
-			test('next() - changes to next page', function () {
-				element.next();
-				assert.equal(element.getCurrentPage().id, 'page2');
+			test('main page - should not show back button', function () {
+				assert.equal(element.getCurrentPage().navbar.back, false);
 			});
-			test('prev() - changes to prev page', function () {
-				element.prev();
-				assert.equal(element.getCurrentPage().id, 'page1');
+
+			suite('Back', function(){
+				test('back() - changes to prev page', function () {
+					element.next();
+					element.back();
+					assert.equal(element.getActivePage().id, 'page1');
+				});
+
 			});
-			test('goto(id/index) - changes to page by id', function () {
-				element.goto('page3');
-				assert.equal(element.getCurrentPage().id, 'page3');
+
+			suite('Methods', function(){
+				test('goto() - changes to page by id', function () {
+					assert.equal(element.goto('page3').id, 'page3');
+				});
+
+				test('goto() - changes to page by index', function () {
+					assert.equal(element.goto(3).id, 'page4');
+				});
+				test('gotoIndex() - changes to page by index', function () {
+					assert.equal(element.goto(0).id, 'page1');
+				});
+
+				test('goto() - returns false if page not in index', function () {
+					assert.equal(element.goto('page100'), false);
+				});
+
+				test('reset() - resets to main page', function () {
+					element.reset();
+					assert.equal(element.getCurrentPage().main, true);
+				});
+
+				test('next() - changes to next page', function () {
+					element.next();
+					assert.equal(element.getActivePage().id, 'page2');
+				});
+
+				test('prev() - changes to prev page', function () {
+					element.prev();
+					assert.equal(element.getActivePage().id, 'page1');
+				});
+
+				test('getCurrent() - returns current page', function () {
+					assert.equal(element.getCurrentPage(), element.getCurrent());
+					assert.equal(element.getCurrentPage(), element.getActivePage());
+				});
+
+				test('getCurrentPage() - returns current page', function () {
+					assert.equal(element.getCurrentPage().navbar.back, false);
+				});
+
 			});
-			test('reset() - resets selected page to 0', function () {
-				element.reset();
-				assert.equal(element.getCurrentPage().main, true);
-			});
+
+
+
+
+
 		});
+
 		suite('<px-page>', function () {
 			var element = document.getElementById('page1');
 			test('renders', function () {
 				assert.ok(element);
 			});
-			test('has navbar', function () {
-				assert.ok(element.navbar);
+			test('has main', function () {
+				assert.ok(element.main);
 			});
 			test('has title', function () {
 				assert.ok(element.title);
 			});
+
+			test('px-navbar - page stores reference to px-navbar child element', function () {
+				var navbar1 = document.getElementById('page1').navbar;
+				var navbar2 = document.getElementById('page1-navbar');
+				assert(navbar1 === navbar2);
+			});
+			test('attaches .has-navbar class', function () {
+				assert.ok(element.hasClass('has-navbar'));
+			});
+
 		});
 	</script>
 </body>

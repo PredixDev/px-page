@@ -1,26 +1,45 @@
 <!-- TODO: Dependencies -->
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-base-element/px-base-element.html" />
-<link rel="import" href="px-page.html" />
+<link rel="import" href="px-page-transitions.html" />
 <link rel="import" href="px-page-behavior.html" />
+<link rel="import" href="px-page.html" />
 <link rel="import" href="px-pages-behavior.html" />
+
 
 <!--
 ## Overview
-This element is for use with child px-page elements.
-The element keeps track of the pages similar to iron-pages.
+This component is for use with child px-page elements, and is usefull if your content exceeds
+the viewport and want to enable smooth scrolling.
+
+When a page includes a px-navbar component, the navbar will show/hide a back button dependending
+if it is the current page in the stack or the main page.
+
+> This component keeps track of the pages similar to iron-pages.
+
+<a target="_blank" href="mobile-demo.html">View the mobile demo on a device</a>
+
+
 
 ## Usage
-To use this component do the following:
-
+This component should be used to manage a stack of pages for a given view.
 ```
 <style>
 	px-page{
-		font-size: 2rem;
-		text-align:center;
-		padding: 5rem;
+    transition: all 0.3s ease-out;
 	}
 
+  px-page.current {
+    transform: translate(0, 0);
+  }
+
+  px-page.next {
+    transform: translate(50%, 0);
+  }
+
+  px-page.previous {
+    transform: translate(-50%, 0);
+  }
 	px-page:nth-child(odd) {
 		background: lime;
 	}
@@ -32,10 +51,10 @@ To use this component do the following:
 <div class="viewport">
 	<div class="flex">
 	<button class="btn btn--full" onclick="document.getElementById('pages').prev()">Prev</button>
-<button class="btn btn--full" onclick="document.getElementById('pages').next()">Next</button>
+  <button class="btn btn--full" onclick="document.getElementById('pages').next()">Next</button>
 </div>
 	<px-pages id="pages" selected="0" debug loop>
-	  <px-page id="page1">One</px-page>
+	  <px-page id="page1" main>One</px-page>
 	  <px-page id="page2">Two</px-page>
 	  <px-page id="page3">Three</px-page>
 	  <px-page id="page4">four</px-page>
@@ -58,38 +77,28 @@ To use this component do the following:
       transition: all .4s;
       -webkit-overflow-scrolling: touch;
       height: 100%;
-      height: calc(100% - 1px);
       min-height: 99vh;
       width: 100%;
     }
 
     ::content px-page {
       opacity: 0;
-      -webkit-transition: all 0.4s ease-out;
-      transition: all 0.4s ease-out;
+      visibility: hidden;
     }
 
-    ::content px-page.et-page-current {
+    ::content px-page.current {
       opacity: 1;
       visibility: visible;
-      -webkit-transform: translate(0, 0);
-      transform: translate(0, 0);
     }
 
     ::content px-page.next {
-      transform: translate(50%, 0);
-      -webkit-transform: translate(50%, 0);
-      visibility: visible;
     }
 
     ::content px-page.previous {
-      transform: translate(-50%, 0);
-      -webkit-transform: translate(-50%, 0);
-      visibility: visible;
     }
     </style>
 
-    <content select=".px-page"></content>
+    <content select=".page"></content>
 
   </template>
 </dom-module>
