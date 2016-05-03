@@ -5,13 +5,7 @@
 <script type="text/javascript">
 var PagesBehavior = {
   behaviors: [BaseElement],
-  // add properties and methods on the element's prototype
   properties: {
-    // declare properties for the element's public API
-    title: {
-      type: String,
-      value: 'Predix Mobile Page'
-    },
     //The default selected Page
     selected: {
       type: Number,
@@ -44,6 +38,10 @@ var PagesBehavior = {
     selectedIndex: {
       type: Number
     },
+    selectedClass: {
+      type: String,
+      value: 'et-page-current'
+    },
     //The pages routes
     routes: {
       type: Object,
@@ -57,8 +55,8 @@ var PagesBehavior = {
     outTransition: {
       type: String
     },
-    //Loop pages once end is reached.
-    loop: {
+    //Update the URL with the current pages ID
+    updateHash: {
       type: Boolean,
       value: false
     },
@@ -111,40 +109,42 @@ var PagesBehavior = {
     }
     //  this.listen(this, 'track', 'handleTrack');
     this.async(function() {
-      _this._initpages();
-      _this.gotoIndex(_this.selected);
+      _this._init();
       _this.toggleClass('et-wrapper');
     });
   },
-  _initpages: function() {
-    var self = this;
-    var pages = Polymer.dom(this).querySelectorAll('px-page');
-    //var pages = Polymer.dom(this).getEffectiveChildren();
-    var len = pages.length;
-    for (var i = 0; i < len; i++) {
-      //  PagesBehavior.log('page', pages[i]);
-      self._addPage(pages[i]);
-    }
-    this.fire('px-pages-ready');
-    this.fire('ready');
-  },
-  //show Page
-  showPage: function(index) {
-    this.PageList[this.selected].toggleClass('et-page-current');
-    this.selected = index;
-    this.PageList[this.selected].child()[0].toggleClass('et-page-current');
-  },
-  //hide Page
-  hidePage: function(index) {
-    this.toggleClass('hidden', true, this);
-  },
+
+
   //update Page
   updatePage: function(page) {}
 };
+
+PagesBehavior._init = function(){
+  var self = this;
+  var pages = Polymer.dom(this).querySelectorAll('px-page');
+  //var pages = Polymer.dom(this).getEffectiveChildren();
+  var len = pages.length;
+  for (var i = 0; i < len; i++) {
+    //  PagesBehavior.log('page', pages[i]);
+    self._addPage(pages[i]);
+  }
+  this.fire('px-pages-ready');
+  this.fire('ready');
+  this.gotoIndex(this.selected);
+};
+PagesBehavior.showPage = function(index){
+  this.PageList[this.selected].toggleClass('et-page-current');
+  this.selected = index;
+  this.PageList[this.selected].child()[0].toggleClass('et-page-current');
+};
+PagesBehavior.hidePage = function(index){
+    this.toggleClass('hidden', true, this);
+};
+
 //Handle adding a Page to the map
 PagesBehavior._addPage = function(Page) {
   this.emit('add', Page);
-  if (Page.modal) {
+  if (Page.dialog) {
     return;
   }
   if (Page.main) {
@@ -212,6 +212,7 @@ PagesBehavior._setCurrent = function(index, oldIndex) {
     currPage.addClass('current');
     currPage.addClass('et-page-current');
     _this.currentPage = currPage;
+    _this._updateHash();
     _this.fire('change', currPage);
   }
 };
@@ -257,27 +258,20 @@ PagesBehavior.currentIndex = 0;
  * Reset page
  */
 PagesBehavior.reset = function(reverse) {
+  var self = this;
   var _pages = this.getContentChildren();
   var len = _pages.length;
   for (var i = 0; i < len; i++) {
-    console.log('resetting', i, _pages[i]);
+    self.log('resetting', i, _pages[i]);
     _pages[i].removeClass('et-page-current');
+    _pages[i].removeClass(self.selectedClass);
+    _pages[i].removeClass('current');
     _pages[i].removeClass('next');
     _pages[i].removeClass('previous');
-    _pages[i].removeClass('current');
-    if (reverse) {
-      _pages[i].addClass('previous');
-      _pages[i].removeClass('next');
-    } else {
-      _pages[i].addClass('next');
-    }
+
   }
   _pages[this.selected].removeClass('next');
-  if (reverse) {
-    this.selected = _pages.length - 1;
-  } else {
-    this.selected = this.selected - (_pages.length - 1);
-  }
+  this.selected = 0;
   this.current();
 };
 /**
@@ -287,15 +281,22 @@ PagesBehavior.goto = function(indexOrId) {
   var page = this.PageMap[indexOrId] || this.PageList[indexOrId] | {};
   if (page) {
     this.gotoPage(indexOrId);
-    window.location.hash = page.route;
     return page;
+  } else {
+    return false;
   }
 };
+
+PagesBehavior._updateHash = function(){
+  if(this.updateHash){
+    window.location.hash = this.getCurrentPage().id;
+  }
+}
 /**
  * Goto a page
  */
 PagesBehavior.gotoPage = function(id) {
-  console.log('gotoPage', id);
+  this.log('gotoPage', id);
   var index = 0;
   if (this.PageMap[id]) {
     index = this.PageList.indexOf(this.PageMap[id]);
@@ -312,8 +313,8 @@ PagesBehavior.gotoPage = function(id) {
  * @param index
  */
 PagesBehavior.gotoIndex = function(index) {
-  console.log('gotoIndex', index);
-  index = index || 0;
+  PagesBehavior.log('gotoIndex', index);
+
   var _this = this;
   this.async(function() {
     PagesBehavior.log('gotoIndex', index);
@@ -330,7 +331,8 @@ PagesBehavior.gotoIndex = function(index) {
 /**
  * The current page
  */
-PagesBehavior.current = function() {
+PagesBehavior.current = function(index) {
+  this.selected = index || this.selected;
   this.log('current', this.selected);
   this.gotoIndex(this.selected);
 };
@@ -346,7 +348,7 @@ PagesBehavior.next = function() {
       this.current();
     }
   } else {
-    this.gotoIndex(this.selected + 1);
+    this.selected++;
   }
 };
 /**
@@ -360,7 +362,7 @@ PagesBehavior.prev = function() {
       this.current();
     }
   } else {
-    this.gotoIndex(this.selected - 1);
+    this.selected--;
   }
 };
 /**
