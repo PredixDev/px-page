@@ -27,5 +27,9 @@
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
     "px-navbar": "https://github.com/PredixDev/px-navbar.git",
     "px-table-view": "https://github.com/PredixDev/px-table-view.git"
+  },
+  "resolutions": {
+    "polymer": "~v1.4.0",
+    "px-theme": "^0.7.0"
   }
 }

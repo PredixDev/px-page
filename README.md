@@ -1,32 +1,82 @@
-# px-view
-The `px-view` element enables developers to manage multiple `px-deck` and `px-card` elements.
+#Px-Page
 
-> NOTE: For a demo visit [/px-view/demo.html](/px-view/demo.html)
+## Overview
 
+Px-Page is a Predix UI component
 
+## Usage
 
-###### Example implementation:
+### Prerequisites
+1. node.js
+2. npm
+3. bower
+4. [webcomponents-lite.js polyfill](https://github.com/webcomponents/webcomponentsjs)
+
+Node, npm and bower are necessary to install the component and dependencies. webcomponents.js adds support for web components and custom elements to your application.
+
+## Getting Started
+
+First, install the component via bower on the command line.
 
 ```
-<px-view id="sandbox-view">
-
-  <px-deck id="deck-1">
-    <px-card id="card-1">
-      deck-1 - card 1
-    </px-card>
-    <px-card id="card-2">
-      deck-1 - card 2
-    </px-card>
-  </px-deck>
-
-	<px-deck id="deck-2">
-    <px-card id="card-3">
-      deck-2 - card 3
-    </px-card>
-    <px-card id="card-4">
-      deck-2 - card 4
-    </px-card>
-  </px-deck>
-
-</px-view>
+bower install Px-Page --save
 ```
+
+Second, import the component to your application with the following tag in your head.
+
+```
+<link rel="import" href="/bower_components/Px-Page/Px-Page.html"/>
+```
+
+Finally, use the component in your application:
+
+```
+Insert Your demo code here.
+```
+
+<br />
+<hr />
+
+## documentation
+
+Read the full API and view the demo [here](https://predixdev.github.io/Px-Page).
+
+The documentation in this repository is supplemental to the official Predix documentation, which is continuously updated and maintained by the Predix documentation team. Go to [http://predix.io](http://predix.io)  to see the official Predix documentation.
+
+
+## Local Development
+
+From the component's directory...
+
+```
+$ npm install
+$ bower install
+$ grunt sass
+```
+
+From the component's directory, to start a local server run:
+
+```
+$ grunt depserve
+```
+
+Navigate to the root of that server (e.g. http://localhost:8080/) in a browser to open the API documentation page, with link to the "Demo" / working examples.
+
+
+### DevMode
+Devmode runs `grunt depserve` and `grunt watch` concurrently so that when you make a change to your source files and save them, your preview will be updated in any browsers you have opened and turned on LiveReload.
+From the component's directory run:
+
+```
+$ grunt devmode
+```
+
+### GE Coding Style Guide
+[GE JS Developer's Guide](https://github.com/GeneralElectric/javascript)
+
+<br />
+<hr />
+
+## Known Issues
+
+Please use [Github Issues](https://github.com/PredixDev/Px-Page/issues) to submit any bugs you might find.

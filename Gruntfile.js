@@ -49,6 +49,9 @@ module.exports = function(grunt) {
       },
       bower: {
         command: 'bower install'
+      },
+      wct: {
+        command: 'wct'
       }
     },
 

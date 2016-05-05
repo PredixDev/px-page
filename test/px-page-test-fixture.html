@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Web Component Test : Fixture for px-page</title>
+
+    <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <!-- web-component-tester automatically provides local copy of brower.js below
+         for any URL ending with "/web-component-tester/browser.js"
+         when wct is run from the command line -->
+    <script src="../web-component-tester/browser.js"></script>
+    <link rel="import" href="../px-page.html" />
+    <!-- Retain this link for px-theme.html -->
+    <!-- px-theme is needed for WCT to run without errors -->
+    <link rel="import" href="../../px-theme/px-theme.html"/>
+    <!-- This script link will contain the generated script for basic wct test cases -->
+    <script src="px-page-base-tests.js"></script>
+    <!-- This script link will contain the generated script stub for custom, developer-added test cases -->
+    <script src="px-page-custom-tests.js"></script>
+  </head>
+
+  <body>
+    <h3>Web Component Test : Fixture for px-page</h3>
+
+    <div class="demo">
+      <div class="">
+        <button onclick="px_page_1.reset()" class="btn">reset</button>
+        <button onclick="px_page_1.prev()" class="btn">prev</button>
+        <button onclick="px_page_1.next()" class="btn">next</button>
+      </div>
+      <px-pages id="px_page_1" title="Test Pages" debug loop>
+        <px-page id="page1" title="Test Page-1" main>
+          <px-navbar id="page1-navbar" view-container="px_page_1"></px-navbar>
+
+        </px-page>
+        <px-page id="page2" title="Test Page-2">
+          <px-navbar view-container="px_page_1"></px-navbar>
+        </px-navbar>
+      </px-page>
+      <px-page id="page3" title="Test Page-3">
+        <px-navbar view-container="px_page_1"></px-navbar>
+      </px-page>
+      <px-page id="page4" title="Test Page-4">
+        <px-navbar view-container="px_page_1"></px-navbar>
+      </px-page>
+      <px-page id="pageModal" title="Test Page-7"  dialog>
+        <h3>Page 6</h3>
+      </px-page>
+    </px-pages>
+  </body>
+</html>
