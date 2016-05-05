@@ -2,7 +2,7 @@
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-base-element/px-base-element.html" />
 <link rel="import" href="px-page-behavior.html" />
-
+<link rel="stylesheet" href="px-page.css">
 <!--
 ```
 
@@ -12,48 +12,8 @@
 @homepage index.html
 -->
 <dom-module id="px-page">
+
   <template>
-    <style>
-    :host {
-      display: block;
-      box-sizing: border-box;
-    }
-
-    :host.dialog {
-      -webkit-transition: all 0.3s ease;
-      transition: all 0.3s ease;
-      position: fixed;
-      left: 0;
-      right: 0;
-      transform: translateY(0);
-      z-index: 100;
-      background: #fff;
-      height: 100%;
-    }
-
-    :host.dialog:not(.is-open) {
-      z-index: -1;
-      transform: translateY(100%);
-    }
-
-    :host ::content section{
-
-    }
-
-    :host .overthrow {
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .overthrow {
-      overflow: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    :host.has-navbar .page-content {
-      margin-top: 55px;
-    }
-    </style>
     <section class="page-content overthrow">
       <content id="pageContent"></content>
     </section>

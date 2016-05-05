@@ -24,16 +24,16 @@
   height: 100%;
 }
 
-:host .overthrow {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
+:host.has-navbar .page-content {
+  margin-top: 65px;
 }
 
 .overthrow {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
-
-:host.has-navbar .page-content {
-  margin-top: 55px;
+.overthrow-enabled .page-content{
+  height: 100%;
+  background: red !important;
+  padding-bottom: 5rem;
 }
