@@ -25,7 +25,7 @@
 }
 
 :host.has-navbar .page-content {
-  margin-top: 65px;
+  margin-top: 55px;
 }
 
 .overthrow {
@@ -34,6 +34,6 @@
 }
 .overthrow-enabled .page-content{
   height: 100%;
-  background: red !important;
+
   padding-bottom: 5rem;
 }
