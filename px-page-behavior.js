@@ -24,7 +24,7 @@ var PageBehavior = {
     var pageNavbar = this.queryEffectiveChildren('px-navbar');
     if (pageNavbar) {
       this.toggleClass('has-navbar');
-      pageContent.css('margin-top', pageNavbar.offsetHeight + 'px');
+      //  pageContent.css('margin-top', pageNavbar.offsetHeight + 'px');
       if (this.theme) {
         pageNavbar.theme = this.theme;
       }
