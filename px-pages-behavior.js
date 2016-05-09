@@ -203,10 +203,10 @@ PagesBehavior.log = function(type, message) {
  */
 PagesBehavior._clearCurrent = function() {
   var self = this;
-  var _pages = this.queryAllEffectiveChildren('.et-page-current');
+  var _pages = this.queryAllEffectiveChildren('px-page');
   if (_pages) {
     for (var i = 0; i < _pages.length; i++) {
-      console.log('_clearCurrent', _pages[i]);
+      console.log('_clearCurrent', self.selectedClass, _pages[i]);
       _pages[i].toggleClass(self.selectedClass, false);
     }
   }
@@ -224,17 +224,17 @@ PagesBehavior._setCurrent = function(index, oldIndex) {
   if (nextPage) {
     _this.log('nextPage', nextPage);
     nextPage.toggleClass('next', true);
-    nextPage.toggleClass(_this.selectedClass, false);
+    //  nextPage.toggleClass(_this.selectedClass, false);
     nextPage.toggleClass('previous', false);
   }
   if (prevPage) {
     _this.log('prevPage', prevPage);
     prevPage.toggleClass('next', false);
-    prevPage.toggleClass(_this.selectedClass, false);
+    //  prevPage.toggleClass(_this.selectedClass, false);
     prevPage.toggleClass('previous', true);
   }
   if (currPage) {
-    _this.log('currPage', currPage);
+    _this.log('currPage', _this.selectedClass, currPage);
     currPage.nextPage = nextPage;
     currPage.prevPage = prevPage;
     currPage.toggleClass('next', false);
@@ -293,17 +293,18 @@ PagesBehavior._updateHash = function() {
  */
 PagesBehavior.reset = function(selected) {
   var self = this;
-  var _pages = this.getContentChildren();
+  var _pages = this.queryAllEffectiveChildren('px-page');
   var len = _pages.length;
+  this._clearCurrent();
   for (var i = 0; i < len; i++) {
     self.log('resetting', i, _pages[i]);
     _pages[i].removeClass(self.selectedClass);
     _pages[i].removeClass('next');
     _pages[i].removeClass('previous');
   }
-  _pages[this.selected].removeClass('next');
+  _pages[this.selected].toggleClass(self.selectedClass);
   this.selected = selected || 0;
-  this.current();
+
 };
 /**
  * Goto a page

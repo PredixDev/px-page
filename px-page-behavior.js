@@ -77,7 +77,7 @@ var PageBehavior = {
   },
   open: function() {
     if (this.dialog) {
-      this.toggleClass('et-page-current');
+      this.toggleClass(this.currentClass);
       this.toggleClass('is-open');
     }
   },

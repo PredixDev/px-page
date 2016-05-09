@@ -40,8 +40,7 @@
       /* This enables the page to allow scrolling */
 
       :host::content section {
-        height: 95%;
-        height: calc(100% - 57px);
+        height: 100%;
       }
 
       :host.has-navbar .page-content {
@@ -133,6 +132,10 @@
       //Reference to the navbar component if it exists in the page
       navbar: {
         type: Object
+      },
+      currentClass: {
+        type: String,
+        value: 'current'
       }
     },
     created: function() {
