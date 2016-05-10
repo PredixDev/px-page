@@ -59,7 +59,7 @@ var PagesBehavior = {
       value: false
     }
   },
-  _init: function() {
+  _init: function () {
     var self = this;
     var pages = this.queryAllEffectiveChildren('px-page');
     var len = pages.length;
@@ -67,30 +67,30 @@ var PagesBehavior = {
       PagesBehavior.log('page', pages[i]);
       self._addPage(pages[i]);
     }
-    this.fire('px-pages-ready');
     this.fire('ready');
   },
-  created: function() {
+  created: function () {
     this.PageMap = {};
     this._PageList = [];
     this.toggleClass('px-pages__wrapper');
   },
-  attached: function() {
+  attached: function () {
     var _this = this;
     if (!this.id) {
       throw 'pages' + this.tagName + ' cannot be created without an id!';
     }
     //  this.listen(this, 'track', 'handleTrack');
-    this.async(function() {
+    this.async(function () {
       _this._init();
       _this.toggleClass('et-wrapper');
-      _this.gotoIndex(_this.selected);
+
     });
+    _this.gotoIndex(_this.selected);
   },
   /**
    * Set the current page
    */
-  _setCurrent: function(index, oldIndex) {
+  _setCurrent: function (index, oldIndex) {
     var _this = this;
     var prevPage = _this.getContentChildren()[index - 1];
     var currPage = _this.getContentChildren()[index];
@@ -99,23 +99,23 @@ var PagesBehavior = {
     this._clearCurrent();
     if (nextPage) {
       _this.log('nextPage', nextPage);
-      nextPage.toggleClass('next', true);
+      _this.toggleClass('next', true, nextPage);
       //  nextPage.toggleClass(_this.selectedClass, false);
-      nextPage.toggleClass('previous', false);
+      _this.toggleClass('previous', false, nextPage);
     }
     if (prevPage) {
       _this.log('prevPage', prevPage);
-      prevPage.toggleClass('next', false);
+      _this.toggleClass('next', false, prevPage);
       //  prevPage.toggleClass(_this.selectedClass, false);
-      prevPage.toggleClass('previous', true);
+      _this.toggleClass('previous', true, prevPage);
     }
     if (currPage) {
       _this.log('currPage', _this.selectedClass, currPage);
       currPage.nextPage = nextPage;
       currPage.prevPage = prevPage;
-      currPage.toggleClass('next', false);
-      currPage.toggleClass('previous', false);
-      currPage.toggleClass(_this.selectedClass, true);
+      _this.toggleClass('next', false, currPage);
+      _this.toggleClass('previous', false, currPage);
+      _this.toggleClass(_this.selectedClass, true, currPage);
       _this.currentPage = currPage;
     }
     _this._updateHash();
@@ -124,7 +124,7 @@ var PagesBehavior = {
   /**
    * Goto a page by index or id
    */
-  goto: function(indexOrId) {
+  goto: function (indexOrId) {
     var page = this.PageMap[indexOrId] || this._PageList[indexOrId] || null;
     if (page) {
       this.gotoPage(indexOrId);
@@ -134,8 +134,8 @@ var PagesBehavior = {
     }
   },
   //Handle adding a Page to the map
-  _addPage: function(Page) {
-    this.emit('add', Page);
+  _addPage: function (Page) {
+    this.fire('add', Page);
     if (Page.dialog) {
       return;
     }
@@ -145,7 +145,8 @@ var PagesBehavior = {
       this.mainPage = Page;
     }
     //add the index to the el
-    Page.attr('index', this._PageList.length.toString());
+    Page.setAttribute('index', this._PageList.length.toString());
+
     //push to Page list
     this._PageList.push(Page);
 
@@ -163,16 +164,16 @@ var PagesBehavior = {
   /**
    * Reset page
    */
-  reset: function(selected) {
+  reset: function (selected) {
     var self = this;
     var _pages = this.queryAllEffectiveChildren('px-page');
     var len = _pages.length;
     this._clearCurrent();
     for (var i = 0; i < len; i++) {
       self.log('resetting', i, _pages[i]);
-      _pages[i].removeClass(self.selectedClass);
-      _pages[i].removeClass('next');
-      _pages[i].removeClass('previous');
+      _pages[i].toggleClass(self.selectedClass);
+      _pages[i].toggleClass('next');
+      _pages[i].toggleClass('previous');
     }
     _pages[this.selected].toggleClass(self.selectedClass);
     this.selected = selected || 0;
@@ -181,16 +182,16 @@ var PagesBehavior = {
   /**
    * Goto a page by index
    */
-  gotoIndex: function(index) {
+  gotoIndex: function (index) {
     PagesBehavior.log('gotoIndex', index);
     var _this = this;
     PagesBehavior.log('gotoIndex', index);
     var _pages = _this.getContentChildren();
 
     if (_pages[index]) {
-      _pages[index].addClass(_this.selectedClass);
-      _pages[index].removeClass('previous');
-      _pages[index].removeClass('next');
+      _pages[index].toggleClass(_this.selectedClass, false);
+      _pages[index].toggleClass('previous', false);
+      _pages[index].toggleClass('next', false);
       _this.selected = index;
     } else {
       _this.selected = 0;
@@ -201,7 +202,7 @@ var PagesBehavior = {
   /**
    * Goto a page by #id
    */
-  gotoPage: function(id) {
+  gotoPage: function (id) {
     this.log('gotoPage', id);
     var index = 0;
     var page = this.PageMap[id];
@@ -214,218 +215,193 @@ var PagesBehavior = {
       }
     }
     return page;
-  }
+  },
 
+  showPage: function (index) {
+    this.log('showPage', index);
+    this._PageList[this.selected].toggleClass(this.selectedClass);
+    this.selected = index;
+    this._PageList[this.selected].child()[0].toggleClass(this.selectedClass);
+  },
+  hidePage: function (index) {
+    this.toggleClass('hidden', true, this);
+  },
 
-};
-
-
-
-/**
- *
- */
-PagesBehavior.showPage = function(index) {
-  this.log('showPage', index);
-  this._PageList[this.selected].toggleClass(this.selectedClass);
-  this.selected = index;
-  this._PageList[this.selected].child()[0].toggleClass(this.selectedClass);
-};
-
-/**
- *
- */
-PagesBehavior.hidePage = function(index) {
-  this.toggleClass('hidden', true, this);
-};
-
-
-
-/**
- *
- */
-PagesBehavior.warn = function(type, message) {
-  if (this.debug) {
-    console.warn('PagesBehavior.' + type, message);
-  }
-};
-
-/**
- */
-PagesBehavior.log = function(type, message) {
-  if (this.debug) {
-    console.log('PagesBehavior.' + type, message);
-  }
-};
-
-/**
- *
- */
-PagesBehavior._clearCurrent = function() {
-  var self = this;
-  var _pages = this.queryAllEffectiveChildren('px-page');
-  if (_pages) {
-    for (var i = 0; i < _pages.length; i++) {
-      console.log('_clearCurrent', self.selectedClass, _pages[i]);
-      _pages[i].toggleClass(self.selectedClass, false);
+  warn: function (type, message) {
+    if (this.debug) {
+      console.warn('PagesBehavior.' + type, message);
     }
-  }
-};
-
-/**
- * Get the current page
- */
-PagesBehavior.getCurrentPage = function() {
-  return this._PageList[this.selected];
-};
-/**
- * Get the prev page
- */
-PagesBehavior.getPrevPage = function() {
-  return this._PageList[this.selected - 1];
-};
-/**
- * Get the next page
- */
-PagesBehavior.getNextPage = function() {
-  return this._PageList[this.selected + 1];
-};
-/**
- * Change a page
- * @param indexOrId
- */
-PagesBehavior.changePage = function(indexOrId) {
-  var p = null;
-  this._clearCurrent();
-  if (this._PageList[indexOrId]) {
-    p = this._PageList[indexOrId];
-    this._setCurrent(indexOrId);
-  } else if (this.PageMap[indexOrId]) {
-    p = this.PageMap[indexOrId];
-    this._setCurrent(this._PageList.indexOf(p));
-  }
-  this.currentPage = p;
-};
-
-
-PagesBehavior.currentIndex = 0;
-
-PagesBehavior._updateHash = function() {
-  if (this.updateHash) {
-    window.location.hash = this.getCurrentPage().id;
-  }
-};
-
-
-
-/**
- * The current page
- */
-PagesBehavior.current = function(index) {
-  this.selected = index || this.selected;
-  this.log('current', this.selected);
-  return this.gotoIndex(this.selected);
-};
-/**
- * The next page
- */
-PagesBehavior.next = function() {
-  PagesBehavior.log('next', this.selected);
-  if (this.selected >= this._PageList.length - 1) {
-    if (this.loop) {
-      return this.reset();
+  },
+  log: function (type, message) {
+    if (this.debug) {
+      console.log('PagesBehavior.' + type, message);
     }
-    console.warn(this.tagName, 'end of page stack!');
-    return;
-  } else {
-    return this.selected++;
-  }
-  return this.current();
-};
-/**
- * The previous page
- */
-PagesBehavior.prev = function() {
-  PagesBehavior.log('prev', this.selected);
-  if (this.selected <= 0) {
+  },
+  //Clears the current page
+  _clearCurrent: function () {
+    var self = this;
+    var _pages = this.queryAllEffectiveChildren('px-page');
+    if (_pages) {
+      for (var i = 0; i < _pages.length; i++) {
+        console.log('_clearCurrent', self.selectedClass, _pages[i]);
+        self.toggleClass(self.selectedClass, false, _pages[i]);
+      }
+    }
+  },
+
+  /**
+   * Get the current page
+   */
+  getCurrentPage: function () {
+    return this._PageList[this.selected];
+  },
+  /**
+   * Get the prev page
+   */
+  getPrevPage: function () {
+    return this._PageList[this.selected - 1];
+  },
+  /**
+   * Get the next page
+   */
+  getNextPage: function () {
+    return this._PageList[this.selected + 1];
+  },
+  /**
+   * Change a page
+   * @param indexOrId
+   */
+  changePage: function (indexOrId) {
+    var p = null;
+    this._clearCurrent();
+    if (this._PageList[indexOrId]) {
+      p = this._PageList[indexOrId];
+      this._setCurrent(indexOrId);
+    } else if (this.PageMap[indexOrId]) {
+      p = this.PageMap[indexOrId];
+      this._setCurrent(this._PageList.indexOf(p));
+    }
+    this.currentPage = p;
+  },
+
+
+  _updateHash: function () {
+    if (this.updateHash) {
+      window.location.hash = this.getCurrentPage().id;
+    }
+  },
+
+
+  /**
+   * The current page
+   */
+  current: function (index) {
+    this.selected = index || this.selected;
+    this.log('current', this.selected);
+    return this.gotoIndex(this.selected);
+  },
+  /**
+   * The next page
+   */
+  next: function () {
+    PagesBehavior.log('next', this.selected);
+    if (this.selected >= this._PageList.length - 1) {
+      if (this.loop) {
+        return this.reset();
+      }
+      console.warn(this.tagName, 'end of page stack!');
+      return;
+    } else {
+      return this.selected++;
+    }
     return this.current();
-  } else {
+  },
+  /**
+   * The previous page
+   */
+  prev: function () {
+    PagesBehavior.log('prev', this.selected);
+    if (this.selected <= 0) {
+      return this.current();
+    } else {
+      return this.selected--;
+    }
+  },
+  /**
+   * Remove transition from page
+   * @param index
+   */
+  removeTransition: function (index) {
+    var page = this._PageList[index];
+    page.content.css('transition', 'none');
+  },
+  /**
+   * Do a transition
+   */
+  doTransition: function (index) {
+    var page = this._PageList[index];
+    var position = page.position();
+    page
+      .css('transition', 'all 400ms ease')
+      .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
+  },
+  /**
+   * Change the page by name.
+   * @param name
+   */
+  change: function (name) {
+    return this.goto(name);
+  },
+  /**
+   * Load a page
+   * @param url
+   */
+  load: function (url) {
+    throw new Error('NOT IMPLEMENTED');
+    return false;
+  },
+  /**
+   * Get the active page
+   */
+  getActivePage: function () {
+    return this._PageList[this.selected];
+  },
+  /**
+   * Handles getting the current page in the stack.
+   */
+  getCurrent: function () {
+    return this._PageList[this.selected];
+  },
+  /**
+   * Handles navigating back in the page stack.
+   */
+  back: function () {
+    PagesBehavior.log('back', this.selected);
     return this.selected--;
-  }
-};
-/**
- * Remove transition from page
- * @param index
- */
-PagesBehavior.removeTransition = function(index) {
-  var page = this._PageList[index];
-  page.content.css('transition', 'none');
-};
-/**
- * Do a transition
- */
-PagesBehavior.doTransition = function(index) {
-  var page = this._PageList[index];
-  var position = page.position();
-  page
-    .css('transition', 'all 400ms ease')
-    .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
-};
-/**
- * Change the page by name.
- * @param name
- */
-PagesBehavior.change = function(name) {
-  return this.goto(name);
-};
-/**
- * Load a page
- * @param url
- */
-PagesBehavior.load = function(url) {
-  this.log('PagesBehavior.load', 'NOT IMPLEMENTED');
-  return false;
-};
-/**
- * Get the active page
- */
-PagesBehavior.getActivePage = function() {
-  return this._PageList[this.selected];
-};
-/**
- * Handles getting the current page in the stack.
- */
-PagesBehavior.getCurrent = function() {
-  return this._PageList[this.selected];
-};
-/**
- * Handles navigating back in the page stack.
- */
-PagesBehavior.back = function() {
-  PagesBehavior.log('back', this.selected);
-  return this.selected--;
-};
-/**
- * Add a px-page from page object
- * @param obj
- */
-PagesBehavior.addPage = function(obj) {
-  PagesBehavior.warn('PagesBehavior.addPage', 'NOT IMPLEMENTED');
-  return false;
-};
+  },
+  /**
+   * Add a px-page from page object
+   * @param obj
+   */
+  addPage: function (obj) {
+    throw new Error('NOT IMPLEMENTED');
+    return false;
+  },
 
-/**
- * Handle setting the height of the current page to the height of the container.
- */
-PagesBehavior._fixHeight = function() {
-  var pHeight = this.offsetHeight;
-  var pageHeight = this.currentPage.offsetHeight;
-  var pageContent = this.querySelector('.page-content');
-  var contentHeight = pageContent.offsetHeight;
-  pageContent.css('height', pageHeight + 'px');
-  PagesBehavior.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
-  return pageContent;
-};
-PagesBehavior.getPages = function() {
-  var _pages = this.getContentChildren();
-  return _pages;
+  /**
+   * Handle setting the height of the current page to the height of the container.
+   */
+  _fixHeight: function () {
+    var pHeight = this.offsetHeight;
+    var pageHeight = this.currentPage.offsetHeight;
+    var pageContent = this.querySelector('.page-content');
+    var contentHeight = pageContent.offsetHeight;
+    pageContent.css('height', pageHeight + 'px');
+    PagesBehavior.log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
+    return pageContent;
+  },
+  getPages: function () {
+    var _pages = this.getContentChildren();
+    return _pages;
+  }
 };

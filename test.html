@@ -29,46 +29,44 @@
 <body>
 	<div class="demo">
 		<div class="">
-			<button onclick="fixture1.reset()" class="btn">reset</button>
-			<button onclick="fixture1.prev()" class="btn">prev</button>
-			<button onclick="fixture1.next()" class="btn">next</button>
+			<button onclick="px_page_1.reset()" class="btn">reset</button>
+			<button onclick="px_page_1.prev()" class="btn">prev</button>
+			<button onclick="px_page_1.next()" class="btn">next</button>
 		</div>
-		<px-pages id="fixture1" title="Test Pages" debug loop>
+		<px-pages id="px_page_1" title="Test Pages" debug loop>
 			<px-page id="page1" title="Test Page-1" main>
-				<px-navbar id="page1-navbar" view-container="fixture1"></px-navbar>
+				<px-navbar id="page1-navbar" view-container="px_page_1"></px-navbar>
 			</px-page>
 			<px-page id="page2" title="Test Page-2">
-				<px-navbar view-container="fixture1"></px-navbar>
+				<px-navbar view-container="px_page_1"></px-navbar>
 				</px-navbar>
 			</px-page>
 			<px-page id="page3" title="Test Page-3">
-				<px-navbar view-container="fixture1"></px-navbar>
+				<px-navbar view-container="px_page_1"></px-navbar>
 			</px-page>
 			<px-page id="page4" title="Test Page-4">
-				<px-navbar view-container="fixture1"></px-navbar>
+				<px-navbar view-container="px_page_1"></px-navbar>
 			</px-page>
 			<px-page id="page5" title="Test Page-5">
-				<px-navbar view-container="fixture1"></px-navbar>
+				<px-navbar view-container="px_page_1"></px-navbar>
 			</px-page>
 			<px-page id="page6" title="Test Page-6">
-				<px-navbar view-container="fixture1"></px-navbar>
+				<px-navbar view-container="px_page_1"></px-navbar>
 			</px-page>
 			<px-page id="page7" title="Test Page-7">
-				<px-navbar view-container="fixture1"></px-navbar>
+				<px-navbar view-container="px_page_1"></px-navbar>
 			</px-page>
-			<px-page id="page8" title="Test Page-8" import="test/remote-page.html">
-				<!-- HTML Loaded -->
-			</px-page>
+			<px-page id="page8" title="Test Page-8" import="test/remote-page.html"></px-page>
 		</px-pages>
 	</div>
 	<script>
 		suite('<px-pages>', function() {
-			var element = document.getElementById('fixture1');
+			var element = document.getElementById('px_page_1');
 			test('renders', function() {
 				assert.ok(element);
 			});
 			test('attaches .px-pages__wrapper class', function() {
-				assert.ok(element.hasClass('px-pages__wrapper'));
+        assert(element.className.indexOf('px-pages__wrapper') > -1);
 			});
 			test('has main page', function() {
 				assert.equal(element.getCurrentPage().main, true);
@@ -153,7 +151,7 @@
 				test('selected - Only 1 page can have selected at a given time.', function() {
 					element.selected = 0;
 					element.selected = 3;
-					var nodes = document.getElementById('fixture1').queryAllEffectiveChildren('.current');
+				  var nodes = document.getElementById('px_page_1').queryAllEffectiveChildren('.'+element.selectedClass);
 					console.log(nodes, typeof(nodes), nodes.length);
 					assert.equal(element.getCurrentPage().id, 'page4');
 					assert.equal(nodes.length, 1);
@@ -188,8 +186,8 @@
 				var navbar2 = document.getElementById('page1-navbar');
 				assert(navbar1 === navbar2);
 			});
-			test('attaches .has-navbar class', function() {
-				assert.ok(element.hasClass('has-navbar'));
+			test('attaches .page--has-navbar class', function() {
+				assert.ok(page1.className.indexOf('page--has-navbar') > -1);
 			});
 
 		});

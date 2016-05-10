@@ -1,12 +1,21 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-    <link rel='stylesheet prefetch' href='//predixdev.github.io/px-library-design/css/style.css'>
-
-    <title>px-page mobile-demo</title>
-
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel='stylesheet' href='//predixdev.github.io/px-library-design/css/style.css'>
     <script src="../webcomponentsjs/webcomponents.min.js"></script>
+    <script src="../fastclick/lib/fastclick.js"></script>
+    <script type="text/javascript">
+      if ('addEventListener' in document) {
+        document.addEventListener('DOMContentLoaded', function() {
+          FastClick.attach(document.body);
+        }, false);
+      }
+    </script>
+
+    <title>px-page | mobile-demo</title>
+
     <link rel="import" href="px-pages.html">
     <link rel="import" href="px-page.html">
     <link rel="import" href="../px-table-view/px-table-view.html">
@@ -24,29 +33,28 @@
       background: fuchsia;
     }
     </style>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
-    <script type="text/javascript">
-    if ('addEventListener' in document) {
-      document.addEventListener('DOMContentLoaded', function() {
-        FastClick.attach(document.body);
-      }, false);
-    }
-    </script>
+
   </head>
   <body unresolved>
     <template id="demoPages" is="dom-bind">
       <div class="demo">
         <px-pages id="appPages" selected="0" debug>
+
+          
           <px-page id="Page0" title="Home" main>
             <px-navbar view-container="appPages"></px-navbar>
             <ul id="list1" class="list-ui table-view table-view--small">
             </ul>
           </px-page>
+
+
           <px-page id="Page1" title="List">
             <px-navbar view-container="appPages" back-label="Home"></px-navbar>
             <ul id="list2" class="list-ui table-view table-view--small">
             </ul>
           </px-page>
+
+
           <px-page id="Page2" title="Details">
             <px-navbar view-container="appPages">
               <div class="navbar__right">
@@ -55,6 +63,7 @@
             </px-navbar>
             <h2>Details Page</h2>
           </px-page>
+
           <px-page id="Page3" title="Edit">
             <px-navbar view-container="appPages" back-label="Cancel"></px-navbar>
             <h2>Edit Page</h2>

@@ -1,28 +1,27 @@
 <!-- TODO: Dependencies -->
 <link rel="import" href="../polymer/polymer.html" />
+<!--
 <link rel="import" href="../px-base-element/px-base-element.html" />
-<link rel="import" href="px-page-transitions.html" />
-<link rel="import" href="px-page-behavior.html" />
+-->
+<link rel="stylesheet" href="css/px-page.css"/>
 <link rel="import" href="px-page.html" />
 <link rel="import" href="px-pages-behavior.html" />
 
 
 <!--
-## Overview
-This component is for use with child px-page elements, and is usefull if your content exceeds
+<p>
+  For demo visit <a href="demo.html" target="_blank">Full demo here</a> or <a href="mobile-demo.html" target="_blank">Mobile demo here</a>
+</p>
+
+This component should be used to manage a stack of pages for a given view.
+This component is for use with child `px-page` elements, and is usefull if your content exceeds
 the viewport and want to enable smooth scrolling.
 
-When a page includes a px-navbar component, the navbar will show/hide a back button dependending
+When a page includes a `px-navbar` component, the navbar will show/hide a back button dependending
 if it is the current page in the stack or the main page.
 
-> This component keeps track of the pages similar to iron-pages.
-
-<a target="_blank" href="mobile-demo.html">View the mobile demo on a device</a>
-
-
-
 ## Usage
-This component should be used to manage a stack of pages for a given view.
+
 ```
 <style>
 	px-page{
@@ -53,7 +52,7 @@ This component should be used to manage a stack of pages for a given view.
 	<button class="btn btn--full" onclick="document.getElementById('pages').prev()">Prev</button>
   <button class="btn btn--full" onclick="document.getElementById('pages').next()">Next</button>
 </div>
-	<px-pages id="pages" selected="0" debug loop>
+	<px-pages id="pages" selected="0">
 	  <px-page id="page1" main>One</px-page>
 	  <px-page id="page2">Two</px-page>
 	  <px-page id="page3">Three</px-page>
@@ -103,6 +102,6 @@ This component should be used to manage a stack of pages for a given view.
 <script type="text/javascript">
   Polymer({
     is: 'px-pages',
-    behaviors: [BaseElement, PagesBehavior]
+    behaviors: [PagesBehavior]
   });
 </script>

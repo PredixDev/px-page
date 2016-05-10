@@ -19,8 +19,7 @@
   ],
   "dependencies": {
     "polymer": "latest",
-    "px-base-element": "https://github.com/PredixDev/px-base-element.git",
-    "px-mobile.js": "https://github.com/PredixDev/px-mobile.js.git"
+    "fastclick": "latest"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",

@@ -1,7 +1,7 @@
 'use strict';
 
 var pkg = require('./package.json');
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   var importOnce = require('node-sass-import-once');
   // Project configuration.
@@ -57,9 +57,9 @@ module.exports = function(grunt) {
 
     jshint: {
       all: [
-        'Gruntfile.js',
-        'js/**/*.js'
-      ],
+				'Gruntfile.js',
+				'js/**/*.js'
+			],
       options: {
         jshintrc: '.jshintrc'
       }
@@ -118,16 +118,16 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', 'Basic build', [
-    'sass',
-    'autoprefixer'
-  ]);
+		'sass',
+		'autoprefixer'
+	]);
 
   grunt.registerTask('devmode', 'Development Mode', [
-    'concurrent:devmode'
-  ]);
+		'concurrent:devmode'
+	]);
 
   // First run task.
-  grunt.registerTask('firstrun', 'Basic first run', function() {
+  grunt.registerTask('firstrun', 'Basic first run', function () {
     grunt.config.set('depserveOpenUrl', '/index.html');
     grunt.task.run('default');
     grunt.task.run('depserve');
@@ -135,15 +135,14 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('test', 'Test', [
-    'jshint',
-    'webdriver'
-  ]);
+		'shell:wct'
+	]);
 
   grunt.registerTask('release', 'Release', [
-    'clean',
-    'shell:bower',
-    'default',
-    'test'
-  ]);
+		'clean',
+		'shell:bower',
+		'default',
+		'test'
+	]);
 
 };
