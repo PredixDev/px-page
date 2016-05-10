@@ -1,149 +1,234 @@
 /**
+ * Behavior that manages the px-pages.
  *
- * @type {{behaviors: *[], properties: {selected: {type: Number, reflectToAttribute: boolean, notify: boolean, observer: string, value: number}, currentPage: {type: Object, value: {}}, mainPage: {type: Object, value: {}}, context: {type: Object, value: {}}, pages: {type: Array}, PageList: {type: Array}, selectedIndex: {type: Number}, selectedClass: {type: String, value: string}, routes: {type: Object, value: {}}, inTransition: {type: String}, outTransition: {type: String}, updateHash: {type: Boolean, value: boolean}, debug: {type: Boolean, value: boolean}}, handleTrack: PagesBehavior.handleTrack, emit: PagesBehavior.emit, on: PagesBehavior.on, created: PagesBehavior.created, attached: PagesBehavior.attached, updatePage: PagesBehavior.updatePage}}
+ * @polymerBehavior
+ * @type {{behaviors: *[], properties: {selected: {type: Number, reflectToAttribute: boolean, notify: boolean, observer: string, value: number}, currentPage: {type: Object, value: {}}, mainPage: {type: Object, value: {}}, context: {type: Object, value: {}}, pages: {type: Array}, _PageList: {type: Array}, selectedIndex: {type: Number}, selectedClass: {type: String, value: string}, routes: {type: Object, value: {}}, inTransition: {type: String}, outTransition: {type: String}, updateHash: {type: Boolean, value: boolean}, debug: {type: Boolean, value: boolean}}, handleTrack: PagesBehavior.handleTrack, emit: PagesBehavior.emit, on: PagesBehavior.on, created: PagesBehavior.created, attached: PagesBehavior.attached, updatePage: PagesBehavior.updatePage}}
  */
-var PagesBehavior = {};
-PagesBehavior.properties = {
-  //The default selected Page
-  selected: {
-    type: Number,
-    reflectToAttribute: true,
-    notify: true,
-    observer: '_setCurrent',
-    value: 0
+
+var PagesBehavior = {
+  properties: {
+
+    //The default selected index
+    selected: {
+      type: Number,
+      reflectToAttribute: true,
+      notify: true,
+      observer: '_setCurrent',
+      value: 0
+    },
+
+    //The current active page object
+    currentPage: {
+      type: Object
+    },
+
+    //The main page
+    mainPage: {
+      type: Object
+    },
+
+    //The array of indexed pages
+    pages: {
+      type: Array
+    },
+
+    _PageList: {
+      type: Array
+    },
+
+    //The selected page's index
+    selectedIndex: {
+      type: Number
+    },
+
+    //The selected page's class name
+    selectedClass: {
+      type: String,
+      value: 'current'
+    },
+
+    //Update the URL with the current page #id attribute
+    updateHash: {
+      type: Boolean,
+      value: false
+    },
+
+    //Enable debug logging
+    debug: {
+      type: Boolean,
+      value: false
+    }
   },
-  //The current context of the Page.
-  currentPage: {
-    type: Object,
-    value: {}
+  _init: function() {
+    var self = this;
+    var pages = this.queryAllEffectiveChildren('px-page');
+    var len = pages.length;
+    for (var i = 0; i < len; i++) {
+      PagesBehavior.log('page', pages[i]);
+      self._addPage(pages[i]);
+    }
+    this.fire('px-pages-ready');
+    this.fire('ready');
   },
-  //The main page of all pages.
-  mainPage: {
-    type: Object,
-    value: {}
+  created: function() {
+    this.PageMap = {};
+    this._PageList = [];
+    this.toggleClass('px-pages__wrapper');
+  },
+  attached: function() {
+    var _this = this;
+    if (!this.id) {
+      throw 'pages' + this.tagName + ' cannot be created without an id!';
+    }
+    //  this.listen(this, 'track', 'handleTrack');
+    this.async(function() {
+      _this._init();
+      _this.toggleClass('et-wrapper');
+      _this.gotoIndex(_this.selected);
+    });
   },
   /**
-   * The current page's context
+   * Set the current page
    */
-  context: {
-    type: Object,
-    value: {}
+  _setCurrent: function(index, oldIndex) {
+    var _this = this;
+    var prevPage = _this.getContentChildren()[index - 1];
+    var currPage = _this.getContentChildren()[index];
+    var nextPage = _this.getContentChildren()[index + 1];
+
+    this._clearCurrent();
+    if (nextPage) {
+      _this.log('nextPage', nextPage);
+      nextPage.toggleClass('next', true);
+      //  nextPage.toggleClass(_this.selectedClass, false);
+      nextPage.toggleClass('previous', false);
+    }
+    if (prevPage) {
+      _this.log('prevPage', prevPage);
+      prevPage.toggleClass('next', false);
+      //  prevPage.toggleClass(_this.selectedClass, false);
+      prevPage.toggleClass('previous', true);
+    }
+    if (currPage) {
+      _this.log('currPage', _this.selectedClass, currPage);
+      currPage.nextPage = nextPage;
+      currPage.prevPage = prevPage;
+      currPage.toggleClass('next', false);
+      currPage.toggleClass('previous', false);
+      currPage.toggleClass(_this.selectedClass, true);
+      _this.currentPage = currPage;
+    }
+    _this._updateHash();
+    _this.fire('change', currPage);
   },
-  //The list of pages
-  pages: {
-    type: Array
+  /**
+   * Goto a page by index or id
+   */
+  goto: function(indexOrId) {
+    var page = this.PageMap[indexOrId] || this._PageList[indexOrId] || null;
+    if (page) {
+      this.gotoPage(indexOrId);
+      return page;
+    } else {
+      return false;
+    }
+  },
+  //Handle adding a Page to the map
+  _addPage: function(Page) {
+    this.emit('add', Page);
+    if (Page.dialog) {
+      return;
+    }
+    if (Page.main) {
+      Page.toggleClass(this.selectedClass, true);
+      PagesBehavior.warn('Got main page, saving', Page);
+      this.mainPage = Page;
+    }
+    //add the index to the el
+    Page.attr('index', this._PageList.length.toString());
+    //push to Page list
+    this._PageList.push(Page);
+
+    //add next class to element
+    Page.toggleClass('et-page');
+    Page.toggleClass('next');
+
+    //add to Page map
+    this.PageMap[Page.id] = Page;
+    //Add to routeHandlers
+    if (Page.route) {
+      this.routes[Page.route] = Page.id;
+    }
+  },
+  /**
+   * Reset page
+   */
+  reset: function(selected) {
+    var self = this;
+    var _pages = this.queryAllEffectiveChildren('px-page');
+    var len = _pages.length;
+    this._clearCurrent();
+    for (var i = 0; i < len; i++) {
+      self.log('resetting', i, _pages[i]);
+      _pages[i].removeClass(self.selectedClass);
+      _pages[i].removeClass('next');
+      _pages[i].removeClass('previous');
+    }
+    _pages[this.selected].toggleClass(self.selectedClass);
+    this.selected = selected || 0;
+
+  },
+  /**
+   * Goto a page by index
+   */
+  gotoIndex: function(index) {
+    PagesBehavior.log('gotoIndex', index);
+    var _this = this;
+    PagesBehavior.log('gotoIndex', index);
+    var _pages = _this.getContentChildren();
+
+    if (_pages[index]) {
+      _pages[index].addClass(_this.selectedClass);
+      _pages[index].removeClass('previous');
+      _pages[index].removeClass('next');
+      _this.selected = index;
+    } else {
+      _this.selected = 0;
+    }
+    return _this.selected;
   },
 
-  PageList: {
-    type: Array
-  },
-  selectedIndex: {
-    type: Number
-  },
-  selectedClass: {
-    type: String,
-    value: 'current'
-  },
-  //The pages routes
-  routes: {
-    type: Object,
-    value: {}
-  },
-  //The in effect
-  inTransition: {
-    type: String
-  },
-  //The out effect
-  outTransition: {
-    type: String
-  },
-  //Update the URL with the current pages ID
-  updateHash: {
-    type: Boolean,
-    value: false
-  },
-  //Enable debug logging
-  debug: {
-    type: Boolean,
-    value: false
+  /**
+   * Goto a page by #id
+   */
+  gotoPage: function(id) {
+    this.log('gotoPage', id);
+    var index = 0;
+    var page = this.PageMap[id];
+    if (page) {
+      index = this._PageList.indexOf(page);
+      if (index) {
+        this.selected = index;
+      } else {
+        this.selected = 0;
+      }
+    }
+    return page;
   }
+
+
 };
 
-/**
- *
- * @param page
- */
-PagesBehavior.created = function(page) {
-  this.PageMap = {};
-  this.PageList = [];
-  this.toggleClass('px-pages__wrapper');
-};
 
-/**
- *
- */
-PagesBehavior.attached = function() {
-  var _this = this;
-  if (!this.id) {
-    throw 'pages' + this.tagName + ' cannot be created without an id!';
-  }
-  //  this.listen(this, 'track', 'handleTrack');
-  this.async(function() {
-    _this._init();
-    _this.toggleClass('et-wrapper');
-    _this.gotoIndex(_this.selected);
-  });
-};
-
-/**
- *
- * @param event
- * @param cb
- * @returns {*}
- */
-PagesBehavior.on = function(event, cb) {
-  return pxMobile.dom('*body').on('page:' + event, cb);
-};
-
-/**
- *
- * @param event
- * @param data
- * @returns {*}
- */
-PagesBehavior.emit = function(event, data) {
-  return pxMobile.dom('*body').trigger('page:' + event, data);
-};
-
-/**
- *
- */
-PagesBehavior.updatePage = function(page) {};
-
-/**
- *
- * @private
- */
-PagesBehavior._init = function() {
-  var self = this;
-  var pages = this.queryAllEffectiveChildren('px-page');
-  var len = pages.length;
-  for (var i = 0; i < len; i++) {
-    PagesBehavior.log('page', pages[i]);
-    self._addPage(pages[i]);
-  }
-  this.fire('px-pages-ready');
-  this.fire('ready');
-};
 
 /**
  *
  */
 PagesBehavior.showPage = function(index) {
   this.log('showPage', index);
-  this.PageList[this.selected].toggleClass(this.selectedClass);
+  this._PageList[this.selected].toggleClass(this.selectedClass);
   this.selected = index;
-  this.PageList[this.selected].child()[0].toggleClass(this.selectedClass);
+  this._PageList[this.selected].child()[0].toggleClass(this.selectedClass);
 };
 
 /**
@@ -153,33 +238,7 @@ PagesBehavior.hidePage = function(index) {
   this.toggleClass('hidden', true, this);
 };
 
-//Handle adding a Page to the map
-PagesBehavior._addPage = function(Page) {
-  this.emit('add', Page);
-  if (Page.dialog) {
-    return;
-  }
-  if (Page.main) {
-    Page.toggleClass(this.selectedClass, true);
-    PagesBehavior.warn('Got main page, saving', Page);
-    this.mainPage = Page;
-  }
-  //add the index to the el
-  Page.attr('index', this.PageList.length.toString());
-  //push to Page list
-  this.PageList.push(Page);
 
-  //add next class to element
-  Page.toggleClass('et-page');
-  Page.toggleClass('next');
-
-  //add to Page map
-  this.PageMap[Page.id] = Page;
-  //Add to routeHandlers
-  if (Page.route) {
-    this.routes[Page.route] = Page.id;
-  }
-};
 
 /**
  *
@@ -211,57 +270,24 @@ PagesBehavior._clearCurrent = function() {
     }
   }
 };
-/**
- * Set the current page
- */
-PagesBehavior._setCurrent = function(index, oldIndex) {
-  var _this = this;
-  var prevPage = _this.getContentChildren()[index - 1];
-  var currPage = _this.getContentChildren()[index];
-  var nextPage = _this.getContentChildren()[index + 1];
 
-  this._clearCurrent();
-  if (nextPage) {
-    _this.log('nextPage', nextPage);
-    nextPage.toggleClass('next', true);
-    //  nextPage.toggleClass(_this.selectedClass, false);
-    nextPage.toggleClass('previous', false);
-  }
-  if (prevPage) {
-    _this.log('prevPage', prevPage);
-    prevPage.toggleClass('next', false);
-    //  prevPage.toggleClass(_this.selectedClass, false);
-    prevPage.toggleClass('previous', true);
-  }
-  if (currPage) {
-    _this.log('currPage', _this.selectedClass, currPage);
-    currPage.nextPage = nextPage;
-    currPage.prevPage = prevPage;
-    currPage.toggleClass('next', false);
-    currPage.toggleClass('previous', false);
-    currPage.toggleClass(_this.selectedClass, true);
-    _this.currentPage = currPage;
-  }
-  _this._updateHash();
-  _this.fire('change', currPage);
-};
 /**
  * Get the current page
  */
 PagesBehavior.getCurrentPage = function() {
-  return this.PageList[this.selected];
+  return this._PageList[this.selected];
 };
 /**
  * Get the prev page
  */
 PagesBehavior.getPrevPage = function() {
-  return this.PageList[this.selected - 1];
+  return this._PageList[this.selected - 1];
 };
 /**
  * Get the next page
  */
 PagesBehavior.getNextPage = function() {
-  return this.PageList[this.selected + 1];
+  return this._PageList[this.selected + 1];
 };
 /**
  * Change a page
@@ -270,12 +296,12 @@ PagesBehavior.getNextPage = function() {
 PagesBehavior.changePage = function(indexOrId) {
   var p = null;
   this._clearCurrent();
-  if (this.PageList[indexOrId]) {
-    p = this.PageList[indexOrId];
+  if (this._PageList[indexOrId]) {
+    p = this._PageList[indexOrId];
     this._setCurrent(indexOrId);
   } else if (this.PageMap[indexOrId]) {
     p = this.PageMap[indexOrId];
-    this._setCurrent(this.PageList.indexOf(p));
+    this._setCurrent(this._PageList.indexOf(p));
   }
   this.currentPage = p;
 };
@@ -288,74 +314,9 @@ PagesBehavior._updateHash = function() {
     window.location.hash = this.getCurrentPage().id;
   }
 };
-/**
- * Reset page
- */
-PagesBehavior.reset = function(selected) {
-  var self = this;
-  var _pages = this.queryAllEffectiveChildren('px-page');
-  var len = _pages.length;
-  this._clearCurrent();
-  for (var i = 0; i < len; i++) {
-    self.log('resetting', i, _pages[i]);
-    _pages[i].removeClass(self.selectedClass);
-    _pages[i].removeClass('next');
-    _pages[i].removeClass('previous');
-  }
-  _pages[this.selected].toggleClass(self.selectedClass);
-  this.selected = selected || 0;
 
-};
-/**
- * Goto a page
- */
-PagesBehavior.goto = function(indexOrId) {
-  var page = this.PageMap[indexOrId] || this.PageList[indexOrId] || null;
-  if (page) {
-    this.gotoPage(indexOrId);
-    return page;
-  } else {
-    return false;
-  }
-};
 
-/**
- * Goto a page
- */
-PagesBehavior.gotoPage = function(id) {
-  this.log('gotoPage', id);
-  var index = 0;
-  var page = this.PageMap[id];
-  if (page) {
-    index = this.PageList.indexOf(page);
-    if (index) {
-      this.selected = index;
-    } else {
-      this.selected = 0;
-    }
-  }
-  return page;
-};
-/**
- * Goto a page by index
- * @param index
- */
-PagesBehavior.gotoIndex = function(index) {
-  PagesBehavior.log('gotoIndex', index);
-  var _this = this;
-  PagesBehavior.log('gotoIndex', index);
-  var _pages = _this.getContentChildren();
 
-  if (_pages[index]) {
-    _pages[index].addClass(_this.selectedClass);
-    _pages[index].removeClass('previous');
-    _pages[index].removeClass('next');
-    _this.selected = index;
-  } else {
-    _this.selected = 0;
-  }
-  return _this.selected;
-};
 /**
  * The current page
  */
@@ -369,7 +330,7 @@ PagesBehavior.current = function(index) {
  */
 PagesBehavior.next = function() {
   PagesBehavior.log('next', this.selected);
-  if (this.selected >= this.PageList.length - 1) {
+  if (this.selected >= this._PageList.length - 1) {
     if (this.loop) {
       return this.reset();
     }
@@ -391,28 +352,26 @@ PagesBehavior.prev = function() {
     return this.selected--;
   }
 };
-
-
 /**
  * Remove transition from page
  * @param index
  */
 PagesBehavior.removeTransition = function(index) {
-  var page = this.PageList[index];
+  var page = this._PageList[index];
   page.content.css('transition', 'none');
 };
 /**
  * Do a transition
  */
 PagesBehavior.doTransition = function(index) {
-  var page = this.PageList[index];
+  var page = this._PageList[index];
   var position = page.position();
   page
     .css('transition', 'all 400ms ease')
     .css('transform', 'translate3d(' + (-1 * (position.left)) + 'px, 0, 0)');
 };
 /**
- * Change the page
+ * Change the page by name.
  * @param name
  */
 PagesBehavior.change = function(name) {
@@ -428,26 +387,23 @@ PagesBehavior.load = function(url) {
 };
 /**
  * Get the active page
- * @returns {*}
  */
 PagesBehavior.getActivePage = function() {
-  return this.PageList[this.selected];
+  return this._PageList[this.selected];
 };
 /**
- *
+ * Handles getting the current page in the stack.
  */
 PagesBehavior.getCurrent = function() {
-  return this.PageList[this.selected];
+  return this._PageList[this.selected];
 };
-
 /**
- *
+ * Handles navigating back in the page stack.
  */
 PagesBehavior.back = function() {
   PagesBehavior.log('back', this.selected);
   return this.selected--;
 };
-
 /**
  * Add a px-page from page object
  * @param obj

@@ -1,3 +1,8 @@
+/**
+ * Behavior that manages the px-page.
+ *
+ * @polymerBehavior
+ */
 var PageBehavior = {
   ready: function() {
     if (this.dialog) {
@@ -23,7 +28,7 @@ var PageBehavior = {
     var pageContent = this.$.pageContent;
     var pageNavbar = this.queryEffectiveChildren('px-navbar');
     if (pageNavbar) {
-      this.toggleClass('has-navbar');
+      this.toggleClass('page--has-navbar');
       //  pageContent.css('margin-top', pageNavbar.offsetHeight + 'px');
       if (this.theme) {
         pageNavbar.theme = this.theme;
