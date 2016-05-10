@@ -19,7 +19,8 @@
   ],
   "dependencies": {
     "polymer": "latest",
-    "fastclick": "latest"
+    "fastclick": "latest",
+    "overthrow": "~0.7.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
