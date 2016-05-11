@@ -1,7 +1,6 @@
-
-<link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="px-page-transitions.html" />
-<link rel="import" href="px-page-behavior.html" />
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="px-page-transitions.html"/>
+<link rel="import" href="px-page-behavior.html"/>
 
 <!--
 ```
@@ -31,14 +30,12 @@
         background: #fff;
         height: 100%;
       }
-
       :host.dialog:not(.is-open) {
         z-index: -1;
         -webkit-transform: translateY(100%);
         transform: translateY(100%);
       }
       /* This enables the page to allow scrolling */
-
       :host::content section {
         height: 100%;
       }
@@ -47,9 +44,20 @@
         margin-top: 57px !important;
       }
 
+      :host .overthrow {
+        overflow: auto;
+        height: 100%;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .overthrow-enabled .page-content {
+        height: 100%;
+      }
+
     </style>
+    <content id="pageNavbar" select="px-navbar"></content>
     <section class="page-content overthrow">
-      <content id="pageContent"></content>
+      <content id="pageContent" select="*"></content>
     </section>
   </template>
 </dom-module>
@@ -75,19 +83,19 @@
       //If the page is currently active in the viewport
       active: {
         type: Boolean,
-        value: false,
+        value: false
       },
 
       //If the page is the main page
       main: {
         type: Boolean,
-        value: false,
+        value: false
       },
 
       //If the page is a dialog
       dialog: {
         type: Boolean,
-        value: false,
+        value: false
       },
 
       //with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue"
@@ -125,7 +133,7 @@
         type: Object
       }
     },
-    created: function() {
+    created: function () {
       this.toggleClass('page');
     }
   });

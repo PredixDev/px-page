@@ -8,7 +8,7 @@
     <script src="../fastclick/lib/fastclick.js"></script>
     <script type="text/javascript">
       if ('addEventListener' in document) {
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
           FastClick.attach(document.body);
         }, false);
       }
@@ -21,17 +21,21 @@
     <link rel="import" href="../px-table-view/px-table-view.html">
     <link rel="import" href="../px-navbar/px-navbar.html">
     <style>
-    body {
-      position: relative;
-      overflow: hidden;
-    }
-    px-page:nth-child(odd) {
-      background: lime;
-    }
+      body,
+      html {
+        position: relative;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
 
-    px-page:nth-child(even) {
-      background: fuchsia;
-    }
+      }
+      px-page:nth-child(odd) {
+        background: lime;
+      }
+      px-page:nth-child(even) {
+        background: fuchsia;
+      }
+
     </style>
 
   </head>
@@ -40,20 +44,15 @@
       <div class="demo">
         <px-pages id="appPages" selected="0" debug>
 
-          
           <px-page id="Page0" title="Home" main>
             <px-navbar view-container="appPages"></px-navbar>
-            <ul id="list1" class="list-ui table-view table-view--small">
-            </ul>
+            <ul id="list1" class="table-view table-view--small"></ul>
           </px-page>
-
 
           <px-page id="Page1" title="List">
             <px-navbar view-container="appPages" back-label="Home"></px-navbar>
-            <ul id="list2" class="list-ui table-view table-view--small">
-            </ul>
+            <ul id="list2" class="list-ui table-view table-view--small"></ul>
           </px-page>
-
 
           <px-page id="Page2" title="Details">
             <px-navbar view-container="appPages">
@@ -71,31 +70,33 @@
         </px-pages>
       </div>
       <script type="text/javascript">
-      var pages = document.getElementById('appPages');
-      pages.addEventListener('change', function(e) {
-        console.log('Page Changed', e);
-      });
+        var pages = document.getElementById('appPages');
+        pages.addEventListener('change', function (e) {
+          console.log('Page Changed', e);
+        });
 
-      function createDemoList(id, label, count) {
-        var _out = [];
-        var a, li, list,
-          $el = document.querySelector(id);
-        for (var i = 0; i < count; i++) {
-          li = document.createElement('li');
-          li.className = 'table-row table-row--nav-right';
-          li.innerText = label + i;
-          li.addEventListener('click', function() {
-            appPages.next();
-          });
-          $el.appendChild(li);
+        function createDemoList(id, label, count) {
+          var _out = [];
+          var a,
+            li,
+            list,
+            $el = document.querySelector(id);
+          for (var i = 0; i < count; i++) {
+            li = document.createElement('li');
+            li.className = 'table-row table-row--nav-right';
+            li.innerText = label + i;
+            li.addEventListener('click', function () {
+              appPages.next();
+            });
+            $el.appendChild(li);
+          }
         }
-      }
-      createDemoList('#list1', 'Category ', 100);
-      createDemoList('#list2', 'Sub Category ', 100);
+        createDemoList('#list1', 'Category ', 100);
+        createDemoList('#list2', 'Sub Category ', 100);
       </script>
     </template>
 
-    </div>
-  </body>
+  </div>
+</body>
 
 </html>

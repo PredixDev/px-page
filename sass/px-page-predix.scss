@@ -1,11 +1,28 @@
 ///px-page styles
+
 :root {
   .overthrow {
-    overflow: auto;
+    overflow                  : auto;
     -webkit-overflow-scrolling: touch;
   }
 
   .overthrow-enabled .page-content {
     height: 100%;
+  }
+
+  px-page {
+    transition: all 0.3s ease-out;
+  }
+
+  px-page.current {
+    transform: translate(0, 0);
+  }
+
+  px-page.next {
+    transform: translate(50%, 0);
+  }
+
+  px-page.previous {
+    transform: translate(-50%, 0);
   }
 }
