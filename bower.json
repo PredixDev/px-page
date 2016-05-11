@@ -18,18 +18,20 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "latest",
+    "polymer": "~v1.4.0",
     "fastclick": "latest",
-    "overthrow": "~0.7.1"
+    "overthrow": "~0.7.1",
+    "px-theme": "~0.7.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
     "px-navbar": "https://github.com/PredixDev/px-navbar.git",
+    "web-component-tester": "~4.2.2",
     "px-table-view": "https://github.com/PredixDev/px-table-view.git"
   },
   "resolutions": {
     "polymer": "~v1.4.0",
-    "px-theme": "^0.7.0"
+    "px-theme": "~0.7.0"
   }
 }
