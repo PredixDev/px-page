@@ -64,7 +64,7 @@ var PagesBehavior = {
       value: false
     }
   },
-  _init: function () {
+  _init: function() {
     var self = this;
     var pages = this.getPages()
     var len = pages.length;
@@ -74,31 +74,31 @@ var PagesBehavior = {
     }
     this.fire('ready');
   },
-  created: function () {
+  created: function() {
     this._PageMap = {};
     this._PageList = [];
     this.toggleClass('px-pages__wrapper');
   },
-  attached: function () {
+  attached: function() {
     var _this = this;
     if (!this.id) {
       throw 'pages' + this.tagName + ' cannot be created without an id!';
     }
     //  this.listen(this, 'track', 'handleTrack');
-    this.async(function () {
+    this.async(function() {
       _this._init();
       _this.toggleClass('et-wrapper');
 
     });
     _this.gotoIndex(_this.selected);
   },
-  detached: function () {
+  detached: function() {
     this._log('detached');
   },
   /**
    * Set the current page
    */
-  _setCurrent: function (index, oldIndex) {
+  _setCurrent: function(index, oldIndex) {
     var _this = this;
     var prevPage = _this.getContentChildren()[index - 1];
     var currPage = _this.getContentChildren()[index];
@@ -134,7 +134,7 @@ var PagesBehavior = {
   /**
    * Goto a page by index or id
    */
-  goto: function (indexOrId) {
+  goto: function(indexOrId) {
     var p = null;
     if (this._PageList[indexOrId]) {
       p = this._PageList[indexOrId];
@@ -151,7 +151,7 @@ var PagesBehavior = {
    * @param Page
    * @private
    */
-  _addPage: function (Page) {
+  _addPage: function(Page) {
 
     if (Page.dialog) {
       return;
@@ -182,7 +182,7 @@ var PagesBehavior = {
   /**
    * Reset page
    */
-  reset: function (selected) {
+  reset: function(selected) {
     var self = this;
     var _pages = this.getPages();
     var len = _pages.length;
@@ -200,7 +200,7 @@ var PagesBehavior = {
   /**
    * Goto a page by index
    */
-  gotoIndex: function (index) {
+  gotoIndex: function(index) {
     PagesBehavior._log('gotoIndex', index);
     var _this = this;
     var _pages = _this.getPages();
@@ -221,7 +221,7 @@ var PagesBehavior = {
    * @param page
    * @returns {*}
    */
-  indexOf: function (page) {
+  indexOf: function(page) {
     var i = this._PageList.indexOf(page);
     if (i > -1) {
       return i;
@@ -233,7 +233,7 @@ var PagesBehavior = {
   /**
    * Goto a page by #id
    */
-  gotoPage: function (id) {
+  gotoPage: function(id) {
     this._log('gotoPage', id);
     var index = 0;
     var page = this._PageMap[id];
@@ -255,7 +255,7 @@ var PagesBehavior = {
    * @param type
    * @param message
    */
-  _warn: function (type, message) {
+  _warn: function(type, message) {
     if (this.debug) {
       console.warn('PagesBehavior.' + type, message);
     }
@@ -265,7 +265,7 @@ var PagesBehavior = {
    * @param type
    * @param message
    */
-  _log: function (type, message) {
+  _log: function(type, message) {
     if (this.debug) {
       console.log('PagesBehavior.' + type, message);
     }
@@ -274,7 +274,7 @@ var PagesBehavior = {
    * Clears the current page
    * @private
    */
-  _clearCurrent: function () {
+  _clearCurrent: function() {
     var self = this;
     var _pages = this.queryAllEffectiveChildren('px-page');
     if (_pages) {
@@ -288,21 +288,21 @@ var PagesBehavior = {
   /**
    * Get the current page
    */
-  getSelectedPage: function () {
+  getSelectedPage: function() {
     return this.selectedPage;
   },
   /**
    * Handle returning the previous page.
    * @returns {*}
    */
-  getPrevPage: function () {
+  getPrevPage: function() {
     return this._PageList[this.selected - 1];
   },
   /**
    * Handle returning the next page.
    * @returns {*}
    */
-  getNextPage: function () {
+  getNextPage: function() {
     return this._PageList[this.selected + 1];
   },
 
@@ -310,7 +310,7 @@ var PagesBehavior = {
    * Handle updating the location.hash
    * @private
    */
-  _updateHash: function () {
+  _updateHash: function() {
     if (this.updateHash) {
       window.location.hash = this.getCurrentPage().id;
     }
@@ -321,7 +321,7 @@ var PagesBehavior = {
    * @param index
    * @returns {*}
    */
-  current: function (index) {
+  current: function(index) {
     this.selected = index || this.selected;
     this._log('current', this.selected);
     return this.gotoIndex(this.selected);
@@ -329,7 +329,7 @@ var PagesBehavior = {
   /**
    * Handle going to the next page in the index.
    */
-  next: function () {
+  next: function() {
     this._log('next', this.selected);
     if (this.selected >= this._PageList.length - 1) {
       if (this.loop) {
@@ -345,7 +345,7 @@ var PagesBehavior = {
   /**
    * Handle going to the previous page in the index.
    */
-  prev: function () {
+  prev: function() {
     PagesBehavior._log('prev', this.selected);
     if (this.selected <= 0) {
       return this.current();
@@ -356,25 +356,25 @@ var PagesBehavior = {
   /**
    * Selects the previous item.
    */
-  selectPrevious: function () {
+  selectPrevious: function() {
     return this.prev();
   },
   /**
    * Selects the next item.
    */
-  selectNext: function () {
+  selectNext: function() {
     return this.next();
   },
   /**
    * Handles getting the current page in the stack.
    */
-  getCurrent: function () {
+  getCurrent: function() {
     return this._PageList.indexOf[this.selected];
   },
   /**
    * Handles navigating back in the page stack.
    */
-  back: function () {
+  back: function() {
     PagesBehavior._log('back', this.selected);
     return this.selected--;
   },
@@ -382,7 +382,7 @@ var PagesBehavior = {
    * Add a px-page from page object
    * @param obj
    */
-  addPage: function (obj) {
+  addPage: function(obj) {
     throw new Error('NOT IMPLEMENTED');
     return false;
   },
@@ -390,20 +390,21 @@ var PagesBehavior = {
   /**
    * Handle setting the height of the current page to the height of the container.
    */
-  _fixHeight: function () {
+  _fixHeight: function() {
     var pHeight = this.offsetHeight;
     var pageHeight = this.selectedPage.offsetHeight;
     var pageContent = this.querySelector('.page-content');
     var contentHeight = pageContent.offsetHeight;
     pageContent.css('height', pageHeight + 'px');
-    PagesBehavior._log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight, pageContent);
+    PagesBehavior._log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight,
+      pageContent);
     return pageContent;
   },
-	/**
+  /**
    * Handle returning the current content pages.
    * @returns {*}
    */
-  getPages: function () {
+  getPages: function() {
     return this.queryAllEffectiveChildren('px-page');
   }
 };
