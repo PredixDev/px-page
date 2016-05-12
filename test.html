@@ -71,6 +71,13 @@
       assert(element.className.indexOf('px-pages__wrapper') > -1);
     });
 
+    test('current page does not have .next or .previous class', function () {
+      var page = document.getElementById('page1');
+      assert(page.className.indexOf('current') > -1);
+      assert.equal(page.className.indexOf('previous'), -1);
+      assert.equal(page.className.indexOf('next'), -1);
+    });
+
     test('has main page', function () {
       assert.equal(element.getSelectedPage().main, true);
     });
