@@ -50,6 +50,7 @@ var PagesBehavior = {
 
     /**
      * Update the URL with the current page #id attribute
+     * @private
      */
     updateHash: {
       type: Boolean,
@@ -58,15 +59,16 @@ var PagesBehavior = {
 
     /**
      * Enable debug logging
+     * @private
      */
-    debug: {
+    _debug: {
       type: Boolean,
       value: false
     }
   },
   _init: function() {
     var self = this;
-    var pages = this.getPages()
+    var pages = this.getPages();
     var len = pages.length;
     for (var i = 0; i < len; i++) {
       self._log('page', pages[i]);
@@ -133,6 +135,7 @@ var PagesBehavior = {
   },
   /**
    * Goto a page by index or id
+   * @return {Object} Page element object
    */
   goto: function(indexOrId) {
     var p = null;
@@ -173,14 +176,11 @@ var PagesBehavior = {
 
     //add to Page map
     this._PageMap[Page.id] = Page;
-    //Add to routeHandlers
-    if (Page.route) {
-      this.routes[Page.route] = Page.id;
-    }
+
     this.fire('add', Page);
   },
   /**
-   * Reset page
+   * Resets all pages to there initial state.
    */
   reset: function(selected) {
     var self = this;
@@ -195,10 +195,10 @@ var PagesBehavior = {
     }
     _pages[this.selected].toggleClass(self.selectedClass);
     this.selected = selected || 0;
-
   },
   /**
    * Goto a page by index
+   * @return {Object} Page element object
    */
   gotoIndex: function(index) {
     PagesBehavior._log('gotoIndex', index);
@@ -219,7 +219,7 @@ var PagesBehavior = {
   /**
    * Return the index of the page.
    * @param page
-   * @returns {*}
+   * @return {Number} The page index
    */
   indexOf: function(page) {
     var i = this._PageList.indexOf(page);
@@ -232,6 +232,7 @@ var PagesBehavior = {
 
   /**
    * Goto a page by #id
+   * @return {Object} Page element object
    */
   gotoPage: function(id) {
     this._log('gotoPage', id);
@@ -256,7 +257,7 @@ var PagesBehavior = {
    * @param message
    */
   _warn: function(type, message) {
-    if (this.debug) {
+    if (this._debug) {
       console.warn('PagesBehavior.' + type, message);
     }
   },
@@ -266,7 +267,7 @@ var PagesBehavior = {
    * @param message
    */
   _log: function(type, message) {
-    if (this.debug) {
+    if (this._debug) {
       console.log('PagesBehavior.' + type, message);
     }
   },
@@ -286,21 +287,22 @@ var PagesBehavior = {
   },
 
   /**
-   * Get the current page
+   * Get the current selected page
+   * @return {Object} Page element object
    */
   getSelectedPage: function() {
     return this.selectedPage;
   },
   /**
    * Handle returning the previous page.
-   * @returns {*}
+   * @return {Object} Page element object
    */
   getPrevPage: function() {
     return this._PageList[this.selected - 1];
   },
   /**
    * Handle returning the next page.
-   * @returns {*}
+   * @return {Object} Page element object
    */
   getNextPage: function() {
     return this._PageList[this.selected + 1];
@@ -319,7 +321,7 @@ var PagesBehavior = {
   /**
    * Handle setting the current page.
    * @param index
-   * @returns {*}
+   * @return {*}
    */
   current: function(index) {
     this.selected = index || this.selected;
@@ -328,6 +330,7 @@ var PagesBehavior = {
   },
   /**
    * Handle going to the next page in the index.
+   * @return {Number} Index
    */
   next: function() {
     this._log('next', this.selected);
@@ -344,6 +347,7 @@ var PagesBehavior = {
   },
   /**
    * Handle going to the previous page in the index.
+   * @return {Number} The selected index
    */
   prev: function() {
     PagesBehavior._log('prev', this.selected);
@@ -354,38 +358,38 @@ var PagesBehavior = {
     }
   },
   /**
-   * Selects the previous item.
+   * Selects the previous item. (alias for prev())
+   * @return {Number} The selected index
    */
   selectPrevious: function() {
     return this.prev();
   },
+
   /**
-   * Selects the next item.
+   * Selects the next item. (alias for next())
+   * @return {Number} The selected index
    */
   selectNext: function() {
     return this.next();
   },
+
   /**
    * Handles getting the current page in the stack.
+   * @return {Object} Page element object
    */
   getCurrent: function() {
     return this._PageList.indexOf[this.selected];
   },
+
   /**
    * Handles navigating back in the page stack.
+   * @return {Number} The selected index
    */
   back: function() {
     PagesBehavior._log('back', this.selected);
     return this.selected--;
   },
-  /**
-   * Add a px-page from page object
-   * @param obj
-   */
-  addPage: function(obj) {
-    throw new Error('NOT IMPLEMENTED');
-    return false;
-  },
+
 
   /**
    * Handle setting the height of the current page to the height of the container.
@@ -402,7 +406,7 @@ var PagesBehavior = {
   },
   /**
    * Handle returning the current content pages.
-   * @returns {*}
+   * @returns {Array} Array of content pages.
    */
   getPages: function() {
     return this.queryAllEffectiveChildren('px-page');
