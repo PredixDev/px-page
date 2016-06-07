@@ -33,6 +33,7 @@
   "resolutions": {
     "polymer": "~v1.4.0",
     "px-theme": "~0.7.0",
-    "fetch": "~0.11.0"
+    "fetch": "~0.11.0",
+    "polymer-font-awesome": "~0.1.5"
   }
 }
