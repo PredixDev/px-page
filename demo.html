@@ -12,56 +12,78 @@
     <link rel="import" href="../px-table-view/px-table-view.html">
     <link rel="import" href="../px-navbar/px-navbar.html">
     <style>
-      body {
+      body,
+      html {
+        background: #eee;
         position: relative;
-        padding: 5px;
+
       }
+      .demo {
+        position: relative;
+      }
+
     </style>
+
+    <script type="text/javascript"></script>
   </head>
-  <body>
-    <div class="content">
-      <h1>px-pages</h1>
+  <body class="viewport">
+
+    <div class="content u-m">
+      <h1 class="alpha">px-pages</h1>
       <p>
         The px-pages element helps manage a set of pages.
       </p>
+      <p>
+        The mobile demo is
+        <a href="mobile-demo.html" target="_blank">here.</a>
+      </p>
     </div>
-    <div>
+
+    <div class="u-m u-p">
+
+      <h2>Default Usage</h2>
+      <p>
+        The following is an example of n Pages.
+      </p>
       <demo-snippet>
         <template>
-          <style media="screen">
-            .demo {
-              position: relative;
-            }
-            px-page h2 {
-              font-size: 2em;
-              text-align: center;
-            }
+          <style is="custom-style">
             px-page:nth-child(odd) {}
             px-page:nth-child(even) {
               background: fuchsia;
             }
+
           </style>
-          <template id="demoPages" is="dom-bind">
+          <template id="app" is="dom-bind">
+
+            Selected Page:<span>{{selectedPage.title}}</span>
+            Selected:
+            <span>{{selected}}</span>
+
             <div class="buttons flex">
               <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
               <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
             </div>
             <div class="demo">
-              <px-pages id="appPages" selected="0" loop debug>
+              <px-pages id="appPages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
                 <px-page id="Page0" title="Main Page" route="/Page0" main>
-                  <px-navbar view-container="appPages"></px-navbar>
-                  <ul id="list1" class="table-view table-view--small"></ul>
+                  <px-navbar>
+                    <button class="navbar__button" drawer-toggle left>
+                      <i class="fa fa-lg fa-bars"></i>
+                    </button>
+                  </px-navbar>
+                  <px-table-view id="list1" modifier="small" table-data="[[items]]"></px-table-view>
                 </px-page>
                 <px-page id="Page1" title="Page 1">
-                  <px-navbar view-container="appPages"></px-navbar>
+                  <px-navbar ></px-navbar>
                   <h2>page1</h2>
                 </px-page>
                 <px-page id="Page2" title="Page 2">
-                  <px-navbar view-container="appPages"></px-navbar>
+                  <px-navbar ></px-navbar>
                   <h2>page2</h2>
                 </px-page>
                 <px-page id="Page3" title="Page 3">
-                  <px-navbar view-container="appPages"></px-navbar>
+                  <px-navbar ></px-navbar>
                   <h2>page3</h2>
                 </px-page>
                 <px-page id="Page4" title="Page 4">
@@ -71,35 +93,103 @@
               </px-pages>
             </div>
             <script type="text/javascript">
+              var app = document.getElementById('app');
               var pages = document.getElementById('appPages');
-              function goto() {
-                var ask = window.prompt('What page?');
-                pages.goto(ask);
-              }
               pages.addEventListener('change', function (e) {
                 console.log('Page Changed', e);
               });
-              function createDemoList(id, count) {
-                var _out = [];
-                var a,
-                  li,
-                  list,
-                  $el = document.querySelector(id);
+
+              function createDemoList(count) {
+                var _out = [],
+                  li;
                 for (var i = 0; i < count; i++) {
-                  li = document.createElement('li');
-                  li.className = 'table-row table-row--nav-right';
-                  li.innerText = 'Item ' + i;
-                  li.addEventListener('click', function () {
-                    appPages.next();
-                  });
-                  $el.appendChild(li);
+                  li = {
+                    title: 'Item ' + i,
+                    modifier: 'tappable nav-right'
+                  };
+                  _out.push(li);
                 }
+                return _out;
               }
-              createDemoList('#list1', 150);
+              app.set('items', createDemoList(150));
+            </script>
+          </template>
+        </template>
+      </demo-snippet>
+
+      <!-- TODO: Usage with px-drawer-layout -->
+      <h2>Usage with px-drawer-layout</h2>
+      <demo-snippet>
+        <template>
+
+          <template id="app2" is="dom-bind">
+
+            <link rel="import" href="../px-responsive-layouts/px-responsive-layouts.html">
+            <div class="bg-dark">
+              <px-drawer-layout>
+                <px-drawer>
+                  <p>drawer content</p>
+                </px-drawer>
+                <section class="bg-light u-p" content>
+                  <px-pages id="pages2" debug selected="{{selected}}" selected-page="{{selectedPage}}">
+                    <px-page id="Page0" title="Main Page" route="/Page0" main>
+                      <px-navbar>
+                        <button class="navbar__button" drawer-toggle left>
+                          <i class="fa fa-lg fa-bars"></i>
+                        </button>
+                      </px-navbar>
+                      <div class="full-height scrollable">
+                        <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
+                      </div>
+                    </px-page>
+                    <px-page id="Page1" title="Page 1">
+                      <px-navbar ></px-navbar>
+                      <h2>page1</h2>
+                    </px-page>
+                    <px-page id="Page2" title="Page 2">
+                      <px-navbar ></px-navbar>
+                      <h2>page2</h2>
+                    </px-page>
+                    <px-page id="Page3" title="Page 3">
+                      <px-navbar ></px-navbar>
+                      <h2>page3</h2>
+                    </px-page>
+                    <px-page id="Page4" title="Page 4">
+                      <px-navbar view-container="appPages"></px-navbar>
+                      <h2>page4</h2>
+                    </px-page>
+                  </px-pages>
+                </section>
+              </px-drawer-layout>
+            </div>
+
+
+
+            <script type="text/javascript">
+              var app = document.getElementById('app2');
+              var pages = document.getElementById('pages2');
+              pages.addEventListener('change', function (e) {
+                console.log('Page Changed', e);
+              });
+
+              function createDemoList(count) {
+                var _out = [],
+                  li;
+                for (var i = 0; i < count; i++) {
+                  li = {
+                    title: 'Item ' + i,
+                    modifier: 'tappable nav-right'
+                  };
+                  _out.push(li);
+                }
+                return _out;
+              }
+              app.set('items', createDemoList(150));
             </script>
           </template>
         </template>
       </demo-snippet>
     </div>
+
   </body>
 </html>

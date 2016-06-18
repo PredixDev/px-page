@@ -23,7 +23,8 @@ var PagesBehavior = {
      * The current active page object
      */
     selectedPage: {
-      type: Object
+      type: Object,
+      notify: true
     },
 
     /**
@@ -66,7 +67,7 @@ var PagesBehavior = {
       value: false
     }
   },
-  _init: function () {
+  _init: function() {
     var self = this;
     var pages = this.getPages();
     var len = pages.length;
@@ -74,33 +75,34 @@ var PagesBehavior = {
       self._log('page', pages[i]);
       self._addPage(pages[i]);
     }
-    this.fire('ready');
+    this.fire('px-page-ready');
   },
-  created: function () {
+  created: function() {
     this._PageMap = {};
     this._PageList = [];
     this.toggleClass('px-pages__wrapper');
   },
-  attached: function () {
+  attached: function() {
     var _this = this;
     if (!this.id) {
       throw 'pages' + this.tagName + ' cannot be created without an id!';
     }
     //  this.listen(this, 'track', 'handleTrack');
-    this.async(function () {
+    this.async(function() {
       _this._init();
       _this.toggleClass('et-wrapper');
 
     });
     _this.gotoIndex(_this.selected);
   },
-  detached: function () {
+  detached: function() {
     this._log('detached');
   },
   /**
-   * Set the current page
+   * Fires when the page is changed.
+   * @event px-page-change
    */
-  _setCurrent: function (index, oldIndex) {
+  _setCurrent: function(index, oldIndex) {
     var _this = this;
     var prevPage = _this.getContentChildren()[index - 1];
     var currPage = _this.getContentChildren()[index];
@@ -129,7 +131,7 @@ var PagesBehavior = {
       _this.toggleClass('previous', false, currPage);
       _this.toggleClass(_this.selectedClass, true, currPage);
       _this.selectedPage = currPage;
-      _this.fire('change', currPage);
+      _this.fire('px-page-change', currPage);
     }
     return currPage;
   },
@@ -137,7 +139,7 @@ var PagesBehavior = {
    * Goto a page by index or id
    * @return {Object} Page element object
    */
-  goto: function (indexOrId) {
+  goto: function(indexOrId) {
     var p = null;
     if (this._PageList[indexOrId]) {
       p = this._PageList[indexOrId];
@@ -154,7 +156,7 @@ var PagesBehavior = {
    * @param Page
    * @private
    */
-  _addPage: function (Page) {
+  _addPage: function(Page) {
 
     if (Page.dialog) {
       return;
@@ -177,12 +179,13 @@ var PagesBehavior = {
     //add to Page map
     this._PageMap[Page.id] = Page;
 
-    this.fire('add', Page);
+    this.fire('px-page-add', Page);
   },
   /**
    * Resets all pages to there initial state.
+   * @event px-page-reset
    */
-  reset: function (selected) {
+  reset: function(selected) {
     var self = this;
     var _pages = this.getPages();
     var len = _pages.length;
@@ -195,12 +198,13 @@ var PagesBehavior = {
     }
     _pages[this.selected].toggleClass(self.selectedClass);
     this.selected = selected || 0;
+    this.fire('px-page-reset');
   },
   /**
    * Goto a page by index
    * @return {Object} Page element object
    */
-  gotoIndex: function (index) {
+  gotoIndex: function(index) {
     PagesBehavior._log('gotoIndex', index);
     var _this = this;
     var _pages = _this.getPages();
@@ -221,7 +225,7 @@ var PagesBehavior = {
    * @param page
    * @return {Number} The page index
    */
-  indexOf: function (page) {
+  indexOf: function(page) {
     var i = this._PageList.indexOf(page);
     if (i > -1) {
       return i;
@@ -234,7 +238,7 @@ var PagesBehavior = {
    * Goto a page by #id
    * @return {Object} Page element object
    */
-  gotoPage: function (id) {
+  gotoPage: function(id) {
     this._log('gotoPage', id);
     var index = 0;
     var page = this._PageMap[id];
@@ -256,7 +260,7 @@ var PagesBehavior = {
    * @param type
    * @param message
    */
-  _warn: function (type, message) {
+  _warn: function(type, message) {
     if (this._debug) {
       console.warn('PagesBehavior.' + type, message);
     }
@@ -266,7 +270,7 @@ var PagesBehavior = {
    * @param type
    * @param message
    */
-  _log: function (type, message) {
+  _log: function(type, message) {
     if (this._debug) {
       console.log('PagesBehavior.' + type, message);
     }
@@ -275,7 +279,7 @@ var PagesBehavior = {
    * Clears the current page
    * @private
    */
-  _clearCurrent: function () {
+  _clearCurrent: function() {
     var self = this;
     var _pages = this.queryAllEffectiveChildren('px-page');
     if (_pages) {
@@ -290,21 +294,21 @@ var PagesBehavior = {
    * Get the current selected page
    * @return {Object} Page element object
    */
-  getSelectedPage: function () {
+  getSelectedPage: function() {
     return this.selectedPage;
   },
   /**
    * Handle returning the previous page.
    * @return {Object} Page element object
    */
-  getPrevPage: function () {
+  getPrevPage: function() {
     return this._PageList[this.selected - 1];
   },
   /**
    * Handle returning the next page.
    * @return {Object} Page element object
    */
-  getNextPage: function () {
+  getNextPage: function() {
     return this._PageList[this.selected + 1];
   },
 
@@ -312,7 +316,7 @@ var PagesBehavior = {
    * Handle updating the location.hash
    * @private
    */
-  _updateHash: function () {
+  _updateHash: function() {
     if (this.updateHash) {
       window.location.hash = this.getCurrentPage().id;
     }
@@ -323,7 +327,7 @@ var PagesBehavior = {
    * @param index
    * @return {*}
    */
-  current: function (index) {
+  current: function(index) {
     this.selected = index || this.selected;
     this._log('current', this.selected);
     return this.gotoIndex(this.selected);
@@ -332,7 +336,7 @@ var PagesBehavior = {
    * Handle going to the next page in the index.
    * @return {Number} Index
    */
-  next: function () {
+  next: function() {
     this._log('next', this.selected);
     if (this.selected >= this._PageList.length - 1) {
       if (this.loop) {
@@ -349,7 +353,7 @@ var PagesBehavior = {
    * Handle going to the previous page in the index.
    * @return {Number} The selected index
    */
-  prev: function () {
+  prev: function() {
     PagesBehavior._log('prev', this.selected);
     if (this.selected <= 0) {
       return this.current();
@@ -361,7 +365,7 @@ var PagesBehavior = {
    * Selects the previous item. (alias for prev())
    * @return {Number} The selected index
    */
-  selectPrevious: function () {
+  selectPrevious: function() {
     return this.prev();
   },
 
@@ -369,7 +373,7 @@ var PagesBehavior = {
    * Selects the next item. (alias for next())
    * @return {Number} The selected index
    */
-  selectNext: function () {
+  selectNext: function() {
     return this.next();
   },
 
@@ -377,7 +381,7 @@ var PagesBehavior = {
    * Handles getting the current page in the stack.
    * @return {Object} Page element object
    */
-  getCurrent: function () {
+  getCurrent: function() {
     return this._PageList.indexOf[this.selected];
   },
 
@@ -385,7 +389,7 @@ var PagesBehavior = {
    * Handles navigating back in the page stack.
    * @return {Number} The selected index
    */
-  back: function () {
+  back: function() {
     PagesBehavior._log('back', this.selected);
     return this.selected--;
   },
@@ -394,7 +398,7 @@ var PagesBehavior = {
   /**
    * Handle setting the height of the current page to the height of the container.
    */
-  _fixHeight: function () {
+  _fixHeight: function() {
     var pHeight = this.offsetHeight;
     var pageHeight = this.selectedPage.offsetHeight;
     var pageContent = this.querySelector('.page-content');
@@ -408,7 +412,7 @@ var PagesBehavior = {
    * Handle returning the current content pages.
    * @returns {Array} Array of content pages.
    */
-  getPages: function () {
+  getPages: function() {
     return this.queryAllEffectiveChildren('px-page');
   }
 };

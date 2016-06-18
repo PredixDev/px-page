@@ -6,18 +6,10 @@
     <link rel='stylesheet' href='//predixdev.github.io/px-library-design/css/style.css'>
     <script src="../webcomponentsjs/webcomponents.min.js"></script>
     <script src="../fastclick/lib/fastclick.js"></script>
-    <script type="text/javascript">
-      if ('addEventListener' in document) {
-        document.addEventListener('DOMContentLoaded', function () {
-          FastClick.attach(document.body);
-        }, false);
-      }
-    </script>
 
     <title>px-page | mobile-demo</title>
 
     <link rel="import" href="px-pages.html">
-    <link rel="import" href="px-page.html">
     <link rel="import" href="../px-table-view/px-table-view.html">
     <link rel="import" href="../px-navbar/px-navbar.html">
     <style>
@@ -27,45 +19,83 @@
         overflow: hidden;
         margin: 0;
         padding: 0;
-
       }
-      px-page:nth-child(odd) {
-        background: lime;
-      }
-      px-page:nth-child(even) {
-        background: fuchsia;
-      }
-
     </style>
-
   </head>
   <body unresolved>
     <template id="demoPages" is="dom-bind">
-      <div class="demo">
-        <px-pages id="appPages" selected="0" debug>
+      <style is="custom-style">
+        :root{
+          --px-page:{
+            transition: all 0.3s ease;
+          }
 
+          --px-page-current: {
+            background: white;
+          }
+
+          --px-page-next:{
+            background: green;
+          }
+
+          --px-page-previous: {
+
+          }
+        }
+      </style>
+
+
+      <div class="demo">
+        <px-pages id="appPages" selected="{{selected}}" selected-page="{{selectedPage}}">
           <px-page id="Page0" title="Home" main>
-            <px-navbar view-container="appPages"></px-navbar>
-            <ul id="list1" class="table-view table-view--small"></ul>
+            <px-navbar view-container="appPages" fixed shadow auto-hide></px-navbar>
+            <ul id="list1" class="list-ui table-view table-view--small"></ul>
           </px-page>
 
           <px-page id="Page1" title="List">
-            <px-navbar view-container="appPages" back-label="Home"></px-navbar>
+            <px-navbar view-container="appPages" back-label="Home" fixed shadow auto-hide></px-navbar>
             <ul id="list2" class="list-ui table-view table-view--small"></ul>
           </px-page>
 
           <px-page id="Page2" title="Details">
             <px-navbar view-container="appPages">
-              <div class="navbar__right">
-                <button class="btn" type="button" onclick="document.getElementById('appPages').goto('Page3')">Edit</button>
+              <div right>
+                <button class="navbar__button" type="button" onclick="document.getElementById('appPages').goto('Page3')">Edit</button>
               </div>
             </px-navbar>
-            <h2>Details Page</h2>
+            <div class="content flex">
+              <div class="flex__item">
+                1
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                  dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+              </div>
+              <div class="flex__item">
+                2
+              </div>
+            </div>
           </px-page>
 
           <px-page id="Page3" title="Edit">
             <px-navbar view-container="appPages" back-label="Cancel"></px-navbar>
-            <h2>Edit Page</h2>
+            <div class="content">
+              <h2>Edit Page</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </div>
+          </px-page>
+          <px-page id="Page4" title="Dialog" dialog>
+            <px-navbar view-container="appPages" back-label="Cancel"></px-navbar>
+            <div class="content">
+              <h2>Edit Page</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </div>
           </px-page>
         </px-pages>
       </div>
@@ -86,7 +116,7 @@
             li.className = 'table-row table-row--nav-right';
             li.innerText = label + i;
             li.addEventListener('click', function () {
-              appPages.next();
+              pages.next();
             });
             $el.appendChild(li);
           }

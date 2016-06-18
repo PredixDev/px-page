@@ -3,7 +3,7 @@
 <!--
 <link rel="import" href="../px-base-element/px-base-element.html" />
 -->
-<link rel="stylesheet" href="css/px-page.css"/>
+
 <link rel="import" href="px-page.html" />
 <link rel="import" href="px-pages-behavior.html" />
 
@@ -60,6 +60,13 @@ if it is the current page in the stack or the main page.
 	</px-pages>
 </div>
 ```
+### Styling
+The following custom properties are available for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--px-header-layout` | Mixin applied to component | {}
+
 
 @element px-pages
 @blurb
@@ -70,6 +77,7 @@ if it is the current page in the stack or the main page.
 <dom-module id="px-pages">
 
   <template>
+    <link rel="import" type="css" href="css/px-page.css"/>
     <style media="screen">
       :host {
         display: block;
@@ -80,21 +88,36 @@ if it is the current page in the stack or the main page.
         height: 100%;
         width: 100%;
         min-height: 100vh;
+        @apply(--px-pages);
       }
 
-      :host::content px-page {
+      :host ::content px-page {
         opacity: 0;
         visibility: hidden;
+        -webkit-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+        @apply(--px-page);
+      }
+      :host ::content .page--has-navbar{
+        padding-top: 56px;
       }
 
-      :host::content px-page.current {
+      :host ::content .current {
         opacity: 1;
         visibility: visible;
+        transform: translate(0, 0);
+        @apply(--px-page-current);
       }
 
-      :host::content px-page.next {}
+      :host ::content .next {
+        transform: translate(50%, 0);
+        @apply(--px-page-next);
+      }
 
-      :host::content px-page.previous {}
+      :host ::content .previous {
+        transform: translate(-50%, 0);
+        @apply(--px-page-previous);
+      }
     </style>
     <content id="pages" select=".page, px-page, .px-page"></content>
   </template>

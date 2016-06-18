@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>px-page with px-drawer-layout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel='stylesheet prefetch' href='https://predixdev.github.io/px-library-design/css/style.css'>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html"/>
+
+
+    <link rel="import" href="../../px-responsive-layouts/px-responsive-layouts.html">
+    <link rel="import" href="../../px-table-view/px-table-view.html">
+
+    <link rel="import" href="../../px-navbar/px-navbar.html">
+    <link rel="import" href="../px-pages.html">
+    <style>
+      html, body{
+        background-color: #eee;
+      }
+      .demo {
+        position: relative;
+      }
+
+    </style>
+  </head>
+  <body unresolved>
+
+
+    <template id="app" is="dom-bind">
+      <px-drawer-layout id="layout">
+        <px-drawer id="drawer" fixed>
+          <h4>{{selectedPage.title}}</h4>
+          <p>
+            <px-button label="Button" size="small" theme="disabled"></px-button>
+<px-button label="Button" size="small" theme></px-button>
+<px-button label="Button" size="small" theme="tertiary"></px-button>
+<px-button label="Button" size="small" theme="primary"></px-button>
+          </p>
+        </px-drawer>
+        <px-pages id="pages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
+          <px-page id="Page0" title="Main Page" route="/Page0" main>
+            <px-navbar>
+                <div left>
+                  <button icon="fa:fa-bars" drawer-toggle>Menu</button>
+                </div>
+            </px-navbar>
+            <div class="full-height scrollable">
+              <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
+            </div>
+          </px-page>
+          <px-page id="Page1" title="Page 1">
+            <px-navbar></px-navbar>
+            <h2>page1</h2>
+          </px-page>
+          <px-page id="Page2" title="Page 2">
+            <px-navbar></px-navbar>
+            <h2>page2</h2>
+          </px-page>
+          <px-page id="Page3" title="Page 3">
+            <px-navbar></px-navbar>
+            <h2>page3</h2>
+          </px-page>
+          <px-page id="Page4" title="Page 4">
+            <px-navbar view-container="appPages"></px-navbar>
+            <h2>page4</h2>
+          </px-page>
+        </px-pages>
+      </px-drawer-layout>
+      <script type="text/javascript">
+        document.addEventListener('WebComponentsReady', function(){
+          var app = document.getElementById('app');
+          var pages = document.getElementById('pages');
+          app.set('items', createDemoList(150));
+          document.addEventListener('px-page-ready', function (e) {
+            console.log('Page ready', e);
+          });
+          document.addEventListener('px-page-change', function (e) {
+            console.log('Page Changed', e);
+          });
+        })
+
+        function createDemoList(count) {
+          var _out = [],
+            li;
+          for (var i = 0; i < count; i++) {
+            li = {
+              title: 'Item ' + i,
+              modifier: 'tappable nav-right'
+            };
+            _out.push(li);
+          }
+          return _out;
+        }
+
+      </script>
+    </template>
+  </body>
+</html>
