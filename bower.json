@@ -26,7 +26,9 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
-    "px-navbar": "https://github.com/PredixDev/px-navbar.git",
+    "px-navbar": "master",
+    "px-responsive-layouts": "master",
+    "px-table-view": "master",
     "web-component-tester": "~4.2.2",
     "px-table-view": "https://github.com/PredixDev/px-table-view.git"
   },
