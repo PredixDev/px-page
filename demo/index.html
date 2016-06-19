@@ -9,10 +9,8 @@
 
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
 
-
     <link rel="import" href="../../px-responsive-layouts/px-responsive-layouts.html">
-    <link rel="import" href="../../px-table-view/px-table-view.html">
-
+    l
     <link rel="import" href="../../px-partials/px-partials.html">
     <link rel="import" href="../../px-card/px-card.html">
     <link rel="import" href="../../px-navbar/px-navbar.html">
@@ -32,26 +30,26 @@
 
     <template id="app" is="dom-bind">
       <style is="custom-style">
-      :root{
-        --px-navbar:{
+        :root {
+          --px-navbar: {
+            background-color: #0d5fb6;
+            color: #fff;
+          }
+
+        }
+        .bg--seed {
           background-color: #0d5fb6;
           color: #fff;
         }
+        .nav a {
+          text-decoration: none;
+        }
+        .nav a.active {
+          color: #fff !important;
+          background-color: rgba(255,255,255,0.4);
+        }
 
-      }
-      .bg--seed {
-   background-color: #0d5fb6;
-   color: #fff;
- }
- .nav a {
-   text-decoration: none;
- }
- .nav a.active {
-   color: #fff !important;
-   background-color: rgba(255,255,255,0.4);
- }
-
- .nav {}
+        .nav {}
       </style>
       <px-drawer-layout id="layout">
         <px-drawer id="drawer" fixed overlay swipe-open swipe-close>
@@ -59,19 +57,18 @@
             <px-brand size="165" wordmark></px-brand>
           </div>
           <div class="side-nav">
-            <px-table-view id="sideNav" selected="[[selected]]" selected-item="[[selectedPage]]">
-            </px-table-view>
+            <px-table-view id="sideNav" selected="[[selected]]" selected-item="[[selectedPage]]"></px-table-view>
           </div>
 
         </px-drawer>
 
         <div class="" content>
           <px-header title="Seed Application" subtitle powered="" class="u-p-- seed-header">
-  <nav class="nav flex flex--justify">
-    <a href="#" class="u-p- active">Dashboards</a>
-    <a onclick="pages.goto(1);" class="u-p-">Blank Page</a>
-  </nav>
-</px-header>
+            <nav class="nav flex flex--justify">
+              <a href="#" class="u-p- active">Dashboards</a>
+              <a onclick="pages.selected++;" class="u-p-">Blank Page</a>
+            </nav>
+          </px-header>
           <px-pages id="pages" debug selected="{{selected}}" selected-page="[[selectedPage]]">
             <px-page id="Page0" title="Main Page" main>
               <px-navbar class="bg--seed">
@@ -87,7 +84,18 @@
                   </button>
                 </div>
               </px-navbar>
-              <div class="cards">
+              <div class="cards u-mt">
+                <div class="box flex flex--spaced bg-dark color-white">
+		<div class="flex flex--col">
+			<span class="epsilon caps">Availability</span>
+			<span class="gamma caps muted">85%</span>
+		</div>
+		<div class="flex flex--col">
+			<span class="epsilon caps">Health</span>
+			<span class="gamma caps muted">99%</span>
+		</div>
+</div>
+
                 <px-card header-text="Card">
                   <p>
                     This is a card.
