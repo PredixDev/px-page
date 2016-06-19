@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <link rel='stylesheet prefetch' href='https://predixdev.github.io/px-library-design/css/style.css'>
 
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
-
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html"/>
 
 
     <link rel="import" href="../../px-responsive-layouts/px-responsive-layouts.html">
     <link rel="import" href="../../px-table-view/px-table-view.html">
 
+    <link rel="import" href="../../px-partials/px-partials.html">
+    <link rel="import" href="../../px-card/px-card.html">
     <link rel="import" href="../../px-navbar/px-navbar.html">
     <link rel="import" href="../px-pages.html">
     <style>
-      html, body{
+      body,
+      html {
         background-color: #eee;
       }
       .demo {
@@ -30,52 +30,95 @@
   </head>
   <body unresolved>
 
-
     <template id="app" is="dom-bind">
+      <style is="custom-style">
+      :root{
+        --px-navbar:{
+          background-color: #0d5fb6;
+          color: #fff;
+        }
+
+      }
+      .bg--seed {
+   background-color: #0d5fb6;
+   color: #fff;
+ }
+ .nav a {
+   text-decoration: none;
+ }
+ .nav a.active {
+   color: #fff !important;
+   background-color: rgba(255,255,255,0.4);
+ }
+
+ .nav {}
+      </style>
       <px-drawer-layout id="layout">
-        <px-drawer id="drawer" fixed>
-          <h4>{{selectedPage.title}}</h4>
-          <p>
-            <px-button label="Button" size="small" theme="disabled"></px-button>
-<px-button label="Button" size="small" theme></px-button>
-<px-button label="Button" size="small" theme="tertiary"></px-button>
-<px-button label="Button" size="small" theme="primary"></px-button>
-          </p>
+        <px-drawer id="drawer" fixed overlay swipe-open swipe-close>
+          <div class="brand flex flex--center u-m">
+            <px-brand size="165" wordmark></px-brand>
+          </div>
+          <div class="side-nav">
+            <px-table-view id="sideNav" selected="[[selected]]" selected-item="[[selectedPage]]">
+            </px-table-view>
+          </div>
+
         </px-drawer>
-        <px-pages id="pages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
-          <px-page id="Page0" title="Main Page" route="/Page0" main>
-            <px-navbar>
+
+        <div class="" content>
+          <px-header title="Seed Application" subtitle powered="" class="u-p-- seed-header">
+  <nav class="nav flex flex--justify">
+    <a href="#" class="u-p- active">Dashboards</a>
+    <a onclick="pages.goto(1);" class="u-p-">Blank Page</a>
+  </nav>
+</px-header>
+          <px-pages id="pages" debug selected="{{selected}}" selected-page="[[selectedPage]]">
+            <px-page id="Page0" title="Main Page" main>
+              <px-navbar class="bg--seed">
                 <div left>
-                  <button icon="fa:fa-bars" drawer-toggle>Menu</button>
+                  <button class="navbar__button" drawer-toggle>
+                    <px-icon icon="fa:fa-bars"></px-icon>
+                  </button>
                 </div>
-            </px-navbar>
-            <div class="full-height scrollable">
-              <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
-            </div>
-          </px-page>
-          <px-page id="Page1" title="Page 1">
-            <px-navbar></px-navbar>
-            <h2>page1</h2>
-          </px-page>
-          <px-page id="Page2" title="Page 2">
-            <px-navbar></px-navbar>
-            <h2>page2</h2>
-          </px-page>
-          <px-page id="Page3" title="Page 3">
-            <px-navbar></px-navbar>
-            <h2>page3</h2>
-          </px-page>
-          <px-page id="Page4" title="Page 4">
-            <px-navbar view-container="appPages"></px-navbar>
-            <h2>page4</h2>
-          </px-page>
-        </px-pages>
+                <div right>
+                  <button class="navbar__button">
+                    <px-icon icon="fa:fa-user"></px-icon>
+                    <span class="is-hidden@md-">John Sinclair</span>
+                  </button>
+                </div>
+              </px-navbar>
+              <div class="cards">
+                <px-card header-text="Card">
+                  <p>
+                    This is a card.
+                  </p>
+                </px-card>
+              </div>
+            </px-page>
+            <px-page id="Page1" title="Page 1">
+              <px-navbar></px-navbar>
+              <h2>page1</h2>
+              <div class="full-height scrollable">
+                <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
+              </div>
+            </px-page>
+            <px-page id="Page2" title="Page 2">
+              <px-navbar></px-navbar>
+              <h2>page2</h2>
+            </px-page>
+            <px-page id="Page3" title="Page 3">
+              <px-navbar></px-navbar>
+              <h2>page3</h2>
+            </px-page>
+          </px-pages>
+        </div>
       </px-drawer-layout>
+      <px-footer></px-footer>
       <script type="text/javascript">
-        document.addEventListener('WebComponentsReady', function(){
+        document.addEventListener('WebComponentsReady', function () {
           var app = document.getElementById('app');
           var pages = document.getElementById('pages');
-          app.set('items', createDemoList(150));
+          app.set('items', createDemoList(15));
           document.addEventListener('px-page-ready', function (e) {
             console.log('Page ready', e);
           });
@@ -96,7 +139,6 @@
           }
           return _out;
         }
-
       </script>
     </template>
   </body>

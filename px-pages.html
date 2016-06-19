@@ -1,12 +1,7 @@
-<!-- TODO: Dependencies -->
 <link rel="import" href="../polymer/polymer.html" />
-<!--
-<link rel="import" href="../px-base-element/px-base-element.html" />
--->
-
-<link rel="import" href="px-page.html" />
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="px-pages-behavior.html" />
-
+<link rel="import" href="px-page.html" />
 
 <!--
 <p>
@@ -125,6 +120,9 @@ Custom property | Description | Default
 <script type="text/javascript">
   Polymer({
     is: 'px-pages',
-    behaviors: [PagesBehavior]
+    behaviors: [
+      Polymer.IronResizableBehavior,
+      PagesBehavior
+    ]
   });
 </script>
