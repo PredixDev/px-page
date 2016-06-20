@@ -10,13 +10,15 @@
          for any URL ending with "/web-component-tester/browser.js"
          when wct is run from the command line -->
     <script src="../web-component-tester/browser.js"></script>
-    <link rel="import" href="../px-pages.html"/>
-    <link rel="import" href="../px-page.html"/>
+
+
     <!-- Retain this link for px-theme.html -->
     <!-- px-theme is needed for WCT to run without errors -->
-    <link rel="import" href="../../px-navbar/px-navbar.html"/>
+
     <link rel="import" href="../../px-theme/px-app.html"/>
     <link rel="import" href="../../px-theme/px-theme.html"/>
+    <link rel="import" href="../px-pages.html"/>
+    <link rel="import" href="../../px-navbar/px-navbar.html"/>
     <!-- This script link will contain the generated script for basic wct test cases -->
     <script src="px-page-base-tests.js"></script>
     <!-- This script link will contain the generated script stub for custom, developer-added test cases -->
@@ -24,39 +26,44 @@
   </head>
   <body>
     <h3>Web Component Test : Fixture for px-page</h3>
-    <div class="demo">
-      <div class="">
-        <button onclick="px_page_1.reset()" class="btn">reset</button>
-        <button onclick="px_page_1.prev()" class="btn">prev</button>
-        <button onclick="px_page_1.next()" class="btn">next</button>
-      </div>
-      <px-pages id="px_page_1" title="Test Pages">
-        <px-page id="page1" title="Test Page-1" main>
-          <px-navbar id="page1-navbar" view-container="px_page_1"></px-navbar>
-        </px-page>
-        <px-page id="page2" title="Test Page-2">
-          <px-navbar view-container="px_page_1"></px-navbar>
-          </px-navbar>
-        </px-page>
-        <px-page id="page3" title="Test Page-3">
-          <px-navbar view-container="px_page_1"></px-navbar>
-        </px-page>
-        <px-page id="page4" title="Test Page-4">
-          <px-navbar view-container="px_page_1"></px-navbar>
-        </px-page>
-        <px-page id="page5" title="Test Page-5">
-          <px-navbar view-container="px_page_1"></px-navbar>
-        </px-page>
-        <px-page id="page6" title="Test Page-6">
-          <px-navbar view-container="px_page_1"></px-navbar>
-        </px-page>
-        <px-page id="page7" title="Test Page-7">
-          <px-navbar view-container="px_page_1"></px-navbar>
-        </px-page>
-        <px-page id="page8" title="Test Page-8" import="./remote-page.html">
-          <!-- HTML Loaded -->
-        </px-page>
-      </px-pages>
-    </div>
+    <button onclick="px_page_1.reset()" class="btn">reset</button>
+    <button onclick="px_page_1.prev()" class="btn">prev</button>
+    <button onclick="px_page_1.next()" class="btn">next</button>
+    <px-pages id="px_page_1" title="Test Pages" debug>
+      <px-page id="page1" title="Test Page-1" main>
+        <px-navbar id="page1-navbar"></px-navbar>
+      </px-page>
+      <px-page id="page2" title="Test Page-2">
+        <px-navbar></px-navbar>
+        <div class="">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </px-page>
+      <px-page id="page3" title="Test Page-3">
+        <px-navbar ></px-navbar>
+        <div class="">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </px-page>
+      <px-page id="page4" title="Test Page-4">
+        <px-navbar ></px-navbar>
+        <div class="">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+      </px-page>
+      <px-page id="page5" title="Test Page-5">
+        <px-navbar ></px-navbar>
+      </px-page>
+      <px-page id="page6" title="Test Page-6">
+        <px-navbar ></px-navbar>
+      </px-page>
+      <px-page id="page7" title="Test Page-7">
+        <px-navbar></px-navbar>
+      </px-page>
+      <px-page id="page8" title="Test Page-8" import="test/remote-page.html"></px-page>
+    </px-pages>
   </body>
 </html>

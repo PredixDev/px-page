@@ -133,7 +133,16 @@ var PagesBehavior = {
     return currPage;
   },
   /**
+   * Select a page by index or id
+   * @param {String} value The value to select
+   * @return {Object} Page element object
+   */
+  select: function(value){
+    return this.goto(value);
+  },
+  /**
    * Goto a page by index or id
+   * @private
    * @return {Object} Page element object
    */
   goto: function (indexOrId) {
@@ -197,6 +206,7 @@ var PagesBehavior = {
   },
   /**
    * Goto a page by index
+   * @private
    * @return {Object} Page element object
    */
   gotoIndex: function (index) {
@@ -226,6 +236,7 @@ var PagesBehavior = {
   },
   /**
    * Goto a page by #id
+   * @private
    * @return {Object} Page element object
    */
   gotoPage: function (id) {
@@ -246,6 +257,7 @@ var PagesBehavior = {
   },
   /**
    * Utility method for logging a warn to the console.
+   * @private
    * @param type
    * @param message
    */
@@ -256,6 +268,7 @@ var PagesBehavior = {
   },
   /**
    * Utility method for logging to the console.
+   * @private
    * @param type
    * @param message
    */
@@ -290,7 +303,7 @@ var PagesBehavior = {
    * Handle returning the previous page.
    * @return {Object} Page element object
    */
-  getPrevPage: function () {
+  getPrevious: function () {
     if (this.selected === this._pages.length) {
       return;
     }
@@ -300,7 +313,7 @@ var PagesBehavior = {
    * Handle returning the next page.
    * @return {Object} Page element object
    */
-  getNextPage: function () {
+  getNext: function () {
     return this._pages[this.selected + 1];
   },
   /**
@@ -315,6 +328,7 @@ var PagesBehavior = {
 
   /**
    * Handle setting the current page.
+   * @private
    * @param index
    * @return {*}
    */
@@ -325,6 +339,7 @@ var PagesBehavior = {
   },
   /**
    * Handle going to the next page in the index.
+   * @private
    * @return {Number} Index
    */
   next: function () {
@@ -345,6 +360,7 @@ var PagesBehavior = {
   },
   /**
    * Handle going to the previous page in the index.
+   * @private
    * @return {Number} The selected index
    */
   prev: function () {
@@ -374,10 +390,11 @@ var PagesBehavior = {
   },
   /**
    * Handles getting the current page in the stack.
+   * @private
    * @return {Object} Page element object
    */
   getCurrent: function () {
-    return this._pages.indexOf[this.selected];
+    return this._pages[this.selected];
   },
   /**
    * Handles navigating back in the page stack.
@@ -389,6 +406,7 @@ var PagesBehavior = {
   },
   /**
    * Handle setting the height of the current page to the height of the container.
+   * @private
    */
   _fixHeight: function () {
     var pHeight = this.offsetHeight;

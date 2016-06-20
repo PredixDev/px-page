@@ -2,23 +2,23 @@
   "name": "px-page",
   "version": "0.0.1",
   "authors": [
-    "Jonnie Spratley <jonnie.spratley@ge.com>"
-  ],
+		"Jonnie Spratley <jonnie.spratley@ge.com>"
+	],
   "description": "A web component for a page",
   "main": "px-pages.html",
   "keywords": [
-    "px"
-  ],
+		"px"
+	],
   "license": "MIT",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
   "dependencies": {
-    "polymer": "~v1.4.0",
+    "polymer": "~v1.5.0",
     "fastclick": "latest",
     "overthrow": "~0.7.1",
     "px-theme": "~0.7.0"
@@ -29,8 +29,7 @@
     "px-navbar": "master",
     "px-responsive-layouts": "master",
     "px-table-view": "master",
-    "web-component-tester": "~4.2.2",
-    "px-table-view": "https://github.com/PredixDev/px-table-view.git"
+    "web-component-tester": "~4.2.2"
   },
   "resolutions": {
     "polymer": "~v1.4.0",
@@ -38,6 +37,7 @@
     "fetch": "~0.11.0",
     "polymer-font-awesome": "~0.1.5",
     "px-drawer": "master",
+    "px-table-view": "master",
     "px-navbar": "master"
   }
 }
