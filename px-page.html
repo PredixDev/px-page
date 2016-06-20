@@ -3,7 +3,6 @@
 <link rel="import" href="overthrow-import.html"/>
 <link rel="import" href="px-page-transitions.html"/>
 <link rel="import" href="px-page-behavior.html"/>
-
 <!--
 ```
 
@@ -27,7 +26,6 @@ Custom property | Description | Default
         display: block;
         box-sizing: border-box;
       }
-
       :host.dialog {
         -webkit-transition: all 0.3s ease;
         transition: all 0.3s ease;
@@ -40,41 +38,38 @@ Custom property | Description | Default
         background: #fff;
         height: 100%;
       }
-
       :host.dialog:not(.is-open) {
         z-index: -1;
         -webkit-transform: translateY(100%);
         transform: translateY(100%);
       }
-
-      :host .overthrow, .overthrow {
+      .overthrow,
+      :host .overthrow {
         overflow: auto;
         height: 100%;
         -webkit-overflow-scrolling: touch;
       }
-
       .overthrow-enabled .page-content {
         height: 100%;
       }
-
       /* This enables the page to allow scrolling */
       :host ::content section {
         height: 100%;
       }
-
     </style>
-    <content id="navbarContent" select="px-navbar"></content>
-    <section class="page-content overthrow">
-      <content id="pageContent" select=":not(px-navbar)"></content>
-    </section>
+    <div class="page">
+      <content id="navbarContent" select="px-navbar"></content>
+      <section class="page-content overthrow">
+        <content id="pageContent" select=":not(px-navbar)"></content>
+      </section>
+    </div>
   </template>
 </dom-module>
 <script type="text/javascript">
   Polymer({
     is: 'px-page',
     behaviors: [
-      Polymer.IronResizableBehavior,
-      PageBehavior
+      Polymer.IronResizableBehavior, PageBehavior
     ],
     properties: {
       //The title for the page
@@ -82,7 +77,6 @@ Custom property | Description | Default
         type: String,
         value: null
       },
-
       //Path to remote view that will be loaded
       import: {
         type: String,
@@ -90,45 +84,37 @@ Custom property | Description | Default
         value: null,
         observer: '_tmplChanged'
       },
-
       //If the page is currently active in the viewport
       active: {
         type: Boolean,
         value: false
       },
-
       //If the page is the main page
       main: {
         type: Boolean,
         value: false
       },
-
       //If the page is a dialog
       dialog: {
         type: Boolean,
         value: false
       },
-
       //with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue"
       query: {
         type: Object
       },
-
       //The context data object associated with the page
       context: {
         type: Object
       },
-
       //The page that came before this page
       fromPage: {
         type: Object
       },
-
       //The route to set in the windows hash
       route: {
         type: String
       },
-
       //Contains string URL of just loaded page
       url: {
         type: String
@@ -144,13 +130,12 @@ Custom property | Description | Default
     * return Element
     */
     get navbar() {
-        return Polymer.dom(this.$.navbarContent).getDistributedNodes()[0];
+      return Polymer.dom(this.$.navbarContent).getDistributedNodes()[0];
     },
     _viewContainer: null,
     attached: function () {
       this.toggleClass('page');
-      if(this.navbar){
-        console.warn('Auto wiring navbar');
+      if (this.navbar) {
         // TODO: Fix for shadow dom
         if (this.parentNode && this.parentNode.localName === 'px-pages') {
           this.viewContainer = this.parentNode;
@@ -159,9 +144,8 @@ Custom property | Description | Default
         }
       }
     },
-    _handleBack: function(e){
-      console.log('Going back in time', e);
-      if(this.viewContainer){
+    _handleBack: function (e) {
+      if (this.viewContainer) {
         this.viewContainer.back();
       }
     }
