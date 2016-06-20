@@ -98,22 +98,13 @@ var PagesBehavior = {
   _handleSelectedChange: function (index, oldIndex) {
 
     var _this = this;
-    var prevPage = _this.getContentChildren()[index - 1];
-    var currPage = _this.getContentChildren()[index];
-    var nextPage = _this.getContentChildren()[index + 1];
+    var _pages = this.getPages();
+    var prevPage = _pages[index - 1];
+    var currPage = _pages[index];
+    var nextPage = _pages[index + 1];
 
     this._clearCurrent();
-    if (currPage) {
-      _this._log('currPage', _this.selectedClass, currPage);
-      currPage.nextPage = nextPage;
-      currPage.prevPage = prevPage;
-      _this.toggleClass('next', false, currPage);
-      _this.toggleClass('previous', false, currPage);
-      _this.toggleClass(_this.selectedClass, true, currPage);
-      _this.selectedPage = currPage;
 
-      _this.fire('px-page-change', currPage);
-    }
     if (nextPage) {
       _this._log('nextPage', nextPage);
       _this.toggleClass('next', true, nextPage);
@@ -127,7 +118,17 @@ var PagesBehavior = {
       _this.toggleClass('next', false, prevPage);
       _this.toggleClass('previous', true, prevPage);
     }
+    if (currPage) {
+      _this._log('currPage', _this.selectedClass, currPage);
+      currPage.nextPage = nextPage;
+      currPage.prevPage = prevPage;
+      _this.toggleClass('next', false, currPage);
+      _this.toggleClass('previous', false, currPage);
+      _this.toggleClass(_this.selectedClass, true, currPage);
+      _this.selectedPage = currPage;
 
+      _this.fire('px-page-change', currPage);
+    }
 
     return currPage;
   },
@@ -139,11 +140,12 @@ var PagesBehavior = {
     var p = null;
     if (this._PageList[indexOrId]) {
       p = this._PageList[indexOrId];
-      return this._handleSelectedChange(indexOrId);
+      return this.gotoIndex(indexOrId);
     } else if (this._PageMap[indexOrId]) {
       p = this._PageMap[indexOrId];
-      return this._handleSelectedChange(this.indexOf(p));
+      return this.gotoIndex(this.indexOf(p));
     } else {
+      console.log('Page', indexOrId, 'does not exist!');
       return false;
     }
   },
@@ -203,11 +205,8 @@ var PagesBehavior = {
     var _pages = _this.getPages();
     var p = _pages[index];
     if (p) {
-      this.toggleClass(_this.selectedClass, true, p);
-      this.toggleClass('previous', false, p);
-      this.toggleClass('next', false, p);
-      _this.selected = index;
-      return _this.selectedPage;
+      this.selected = this.indexOf(p);
+      return p;
     } else {
       return false;
     }
@@ -285,7 +284,7 @@ var PagesBehavior = {
    * @return {Object} Page element object
    */
   getSelectedPage: function () {
-    return this.selectedPage;
+    return this._pages[this.selected];
   },
   /**
    * Handle returning the previous page.

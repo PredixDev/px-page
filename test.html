@@ -72,9 +72,9 @@
         });
         test('current page does not have .next or .previous class', function () {
           var page = document.getElementById('page1');
-          assert(page.className.indexOf('current') > -1);
-          assert.equal(page.className.indexOf('previous'), -1);
-          assert.equal(page.className.indexOf('next'), -1);
+          assert.ok(page.classList.contains('current'));
+          assert.ok(!page.classList.contains('previous'));
+          assert.ok(!page.classList.contains('next'));
         });
         test('has main page', function () {
           assert.equal(element.getSelectedPage().main, true);
@@ -132,11 +132,9 @@
           test('getSelectedPage() - returns current page', function () {
             assert.equal(element.getSelectedPage(), element.selectedPage);
           });
-          test('getSelectedPage() - returns current page', function () {
-            assert.equal(element.getSelectedPage().navbar.back, false);
-          });
           test('reset() - resets to main page.', function () {
             element.reset();
+
             assert.equal(element.getSelectedPage().main, true);
           });
           test('reset() - double resets goto main page.', function () {
@@ -164,14 +162,15 @@
             element.selected = 2;
             assert.equal(element.getSelectedPage().id, 'page3');
           });
+
           test('selected - Only 1 page can have selected at a given time.', function () {
             element.selected = 0;
             element.selected = 3;
             var nodes = document.getElementById('px_page_1').queryAllEffectiveChildren('.' + element.selectedClass);
-            console.log(nodes, typeof(nodes), nodes.length);
             assert.equal(element.getSelectedPage().id, 'page4');
             assert.equal(nodes.length, 1);
           });
+
           test('selected - Changes the current page to index', function () {
             element.selected = 2;
             assert.equal(element.getSelectedPage().id, 'page3');
@@ -197,8 +196,8 @@
           var navbar2 = document.getElementById('page1-navbar');
           assert(navbar1 === navbar2);
         });
-        test('attaches .page--has-navbar class', function () {
-          assert.ok(page1.className.indexOf('has-navbar') > -1);
+        test('attaches .has-navbar class', function () {
+          assert.ok(document.getElementById('page1').classList.contains('has-navbar'));
         });
       });
     </script>
