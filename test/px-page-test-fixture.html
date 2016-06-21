@@ -17,8 +17,10 @@
 
     <link rel="import" href="../../px-theme/px-app.html"/>
     <link rel="import" href="../../px-theme/px-theme.html"/>
-    <link rel="import" href="../px-pages.html"/>
     <link rel="import" href="../../px-navbar/px-navbar.html"/>
+    <link rel="import" href="../px-page.html"/>
+    <link rel="import" href="../px-pages.html"/>
+
     <!-- This script link will contain the generated script for basic wct test cases -->
     <script src="px-page-base-tests.js"></script>
     <!-- This script link will contain the generated script stub for custom, developer-added test cases -->
@@ -63,7 +65,7 @@
       <px-page id="page7" title="Test Page-7">
         <px-navbar></px-navbar>
       </px-page>
-      <px-page id="page8" title="Test Page-8" import="test/remote-page.html"></px-page>
+      <px-page id="page8" title="Test Page-8" import="./remote-page.html"></px-page>
     </px-pages>
   </body>
 </html>

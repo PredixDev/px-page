@@ -1,18 +1,23 @@
 // This is the wrapper for custom tests, called upon web components ready state
 function runCustomTests() {
+  var element = document.getElementById('px_page_1');
   suite('<px-pages>', function () {
-    var element = document.getElementById('px_page_1');
+
     test('renders', function () {
       assert.ok(element);
     });
     test('attaches .px-pages__wrapper class', function () {
       assert(element.className.indexOf('px-pages__wrapper') > -1);
     });
-    test('current page does not have .next or .previous class', function () {
+    test('current page does not have .next or .previous class', function (done) {
       var page = document.getElementById('page1');
-      assert.ok(page.classList.contains('current'));
-      assert.ok(!page.classList.contains('previous'));
-      assert.ok(!page.classList.contains('next'));
+      setTimeout(function () {
+        assert(page.classList.contains('current'));
+        assert(!page.classList.contains('previous'));
+        assert(!page.classList.contains('next'));
+        done();
+      }, 500);
+
     });
     test('has main page', function () {
       assert.equal(element.getSelectedPage().main, true);
@@ -31,8 +36,14 @@ function runCustomTests() {
 
     });
     suite('Methods', function () {
-      test('goto() - changes to page by id', function () {
-        assert.equal(element.goto('page3').id, 'page3');
+      test('goto() - changes to page by id', function (done) {
+        var element = document.getElementById('px_page_1');
+        var p = element.goto('page3');
+
+        setTimeout(function () {
+          assert(p.id === 'page3');
+          done();
+        }, 500);
       });
       test('goto() - changes to page by index', function () {
         assert(element.goto(3));
