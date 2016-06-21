@@ -1,8 +1,7 @@
-#Px-Page
+# px-page [![Build Status](https://travis-ci.org/PredixDev/px-page.svg?branch=master)](https://travis-ci.org/PredixDev/px-page)
 
 ## Overview
-
-Px-Page is a Predix UI component
+Px-Page is a Predix UI component.
 
 ## Usage
 

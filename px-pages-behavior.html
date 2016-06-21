@@ -262,9 +262,9 @@ var PagesBehavior = {
    * @param message
    */
   _warn: function (type, message) {
-    if (this._debug) {
-      console.warn('PagesBehavior.' + type, message);
-    }
+    // if (this._debug) {
+    //   console.warn('PagesBehavior.' + type, message);
+    // }
   },
   /**
    * Utility method for logging to the console.
@@ -273,9 +273,9 @@ var PagesBehavior = {
    * @param message
    */
   _log: function (type, message) {
-    if (this._debug) {
-      console.log('PagesBehavior.' + type, message);
-    }
+    // if (this._debug) {
+    //   console.log('PagesBehavior.' + type, message);
+    // }
   },
   /**
    * Clears the current page
@@ -304,8 +304,8 @@ var PagesBehavior = {
    * @return {Object} Page element object
    */
   getPrevious: function () {
-    if (this.selected === this._pages.length) {
-      return;
+    if (this.selected === 0) {
+      return false;
     }
     return this._pages[this.selected - 1];
   },
@@ -314,6 +314,9 @@ var PagesBehavior = {
    * @return {Object} Page element object
    */
   getNext: function () {
+    if(this.selected === this._pages.length - 1){
+      return false;
+    }
     return this._pages[this.selected + 1];
   },
   /**
@@ -407,7 +410,7 @@ var PagesBehavior = {
   /**
    * Handle setting the height of the current page to the height of the container.
    * @private
-   */
+
   _fixHeight: function () {
     var pHeight = this.offsetHeight;
     var pageHeight = this.selectedPage.offsetHeight;
@@ -417,7 +420,7 @@ var PagesBehavior = {
     PagesBehavior._log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight,
       pageContent);
     return pageContent;
-  },
+  },   */
   /**
    * Handle returning the current content pages.
    * @returns {Array} Array of content pages.

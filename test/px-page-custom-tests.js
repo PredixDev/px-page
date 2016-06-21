@@ -45,6 +45,10 @@ function runCustomTests() {
           done();
         }, 500);
       });
+      test('select() - changes to page by id/index', function () {
+        assert(element.select(2));
+        assert.equal(element.getSelectedPage().id, 'page3');
+      });
       test('goto() - changes to page by index', function () {
         assert(element.goto(3));
         assert.equal(element.getSelectedPage().id, 'page4');
@@ -98,15 +102,18 @@ function runCustomTests() {
         assert.equal(element.indexOf({}), false);
       });
     });
+
     suite('Selected', function () {
       test('reset() - resets to main page', function () {
         element.reset();
         assert.equal(element.getSelectedPage().main, true);
       });
+
       test('selected - 0 - Changes the first current page in index', function () {
         element.selected = 0;
         assert.equal(element.getSelectedPage().id, 'page1');
       });
+
       test('selected - 3 - Changes the 3rd current page in index', function () {
         element.selected = 2;
         assert.equal(element.getSelectedPage().id, 'page3');
@@ -124,6 +131,36 @@ function runCustomTests() {
         element.selected = 2;
         assert.equal(element.getSelectedPage().id, 'page3');
       });
+
+      test('getCurrent() - Returns the current page', function () {
+        element.selected = 2;
+        assert.equal(element.getCurrent().id, 'page3');
+      });
+
+      test('getNext() - Returns the next page', function () {
+        element.selected = 1;
+        assert.equal(element.getCurrent().id, 'page2');
+        assert.equal(element.getNext().id, 'page3');
+      });
+
+      test('getPrevious() - Returns false if at start of stack', function () {
+        element.selected = 0;
+        assert.equal(element.getPrevious(), false);
+      });
+      test('getNext() - Returns false if at end of stack', function () {
+        element.selected = element.getPages().length - 1;
+        assert.equal(element.getNext(), false);
+      });
+
+      test('getPrevious() - Returns the previous page', function () {
+        element.selected = 2;
+        assert.equal(element.getCurrent().id, 'page3');
+        assert.equal(element.getPrevious().id, 'page2');
+        assert.equal(element.getNext().id, 'page4');
+      });
+
+
+
     });
   });
   suite('<px-page>', function () {
