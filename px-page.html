@@ -132,21 +132,21 @@ Custom property | Description | Default
     get navbar() {
       return Polymer.dom(this.$.navbarContent).getDistributedNodes()[0];
     },
-    _viewContainer: null,
+    _pagesContainer: null,
     attached: function () {
       this.toggleClass('page');
       if (this.navbar) {
         // TODO: Fix for shadow dom
         if (this.parentNode && this.parentNode.localName === 'px-pages') {
-          this.viewContainer = this.parentNode;
-          this.navbar.viewContainer = this.viewContainer;
+          this.pagesContainer = this.parentNode;
+          this.navbar.pagesContainer = this.pagesContainer;
           this.listen(this.navbar, 'px-page-back', '_handleBack');
         }
       }
     },
     _handleBack: function (e) {
-      if (this.viewContainer) {
-        this.viewContainer.back();
+      if (this.pagesContainer) {
+        this.pagesContainer.back();
       }
     }
   });
