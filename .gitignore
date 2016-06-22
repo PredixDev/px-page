@@ -6,3 +6,5 @@ bower_components
 reports
 css/noprefix
 .yo-rc.json
+coverage
+docs
