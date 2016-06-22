@@ -327,7 +327,7 @@ Custom property | Description | Default
      * @return {Object} Page element object
      */
     gotoIndex: function (index) {
-      PagesBehavior._log('gotoIndex', index);
+      this._log('gotoIndex', index);
       var _this = this;
       var _pages = _this.getPages();
       var p = _pages[index];
@@ -521,7 +521,7 @@ Custom property | Description | Default
      * @return {Number} The selected index
      */
     back: function () {
-      PagesBehavior._log('back', this.selected);
+      this._log('back', this.selected);
       return this.selected--;
     },
     /**
@@ -534,7 +534,7 @@ Custom property | Description | Default
       var pageContent = this.querySelector('.page-content');
       var contentHeight = pageContent.offsetHeight;
       pageContent.css('height', pageHeight + 'px');
-      PagesBehavior._log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight,
+      this._log('Parent', pHeight, 'Child', pageHeight, 'Content', contentHeight,
         pageContent);
       return pageContent;
     },   */
