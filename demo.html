@@ -1,154 +1,171 @@
 <html>
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
-  <title>px-page | demo</title>
-  <script src="../webcomponentsjs/webcomponents.min.js"></script>
-  <link rel="import" href="../iron-demo-helpers/demo-snippet.html"/>
-  <link rel="import" href="../px-demo-helpers/px-demo-helpers.html"/>
-
-  <link rel="import" href="../px-theme/px-theme.html">
-  <link rel="import" href="../px-theme/px-app.html">
-  <link rel="import" href="../px-navbar/px-navbar.html">
-  <link rel="import" href="../px-table-view/px-table-view.html">
-  <link rel="import" href="px-pages.html">
-  <style>
-    body,
-    html {
-      background: #eee !important;
-      position: relative;
-
-    }
-
-    .demo {
-      position: relative;
-    }
-
-  </style>
-
-  <script type="text/javascript"></script>
-</head>
-<body class="viewport" unresolved>
-
-<div class="content u-pt">
-  <h1 class="beta">px-page</h1>
-  <p>
-    The <code>px-page</code> and <code>px-pages</code> elements helps manage a set of pages with scrollable content.
-  </p>
-  <p>
-    The demo using <code> px-drawer-layout</code> is <a href="demo/index.html" target="_blank">here.</a>
-  </p>
-  <p>
-    The mobile demo is <a href="mobile-demo.html" target="_blank">here.</a>
-  </p>
-</div>
-
-<div class="">
-
-  <h2>Example</h2>
-  <demo-snippet>
-    <template>
-      <style is="custom-style">
-        :root {
-          --px-page: {
-            background: fuchsia;
-          }
-        }
-      </style>
-      <template id="app" is="dom-bind">
-
-        Selected Page:<span>{{selectedPage.title}}</span>
-        Selected:
-        <span>{{selected}}</span>
-
-        <div class="buttons flex">
-          <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
-          <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
-        </div>
-        <div class="demo">
-          <px-pages id="appPages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
-            <px-page id="Page0" title="Main Page" route="/Page0" main>
-              <px-navbar>
-                <button class="navbar__button" drawer-toggle left>
-                  <i class="fa fa-lg fa-bars"></i>
-                </button>
-              </px-navbar>
-              <px-table-view id="list1" modifier="small" table-data="[[items]]"></px-table-view>
-            </px-page>
-            <px-page id="Page1" title="Page 1">
-              <px-navbar></px-navbar>
-              <section><h2>page1</h2></section>
-            </px-page>
-            <px-page id="Page2" title="Page 2">
-              <px-navbar></px-navbar>
-              <section><h2>page2</h2></section>
-            </px-page>
-          </px-pages>
-        </div>
-        <script type="text/javascript">
-          var app = document.getElementById('app');
-          var pages = document.getElementById('appPages');
-          pages.addEventListener('change', function (e) {
-            console.log('Page Changed', e);
-          });
-
-          function createDemoList(count) {
-            var _out = [],
-              li;
-            for (var i = 0; i < count; i++) {
-              li = {
-                title: 'Item ' + i,
-                modifier: 'tappable nav-right'
-              };
-              _out.push(li);
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>px-page | demo</title>
+    <script src="../webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="../iron-demo-helpers/demo-snippet.html"/>
+    <link rel="import" href="../px-demo-helpers/px-demo-helpers.html"/>
+    <link rel="import" href="../px-theme/px-theme.html">
+    <link rel="import" href="../px-theme/px-app.html">
+    <link rel="import" href="../px-navbar/px-navbar.html">
+    <link rel="import" href="../px-table-view/px-table-view.html">
+    <link rel="import" href="px-pages.html">
+    <style>
+      body,
+      html {
+        background: #eee !important;
+        position: relative;
+      }
+      .demo {
+        position: relative;
+      }
+    </style>
+    <script type="text/javascript"></script>
+  </head>
+  <body class="viewport" unresolved>
+    <div class="content u-pt">
+      <h1 class="beta">px-page</h1>
+      <p>
+        The
+        <code>px-page</code>
+        and
+        <code>px-pages</code>
+        elements helps manage a set of pages with scrollable content.
+      </p>
+      <p>
+        The demo using
+        <code>
+          px-drawer-layout</code>
+        is
+        <a href="demo/index.html" target="_blank">here.</a>
+      </p>
+      <p>
+        The mobile demo is
+        <a href="mobile-demo.html" target="_blank">here.</a>
+      </p>
+    </div>
+    <div class="">
+      <h2>Example</h2>
+      <demo-snippet>
+        <template>
+          <style is="custom-style">
+            :root {
+              --px-page: {
+                background: fuchsia;
+              }
             }
-            return _out;
-          }
-          app.set('items', createDemoList(50));
-        </script>
-      </template>
-    </template>
-  </demo-snippet>
+          </style>
+          <template id="app" is="dom-bind">
+            <div class="debug">
+              <ul>
+                <li>Selected Page:<span>{{selectedPage.title}}</span></li>
+                <li>Selected Index:<span>{{selected}}</span></li>
+              </ul>
+            </div>
 
-  <!-- TODO: Usage with px-drawer-layout -->
-  <h2>Usage with px-drawer-layout</h2>
-  <demo-snippet>
-    <template>
-      <template id="app2" is="dom-bind">
-        <px-pages id="pages2" debug selected="{{selected}}" selected-page="{{selectedPage}}">
-          <px-page id="Page0" title="Main Page" route="/Page0" main>
-            <px-navbar>
-              <button class="navbar__button" drawer-toggle left>
-                <i class="fa fa-lg fa-bars"></i>
-              </button>
-            </px-navbar>
-            <section>
-              <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
-            </section>
-          </px-page>
-          <px-page id="Page1" title="Page 1">
-            <px-navbar></px-navbar>
-            <section><h2>page1</h2></section>
-          </px-page>
-          <px-page id="Page2" title="Page 2">
-            <px-navbar></px-navbar>
-            <section><h2>page2</h2></section>
-          </px-page>
-        </px-pages>
-        <script type="text/javascript">
-          var app = document.getElementById('app2');
-          var pages = document.getElementById('pages2');
-          pages.addEventListener('change', function (e) {
-            console.log('Page Changed', e);
-          });
-        </script>
-      </template>
-    </template>
-  </demo-snippet>
+            <div class="buttons flex">
+              <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
+              <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
+            </div>
+            <div class="flex flex--center">
+              <device-view device="phone">
+                <px-pages id="appPages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
+                  <px-page id="Page0" title="Main" main>
+                    <px-navbar>
+                      <button class="navbar__button" drawer-toggle left>
+                        <i class="fa fa-lg fa-bars"></i>
+                      </button>
+                    </px-navbar>
+                    <px-table-view id="list1" modifier="small" table-data="[[items]]"></px-table-view>
+                  </px-page>
+                  <px-page id="Page1" title="Page 1">
+                    <px-navbar></px-navbar>
+                    <section>
+                      <h2>page1</h2>
+                    </section>
+                  </px-page>
+                  <px-page id="Page2" title="Page 2">
+                    <px-navbar></px-navbar>
+                    <section>
+                      <h2>page2</h2>
+                    </section>
+                  </px-page>
+                  <px-page id="Page3" title="Page 3">
+                    <px-navbar></px-navbar>
+                    <section>
+                      <h2>page3</h2>
+                    </section>
+                  </px-page>
+                  <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html">
+                  </px-page>
+                </px-pages>
+              </device-view>
+            </div>
 
-</div>
-
-</body>
+            <script type="text/javascript">
+              var app = document.getElementById('app');
+              var pages = document.getElementById('appPages');
+              pages.addEventListener('change', function (e) {
+                console.log('Page Changed', e);
+              });
+              function createDemoList(count) {
+                var _out = [],
+                  li;
+                for (var i = 0; i < count; i++) {
+                  li = {
+                    title: 'Item ' + i,
+                    modifier: 'tappable nav-right'
+                  };
+                  _out.push(li);
+                }
+                return _out;
+              }
+              app.set('items', createDemoList(50));
+            </script>
+          </template>
+        </template>
+      </demo-snippet>
+      <!-- TODO: Usage with px-drawer-layout -->
+      <h2>Usage with px-drawer-layout</h2>
+      <demo-snippet>
+        <template>
+          <template id="app2" is="dom-bind">
+            <px-pages id="pages2" debug selected="{{selected}}" selected-page="{{selectedPage}}">
+              <px-page id="Page0" title="Main Page" route="/Page0" main>
+                <px-navbar>
+                  <button class="navbar__button" drawer-toggle left>
+                    <i class="fa fa-lg fa-bars"></i>
+                  </button>
+                </px-navbar>
+                <section>
+                  <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
+                </section>
+              </px-page>
+              <px-page id="Page1" title="Page 1">
+                <px-navbar></px-navbar>
+                <section>
+                  <h2>page1</h2>
+                </section>
+              </px-page>
+              <px-page id="Page2" title="Page 2">
+                <px-navbar></px-navbar>
+                <section>
+                  <h2>page2</h2>
+                </section>
+              </px-page>
+            </px-pages>
+            <script type="text/javascript">
+              var app = document.getElementById('app2');
+              var pages = document.getElementById('pages2');
+              pages.addEventListener('change', function (e) {
+                console.log('Page Changed', e);
+              });
+            </script>
+          </template>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
 </html>

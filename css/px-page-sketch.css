@@ -1829,48 +1829,10 @@
   -webkit-animation-delay: 1s;
   animation-delay: 1s; }
 
-.overthrow-enabled .page-content {
-  height: 100%; }
-
-px-page {
-  transition: all 0.3s ease-out; }
-
-.current {
-  -webkit-transform: translate(0, 0);
-          transform: translate(0, 0); }
-
-.next {
-  -webkit-transform: translate(50%, 0);
-          transform: translate(50%, 0); }
-
-.previous {
-  -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0); }
-
-.dialog {
-  transition: all 0.3s ease;
-  position: fixed;
-  left: 0;
-  right: 0;
-  -webkit-transform: translateY(0);
-  transform: translateY(0);
-  z-index: 100;
-  background: #fff;
-  height: 100%; }
-
-.dialog:not(.is-open) {
-  z-index: -1;
-  -webkit-transform: translateY(100%);
-  transform: translateY(100%); }
-
 .overthrow {
   overflow: auto;
   height: 100%;
   -webkit-overflow-scrolling: touch; }
 
 .overthrow-enabled .page-content {
-  height: 100%; }
-
-/* This enables the page to allow scrolling */
-:host ::content > section {
   height: 100%; }

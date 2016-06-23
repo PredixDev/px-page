@@ -198,6 +198,32 @@ var transitions = [{
   enter: 'rotateSlideIn'
 }].reverse();
 
+function formatClass(str) {
+  var classes = str.split(' ');
+  var output = [];
+  for (var i = 0; i < classes.length; i++) {
+    output.push('pt-page-' + classes[i]);
+  }
+  return output;
+}
+
+
+
+function resetPage($outpage, $inpage) {
+  $outpage.attr('class', $outpage.attr('data-originalClassList'));
+  $inpage.attr('class', $inpage.attr('data-originalClassList') + ' et-page-current');
+  console.warn('resetPage');
+}
+
+
+function onEndAnimation($outpage, $inpage, block) {
+  resetPage($outpage, $inpage);
+  $outpage.trigger('animation.out.complete');
+  $inpage.trigger('animation.in.complete');
+  block.attr('data-isAnimating', 'false');
+  console.warn('onEndAnimation');
+}
+
 function PageTransitions() {
   var startElement = 0,
     animEndEventName = '',
@@ -238,11 +264,11 @@ function PageTransitions() {
     console.warn('PageTransitions.init', selected);
 
     var views = document.querySelectorAll('px-view');
-    views.each(function(el) {
+    views.each(function (el) {
       console.log(el);
       el.attr('data-originalClassList', el.attr('class'));
     });
-    document.querySelectorAll('px-views').each(function(el) {
+    document.querySelectorAll('px-views').each(function (el) {
       el.attr('data-current', '0');
       el.attr('data-isAnimating', 'false');
       //  el.children(".et-page").eq(startElement).addClass('et-page-current');
@@ -257,12 +283,12 @@ function PageTransitions() {
   function animate(options) {
     var el, wrapper, inClass, outClass, nextPage, currPage;
 
-    el = document.querySelector(options.el);
+    el = document.getElementById(options.el);
 
     console.log('Animate', options, el);
 
-    if (el && el.parent) {
-      wrapper = el.parent();
+    if (el && el.container) {
+      wrapper = el.container;
     }
 
     if (!el.inTrans) {
@@ -275,8 +301,8 @@ function PageTransitions() {
     inClass = formatClass(el.inTrans);
     outClass = formatClass(el.outTrans);
 
-    currPage = options.current || wrapper.getCurrentPage();
-    nextPage = options.next || wrapper.getNextPage();
+    currPage = options.current || wrapper.getSelectedPage();
+    nextPage = options.next || wrapper.getNext();
 
 
 
@@ -287,26 +313,26 @@ function PageTransitions() {
 
 
     //If wrapper is not animating
-    if (wrapper.attr('data-isAnimating') === 'true') {
-      console.log(wrapper, wrapper.attr('data-isAnimating'));
+    if (wrapper.getAttribute('data-isAnimating') === 'true') {
+      console.log(wrapper, wrapper.getAttribute('data-isAnimating'));
       return false;
     }
 
-    wrapper.attr('data-isAnimating', 'true');
+    wrapper.setAttribute('data-isAnimating', 'true');
 
     //Steps for animateion
 
     //Current Page
     //Each outclass, add to the current page.
-    outClass.forEach(function(c) {
-      currPage.addClass(c);
+    outClass.forEach(function (c) {
       console.warn('adding class', c);
+      currPage.classList.add(c);
     });
 
     //Listen for animation end event
-    currPage.addEventListener(animEndEventName, function() {
+    currPage.addEventListener(animEndEventName, function transitionHandler() {
       console.warn(animEndEventName, 'finished - removing handler');
-      currPage.off(animEndEventName);
+      currPage.removeEventListener(animEndEventName, transitionHandler);
       endCurrPage = true;
       if (endNextPage) {
         onEndAnimation(currPage, nextPage, el);
@@ -314,13 +340,13 @@ function PageTransitions() {
     });
 
     //Next Page
-    inClass.forEach(function(c) {
-      nextPage.addClass(c);
+    inClass.forEach(function (c) {
+      nextPage.classList.add(c);
     });
 
-    nextPage.addEventListener(animEndEventName, function() {
+    nextPage.addEventListener(animEndEventName, function () {
       console.warn('Adding event listener to nextPage');
-      nextPage.off(animEndEventName);
+      nextPage.removeEventListener(animEndEventName);
       endNextPage = true;
       if (endCurrPage) {
         onEndAnimation(currPage, nextPage, el);
@@ -334,29 +360,6 @@ function PageTransitions() {
     console.warn('wrapper', wrapper);
   }
 
-  function formatClass(str) {
-    var classes = str.split(' ');
-    var output = [];
-    for (var i = 0; i < classes.length; i++) {
-      output.push('pt-page-' + classes[i]);
-    }
-    return output;
-  }
-
-
-  function onEndAnimation($outpage, $inpage, block) {
-    resetPage($outpage, $inpage);
-    $outpage.trigger('animation.out.complete');
-    $inpage.trigger('animation.in.complete');
-    block.attr('data-isAnimating', 'false');
-    console.warn('onEndAnimation');
-  }
-
-  function resetPage($outpage, $inpage) {
-    $outpage.attr('class', $outpage.attr('data-originalClassList'));
-    $inpage.attr('class', $inpage.attr('data-originalClassList') + ' et-page-current');
-    console.warn('resetPage');
-  }
 
 
   return {

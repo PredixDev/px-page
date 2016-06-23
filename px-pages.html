@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="px-pages-behavior.html"/>
 <link rel="import" href="px-page.html"/>
+<link rel="import" href="px-page-styles.html"/>
 
 
 <!--
@@ -50,7 +50,7 @@ Custom property | Description | Default
 -->
 
 <dom-module id="px-pages">
-
+		<style include="px-navbar-css"></style>
   <template>
     <style>
       :host {
@@ -67,6 +67,7 @@ Custom property | Description | Default
         @apply(--px-pages);
       }
 
+
       :host .pages ::content .page{
         position: absolute;
         top: 0;
@@ -78,28 +79,38 @@ Custom property | Description | Default
       :host .pages ::content .page:not(.current){
         opacity: 0;
         visibility: hidden;
+        /*
         -webkit-transition: all 0.2s ease;
         transition: all 0.2s ease;
+        */
         @apply(--px-page);
       }
 
       :host ::content .has-navbar{
         padding-top: 56px;
       }
+
       :host ::content .current {
         opacity: 1;
         visibility: visible;
+        /*
         transform: translate(0, 0);
+        */
         @apply(--px-page-current);
       }
+
       :host ::content .next {
+        /*
         transform: translate(50%, 0);
+        */
         @apply(--px-page-next);
       }
+
       :host ::content .previous {
-        transform: translate(-50%, 0);
+        /*transform: translate(-50%, 0);*/
         @apply(--px-page-previous);
       }
+
     </style>
     <div class="pages"><content id="pages" select=".page, px-page, .px-page"></content></div>
   </template>
@@ -162,10 +173,8 @@ Custom property | Description | Default
     },
 
     created: function () {
-
       this._PageMap = {};
       this._PageList = [];
-      this.toggleClass('px-pages__wrapper');
     },
     attached: function () {
       var _this = this;
@@ -174,9 +183,10 @@ Custom property | Description | Default
       }
       //  this.listen(this, 'track', 'handleTrack');
       this.async(function () {
-        _this._init();
-        _this.toggleClass('et-wrapper');
-        _this.gotoIndex(_this.selected);
+        this._init();
+        this.toggleClass('et-wrapper');
+        this.toggleClass('px-pages__wrapper');
+        this.gotoIndex(this.selected);
       }, 1);
     },
     detached: function () {
@@ -280,6 +290,8 @@ Custom property | Description | Default
 
       //add to Page map
       this._PageMap[Page.id] = Page;
+
+      Page.container = this;
 
       //push to Page list
       this._PageList.push(Page);
