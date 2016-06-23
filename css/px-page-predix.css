@@ -1,6 +1,0 @@
-:root .overthrow {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch; }
-
-:root .overthrow-enabled .page-content {
-  height: 100%; }

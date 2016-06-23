@@ -3,7 +3,15 @@
 <link rel="import" href="overthrow-import.html"/>
 <link rel="import" href="px-page-transitions.html"/>
 <link rel="import" href="px-page-behavior.html"/>
+
 <!--
+
+The `px-page` element provides a simple container that enables scrollable content. When used with the `px-navbar` element
+the page will update the `px-navbar` element with its title and/or back button.
+
+
+### Usage
+
 ```
 
 ```
@@ -13,7 +21,7 @@ The following custom properties are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--px-header-layout` | Mixin applied to component | {}
+`--px-page` | Mixin applied to component | {}
 
 @element px-page
 @demo demo.html
@@ -26,6 +34,7 @@ Custom property | Description | Default
         display: block;
         box-sizing: border-box;
       }
+
       :host.dialog {
         -webkit-transition: all 0.3s ease;
         transition: all 0.3s ease;
@@ -38,26 +47,31 @@ Custom property | Description | Default
         background: #fff;
         height: 100%;
       }
+
       :host.dialog:not(.is-open) {
         z-index: -1;
         -webkit-transform: translateY(100%);
         transform: translateY(100%);
       }
+
       .overthrow,
       :host .overthrow {
         overflow: auto;
         height: 100%;
         -webkit-overflow-scrolling: touch;
       }
+
       .overthrow-enabled .page-content {
         height: 100%;
       }
+
       /* This enables the page to allow scrolling */
       :host ::content section {
         height: 100%;
       }
+
     </style>
-    <div class="page">
+    <div class="page-container">
       <content id="navbarContent" select="px-navbar"></content>
       <section class="page-content overthrow">
         <content id="pageContent" select=":not(px-navbar)"></content>
@@ -125,10 +139,10 @@ Custom property | Description | Default
       }
     },
     /**
-    * A reference to the px-navbar element. (if it exists)
-    * @property navbar
-    * return Element
-    */
+     * A reference to the px-navbar element. (if it exists)
+     * @property navbar
+     * return Element
+     */
     get navbar() {
       return Polymer.dom(this.$.navbarContent).getDistributedNodes()[0];
     },

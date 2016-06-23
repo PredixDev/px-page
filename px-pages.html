@@ -1,7 +1,8 @@
-<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="px-pages-behavior.html" />
-<link rel="import" href="px-page.html" />
+<link rel="import" href="px-pages-behavior.html"/>
+<link rel="import" href="px-page.html"/>
+
 
 <!--
 <p>
@@ -19,28 +20,7 @@ if it is the current page in the stack or the main page.
 
 ```
 <style>
-	px-page{
-    transition: all 0.3s ease-out;
-	}
 
-  px-page.current {
-    transform: translate(0, 0);
-  }
-
-  px-page.next {
-    transform: translate(50%, 0);
-  }
-
-  px-page.previous {
-    transform: translate(-50%, 0);
-  }
-	px-page:nth-child(odd) {
-		background: lime;
-	}
-
-	px-page:nth-child(even) {
-		background: fuchsia;
-	}
 </style>
 <div class="viewport">
 	<div class="flex">
@@ -72,21 +52,30 @@ Custom property | Description | Default
 <dom-module id="px-pages">
 
   <template>
-    <link rel="import" type="css" href="css/px-page.css"/>
-    <style media="screen">
+    <style>
       :host {
         display: block;
+
+      }
+      :host .pages{
         position: relative;
         -webkit-transition: all 0.4s;
         transition: all 0.4s;
         -webkit-overflow-scrolling: touch;
         height: 100%;
         width: 100%;
-        min-height: 100vh;
         @apply(--px-pages);
       }
 
-      :host ::content px-page {
+      :host .pages ::content .page{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      :host .pages ::content .page:not(.current){
         opacity: 0;
         visibility: hidden;
         -webkit-transition: all 0.2s ease;
@@ -97,25 +86,22 @@ Custom property | Description | Default
       :host ::content .has-navbar{
         padding-top: 56px;
       }
-
       :host ::content .current {
         opacity: 1;
         visibility: visible;
         transform: translate(0, 0);
         @apply(--px-page-current);
       }
-
       :host ::content .next {
         transform: translate(50%, 0);
         @apply(--px-page-next);
       }
-
       :host ::content .previous {
         transform: translate(-50%, 0);
         @apply(--px-page-previous);
       }
     </style>
-    <content id="pages" select=".page, px-page, .px-page"></content>
+    <div class="pages"><content id="pages" select=".page, px-page, .px-page"></content></div>
   </template>
 </dom-module>
 <script type="text/javascript">
@@ -254,7 +240,7 @@ Custom property | Description | Default
      * @param {String} value The value to select
      * @return {Object} Page element object
      */
-    select: function(value){
+    select: function (value) {
       return this.goto(value);
     },
     /**
@@ -431,7 +417,7 @@ Custom property | Description | Default
      * @return {Object} Page element object
      */
     getNext: function () {
-      if(this.selected === this._pages.length - 1){
+      if (this.selected === this._pages.length - 1) {
         return false;
       }
       return this._pages[this.selected + 1];
@@ -528,7 +514,7 @@ Custom property | Description | Default
      * Handle setting the height of the current page to the height of the container.
      * @private
 
-    _fixHeight: function () {
+     _fixHeight: function () {
       var pHeight = this.offsetHeight;
       var pageHeight = this.selectedPage.offsetHeight;
       var pageContent = this.querySelector('.page-content');

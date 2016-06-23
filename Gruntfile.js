@@ -23,16 +23,15 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'css/<%= pkg.name %>.css': 'sass/<%= pkg.name %>-sketch.scss',
           'css/noprefix/<%= pkg.name %>-sketch.css': 'sass/<%= pkg.name %>-sketch.scss',
-          'css/noprefix/<%= pkg.name %>-predix.css': 'sass/<%= pkg.name %>-predix.scss'
+          'css/noprefix/<%= pkg.name %>.css': 'sass/<%= pkg.name %>-predix.scss'
         }
       }
     },
 
     autoprefixer: {
       options: {
-        browsers: ['last 2 version']
+        browsers: ['last 2 versions', 'Safari 8']
       },
       multiple_files: {
         expand: true,
@@ -103,6 +102,21 @@ module.exports = function (grunt) {
           logConcurrentOutput: true
         }
       }
+    },
+    cssmin: {
+      target: {
+        files: {
+          'css/<%= pkg.name %>.min.css': ['css/<%= pkg.name %>.css']
+        }
+      }
+    },
+    'polymer-css-compiler': {
+      target: {
+        filename: '-styles',
+        files: {
+          './<%= pkg.name %>.html': ['css/<%= pkg.name %>.min.css']
+        }
+      }
     }
   });
 
@@ -115,13 +129,17 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('webdriver-support');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-concurrent');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('polymer-css-compiler');
 
   // Default task.
   grunt.registerTask('default', 'Basic build', [
-		'sass',
-		'autoprefixer'
-	]);
-
+    'clean:css',
+    'sass',
+    'autoprefixer',
+    'cssmin',
+    'polymer-css-compiler'
+  ]);
   grunt.registerTask('devmode', 'Development Mode', [
 		'concurrent:devmode'
 	]);
