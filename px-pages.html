@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="px-page.html"/>
 <link rel="import" href="px-page-styles.html"/>
 
@@ -119,10 +120,37 @@ Custom property | Description | Default
   Polymer({
     is: 'px-pages',
     behaviors: [
-      Polymer.IronResizableBehavior
+      Polymer.IronResizableBehavior,
+			Polymer.NeonAnimationRunnerBehavior
     ],
+		listeners: {
+			// this event is fired when the animation finishes
+			'neon-animation-finish': '_onNeonAnimationFinish'
+		},
+		animate: function() {
+			// run scale-down-animation
+			this.playAnimation();
+		},
+		_onNeonAnimationFinish: function() {
+			console.log('animation done!');
+		},
     properties: {
-
+			animationConfig: {
+				value: function() {
+					return {
+						'entry': {
+							// provided by neon-animation/animations/scale-up-animation.html
+							name: 'fade-in-animation',
+							node: this
+						},
+						'exit': {
+							// provided by neon-animation-animations/fade-out-animation.html
+							name: 'fade-out-animation',
+							node: this
+						}
+					}
+				}
+			},
       /**
        * The selected index
        */
