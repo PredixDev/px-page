@@ -7,28 +7,23 @@
 <link rel="import" href="px-page.html"/>
 <link rel="import" href="px-page-styles.html"/>
 <!--
-<p>
-  For demo visit <a href="demo.html" target="_blank">Full demo here</a> or <a href="mobile-demo.html" target="_blank">Mobile demo here</a>
-</p>
+The `px-pages` element handles managing a stack of `px-page` elements for a given view.
 
-This component should be used to manage a stack of pages for a given view.
-This component is for use with child `px-page` elements, and is usefull if your content exceeds
-the viewport and want to enable smooth scrolling.
+[![Build Status](https://travis-ci.org/PredixDev/px-page.svg?branch=master)](https://travis-ci.org/PredixDev/px-page)
 
-When a page includes a `px-navbar` component, the navbar will show/hide a back button dependending
-if it is the current page in the stack or the main page.
 
-## Usage
+This component is for use with child `px-page` elements, and is useful if your content exceeds
+the viewport and want scrollable content.
+
+For demo visit <a href="demo.html" target="_blank">here</a> or <a href="mobile-demo.html" target="_blank">mobile demo here</a>
+
+
+
+### Usage
 
 ```
-<style>
-
-</style>
+<link rel="import" href="../px-page/px-pages.html">
 <div class="viewport">
-	<div class="flex">
-	<button class="btn btn--full" onclick="document.getElementById('pages').prev()">Prev</button>
-  <button class="btn btn--full" onclick="document.getElementById('pages').next()">Next</button>
-</div>
 	<px-pages id="pages" selected="0">
 	  <px-page id="page1" main>One</px-page>
 	  <px-page id="page2">Two</px-page>
@@ -37,12 +32,17 @@ if it is the current page in the stack or the main page.
 	</px-pages>
 </div>
 ```
+
+
+
+
+
 ### Styling
 The following custom properties are available for styling:
 
 Custom property | Description | Default
 ----------------|-------------|----------
-`--px-header-layout` | Mixin applied to component | {}
+`--px-pages` | Mixin applied to component | {}
 
 
 @element px-pages
@@ -55,9 +55,19 @@ Custom property | Description | Default
 	<template>
 		<style>
 			:host {
+				height: 100%;
+				position: relative;
+				-webkit-perspective: 1200px;
+				-moz-perspective: 1200px;
+				perspective: 1200px;
 				display: block;
+				overflow: hidden;
+					min-height: 75vh;
 			}
-			:host .pages {
+
+
+			:host .c-pages {
+
 				position: relative;
 				-webkit-transition: all 0.4s;
 				transition: all 0.4s;
@@ -66,14 +76,27 @@ Custom property | Description | Default
 				width: 100%;
 				@apply(--px-pages);
 			}
-			:host .pages ::content .page {
+
+			:host ::content .c-page {
+				width: 100%;
+				height: 100%;
 				position: absolute;
 				top: 0;
 				left: 0;
-				width: 100%;
-				height: 100%;
+				visibility: hidden;
+				overflow: hidden;
+				-webkit-backface-visibility: hidden;
+				-moz-backface-visibility: hidden;
+				backface-visibility: hidden;
+				-webkit-transform: translate3d(0, 0, 0);
+				-moz-transform: translate3d(0, 0, 0);
+				transform: translate3d(0, 0, 0);
+				-webkit-transform-style: preserve-3d;
+				-moz-transform-style: preserve-3d;
+				transform-style: preserve-3d;
 			}
-			:host .pages ::content .page:not(.current) {
+
+			:host ::content .c-page:not(.current) {
 				opacity: 0;
 				visibility: hidden;
 				/*
@@ -81,9 +104,6 @@ Custom property | Description | Default
         transition: all 0.2s ease;
         */
 				@apply(--px-page);
-			}
-			:host ::content .has-navbar {
-				padding-top: 56px;
 			}
 			:host ::content .current {
 				opacity: 1;
@@ -93,19 +113,21 @@ Custom property | Description | Default
         */
 				@apply(--px-page-current);
 			}
+
 			:host ::content .next {
 				/*
         transform: translate(50%, 0);
         */
 				@apply(--px-page-next);
 			}
+
 			:host ::content .previous {
 				/*transform: translate(-50%, 0);*/
 				@apply(--px-page-previous);
 			}
 		</style>
-		<div class="pages">
-			<content id="pages" select=".page, px-page, .px-page"></content>
+		<div class="c-pages">
+			<content id="pagesContent" select=".page, px-page, .px-page"></content>
 		</div>
 	</template>
 </dom-module>
@@ -116,15 +138,7 @@ Custom property | Description | Default
 			Polymer.IronSelectableBehavior, Polymer.IronResizableBehavior, Polymer.NeonAnimationRunnerBehavior
 		],
 		listeners: {
-			// this event is fired when the animation finishes
 			'neon-animation-finish': '_onNeonAnimationFinish'
-		},
-		animate: function () {
-			// run scale-down-animation
-			this.playAnimation();
-		},
-		_onNeonAnimationFinish: function () {
-			console.log('animation done!');
 		},
 		properties: {
 			animationConfig: {
@@ -132,12 +146,10 @@ Custom property | Description | Default
 				value: function () {
 					return {
 						'entry': {
-							// provided by neon-animation/animations/scale-up-animation.html
 							name: 'fade-in-animation',
 							node: this
 						},
 						'exit': {
-							// provided by neon-animation-animations/fade-out-animation.html
 							name: 'fade-out-animation',
 							node: this
 						}
@@ -192,38 +204,38 @@ Custom property | Description | Default
 				value: false
 			}
 		},
-		created: function () {
+		ready: function () {
 			this._PageMap = {};
 			this._PageList = [];
-			this.selectable = '.page';
+			this.selectable = 'c-page';
 		},
 		attached: function () {
 			var _this = this;
-			if (!this.id) {
-				throw 'pages' + this.tagName + ' cannot be created without an id!';
-			}
+
 			//  this.listen(this, 'track', 'handleTrack');
 			this.async(function () {
 				this._init();
-				this.toggleClass('et-wrapper');
-				this.toggleClass('px-pages__wrapper');
 				this.gotoIndex(this.selected);
-			}, 1);
+			});
 		},
 		detached: function () {
 			this._log('detached');
 		},
+		animate: function () {
+			this.playAnimation();
+		},
+		_onNeonAnimationFinish: function () {
+			console.log('animation done!');
+		},
 		_init: function () {
 			var self = this;
 			var pages = this.getPages();
-			//Cache pages
-			this._pages = pages;
-			var len = pages.length;
+			var len = this.getPages().length;
 			for (var i = 0; i < len; i++) {
-				self._log('page', pages[i]);
 				self._addPage(pages[i]);
 			}
-			this.fire('px-page-ready');
+
+			this.fire('px-pages-ready');
 		},
 		/**
      * Fires when the page is changed.
@@ -237,19 +249,16 @@ Custom property | Description | Default
 			var nextPage = _pages[index + 1];
 			this._clearCurrent();
 			if (nextPage) {
-				_this._log('nextPage', nextPage);
 				_this.toggleClass('next', true, nextPage);
 				_this.toggleClass(_this.selectedClass, false, nextPage);
 				_this.toggleClass('previous', false, nextPage);
 			}
 			if (prevPage) {
-				_this._log('prevPage', prevPage);
 				_this.toggleClass(_this.selectedClass, false, prevPage);
 				_this.toggleClass('next', false, prevPage);
 				_this.toggleClass('previous', true, prevPage);
 			}
 			if (currPage) {
-				_this._log('currPage', _this.selectedClass, currPage);
 				currPage.nextPage = nextPage;
 				currPage.prevPage = prevPage;
 				_this.toggleClass('next', false, currPage);
@@ -282,7 +291,7 @@ Custom property | Description | Default
 				p = this._PageMap[indexOrId];
 				return this.gotoIndex(this.indexOf(p));
 			} else {
-				console.log('Page', indexOrId, 'does not exist!');
+				console.warn('Page', indexOrId, 'does not exist!');
 				return false;
 			}
 		},
@@ -319,7 +328,6 @@ Custom property | Description | Default
 			this._clearCurrent();
 			for (var i = 0; i < len; i++) {
 				p = _pages[i];
-				self._log('resetting', i, p);
 				this.toggleClass(self.selectedClass, false, p);
 				this.toggleClass('next', false, p);
 				this.toggleClass('previous', false, p);
@@ -334,7 +342,6 @@ Custom property | Description | Default
      * @return {Object} Page element object
      */
 		gotoIndex: function (index) {
-			this._log('gotoIndex', index);
 			var _this = this;
 			var _pages = _this.getPages();
 			var p = _pages[index];
@@ -364,7 +371,6 @@ Custom property | Description | Default
      * @return {Object} Page element object
      */
 		gotoPage: function (id) {
-			this._log('gotoPage', id);
 			var index = 0;
 			var page = this._PageMap[id];
 			if (page) {
@@ -407,7 +413,6 @@ Custom property | Description | Default
 			var len = _pages.length;
 			if (_pages) {
 				for (var i = 0; i < len; i++) {
-					self._log('_clearCurrent', self.selectedClass, _pages[i]);
 					self.toggleClass(self.selectedClass, false, _pages[i]);
 				}
 			}
@@ -456,7 +461,6 @@ Custom property | Description | Default
      */
 		current: function (index) {
 			this.selected = index || this.selected;
-			this._log('current', this.selected);
 			return this.gotoIndex(this.selected);
 		},
 		/**
@@ -465,14 +469,13 @@ Custom property | Description | Default
      * @return {Number} Index
      */
 		next: function () {
-			this._log('next', this.selected);
 			if (this.selected >= this.getPages().length - 1) {
 				if (this.loop) {
 					this.reset();
 				} else {
 					this.current();
 				}
-				this._warn('next', 'end of page stack!');
+				console.warn('next', 'end of page stack!');
 				return;
 			} else {
 				this.selected++;
@@ -523,7 +526,6 @@ Custom property | Description | Default
      * @return {Number} The selected index
      */
 		back: function () {
-			this._log('back', this.selected);
 			return this.selected--;
 		},
 		/**

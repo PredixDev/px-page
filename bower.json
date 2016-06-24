@@ -15,7 +15,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "*.pdf"
   ],
   "dependencies": {
     "polymer": "~v1.5.0",
@@ -28,9 +29,9 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
-    "px-navbar": "master",
-    "px-responsive-layouts": "master",
-    "px-table-view": "master",
+    "px-navbar": "latest",
+    "px-layout": "latest",
+    "px-table-view": "latest",
     "web-component-tester": "~4.2.2"
   },
   "resolutions": {

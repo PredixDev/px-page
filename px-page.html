@@ -7,7 +7,6 @@
 <link rel="import" href="../neon-animation/animations/slide-left-animation.html">
 <link rel="import" href="../neon-animation/animations/slide-right-animation.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
-
 <!--
 
 The `px-page` element provides a simple container that enables scrollable content. When used with the `px-navbar` element
@@ -64,22 +63,26 @@ Custom property | Description | Default
         height: 100%;
         -webkit-overflow-scrolling: touch;
       }
-
-      .overthrow-enabled .page-content {
+      .overthrow-enabled .c-page__content {
         height: 100%;
       }
 
-      /* This enables the page to allow scrolling */
-      :host ::content section {
+      :host ::content > div{
         height: 100%;
+        background-color: crimson;
       }
 
+      :host .has-navbar {
+        margin-top: 56px;
+      }
     </style>
-    <div class="page-container">
-      <content id="navbarContent" select="px-navbar"></content>
-      <section class="page-content overthrow">
+    <div id="pageContainer" class="c-page__container">
+      <div class="pageNavbar" class="c-page__navbar">
+        <content id="navbarContent" select="px-navbar"></content>
+      </div>
+      <div id="pageContent" class="c-page__content overthrow">
         <content id="pageContent" select=":not(px-navbar)"></content>
-      </section>
+      </div>
     </div>
   </template>
 </dom-module>
@@ -88,84 +91,73 @@ Custom property | Description | Default
     is: 'px-page',
     behaviors: [
       Polymer.IronResizableBehavior,
-    //  Polymer.NeonAnimationRunnerBehavior,
-      Polymer.NeonAnimatableBehavior,
+      Polymer.NeonAnimationRunnerBehavior,
+      //Polymer.NeonAnimatableBehavior,
       PageBehavior
     ],
     properties: {
+      /**
+       * The entry animation to play when page is selected
+       */
       entryAnimation: {
-          value: 'slide-left-animation'
-        },
-        exitAnimation: {
-          value: 'slide-right-animation'
-        },
-
-      //The title for the page
+        value: 'slide-left-animation'
+      },
+      /**
+       * The exit animation to play when page is not selected
+       */
+      exitAnimation: {
+        value: 'slide-right-animation'
+      },
+      /**
+       * The title for the page
+       */
       title: {
         type: String,
         value: null
       },
-      //Path to remote view that will be loaded
+      /**
+       * URL to load as the pages content
+       */
       import: {
         type: String,
         notify: true,
         value: null,
         observer: '_tmplChanged'
       },
-      //If the page is currently active in the viewport
+      /**
+       * If the page is currently active in the viewport
+       */
       active: {
-        type: Boolean,
-        value: false
+        type: Boolean
       },
-      //If the page is the main page
+      /**
+       * If the page is the main page
+       */
       main: {
-        type: Boolean,
-        value: false
+        type: Boolean
       },
-      //If the page is a dialog
+      /**
+       * If the page is a dialog
+       */
       dialog: {
-        type: Boolean,
-        value: false
+        type: Boolean
       },
-      //with URL query parameters. If your page URL is "about.html?id=10&count=20&color=blue"
-      query: {
-        type: Object
-      },
-      //The context data object associated with the page
+      /**
+       * The context data object associated with the page
+       */
       context: {
         type: Object
       },
-      //The page that came before this page
+      /**
+       * The page that came before this page
+       */
       fromPage: {
-        type: Object
-      },
-      //The route to set in the windows hash
-      route: {
-        type: String
-      },
-      //Contains string URL of just loaded page
-      url: {
-        type: String
-      },
-      //reference to parent px-pages element
-      pages: {
-        type: Object
-      },
-      //reference to parent px-pages container
-      container: {
         type: Object
       }
     },
     listeners: {
       // this event is fired when the animation finishes
       'neon-animation-finish': '_onNeonAnimationFinish'
-    },
-    animate: function() {
-      // run scale-down-animation
-      this.playAnimation();
-    },
-    _onNeonAnimationFinish: function() {
-      console.log('animation done!');
     },
     /**
      * A reference to the px-navbar element. (if it exists)
@@ -175,49 +167,47 @@ Custom property | Description | Default
     get navbar() {
       return Polymer.dom(this.$.navbarContent).getDistributedNodes()[0];
     },
-    _pagesContainer: null,
+    /**
+     * A reference to the parent px-pages element.
+     * @property pages
+     * return Element
+     */
+    get pages() {
+      return Polymer.dom(this).parentNode;
+    },
+    ready: function () {
+      this.toggleClass('c-page');
+    },
     attached: function () {
-      this.toggleClass('page');
-      if (this.navbar) {
-        // TODO: Fix for shadow dom
-        if (this.parentNode && this.parentNode.localName === 'px-pages') {
-          this.pagesContainer = this.parentNode;
-          this.navbar.pagesContainer = this.pagesContainer;
-          this.listen(this.navbar, 'px-page-back', '_handleBack');
+      this._wireNavbar();
+    },
+    _wireNavbar: function(){
+      this.async(function(){
+        if (this.navbar && this.pages) {
+          this.toggleClass('has-navbar', true, this.$.pageContent)
+          this.navbar.pagesContainer = this.pages;
+          this.listen(this.navbar, 'px-navbar-back', '_handleBack');
         }
-      }
+      });
+    },
+    _onNeonAnimationFinish: function () {
+      console.log('animation done!');
     },
     _handleBack: function (e) {
-      if (this.pagesContainer) {
-        this.pagesContainer.back();
+      if (this.pages) {
+        this.pages.back();
       }
+    },
+    animate: function () {
+      this.playAnimation();
     },
     show: function () {
-      console.log('show');
+      this.active = true;
       this.playAnimation('entry');
-      //this.toggleClass('current', false, this);
     },
     hide: function () {
+      this.active = false;
       this.playAnimation('exit');
-      console.log('hide');
-      //this.toggleClass('hidden', true, this);
-    },
-    update: function () {
-      console.log('INFO', 'update view', this.id);
-    },
-    //I handle loading a page from a url
-    _tmplChanged: function (newVal, oldVal) {
-      var _this = this,
-        html = '';
-      if (newVal) {
-        //console.log(this.id, 'Load remote html', newVal);
-        this.importHref(newVal, function (e) {
-          html = e.target.import.body.innerHTML;
-          _this.$$('.page-content').innerHTML = html;
-        }, function (err) {
-          console.error('Error loading page', err);
-        });
-      }
     },
     open: function () {
       if (this.dialog) {
@@ -227,8 +217,20 @@ Custom property | Description | Default
     },
     close: function () {
       if (this.dialog) {
-        this.toggleClass('et-page-current');
         this.toggleClass('is-open');
+      }
+    },
+    _tmplChanged: function (newVal, oldVal) {
+      var _this = this,
+        html = '';
+      if (newVal) {
+        this.importHref(newVal, function (e) {
+          html = e.target.import.body.innerHTML;
+          Polymer.dom(_this.$.pageContent).appendChild(e.target.import.body.firstChild);
+          _this._wireNavbar();
+        }, function (err) {
+          console.error('Error loading page', err);
+        });
       }
     }
   });

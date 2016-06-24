@@ -57,7 +57,7 @@ module.exports = function (grunt) {
     jshint: {
       all: [
 				'Gruntfile.js',
-				'js/**/*.js'
+				'*.js'
 			],
       options: {
         jshintrc: '.jshintrc'
@@ -67,7 +67,7 @@ module.exports = function (grunt) {
     watch: {
       sass: {
         files: ['sass/**/*.scss'],
-        tasks: ['sass', 'autoprefixer'],
+        tasks: ['sass', 'autoprefixer', 'cssmin', 'polymer-css-compiler'],
         options: {
           interrupt: true,
           livereload: true
@@ -134,18 +134,18 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', 'Basic build', [
-    'clean:css',
-    'sass',
-    'autoprefixer',
-    'cssmin',
-    'polymer-css-compiler'
-  ]);
+		'clean:css',
+		'sass',
+		'autoprefixer',
+		'cssmin',
+		'polymer-css-compiler'
+	]);
   grunt.registerTask('devmode', 'Development Mode', [
 		'concurrent:devmode'
 	]);
 
   // First run task.
-  grunt.registerTask('firstrun', 'Basic first run', function () {
+  grunt.registerTask('serve', 'Basic first run', function () {
     grunt.config.set('depserveOpenUrl', '/index.html');
     grunt.task.run('default');
     grunt.task.run('depserve');

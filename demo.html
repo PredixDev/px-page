@@ -5,12 +5,20 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>px-page | demo</title>
     <script src="../webcomponentsjs/webcomponents.min.js"></script>
+
     <link rel="import" href="../iron-demo-helpers/demo-snippet.html"/>
     <link rel="import" href="../px-demo-helpers/px-demo-helpers.html"/>
+
     <link rel="import" href="../px-theme/px-theme.html">
     <link rel="import" href="../px-theme/px-app.html">
+    <link rel="import" href="../px-partials/px-partials.html">
+    <link rel="import" href="../px-drawer/px-drawer.html">
     <link rel="import" href="../px-navbar/px-navbar.html">
     <link rel="import" href="../px-table-view/px-table-view.html">
+    <link rel="import" href="../px-layout/px-layout.html">
+
+
+
     <link rel="import" href="px-pages.html">
     <style>
       body,
@@ -143,6 +151,7 @@
                     </section>
                   </px-page>
                   <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html"></px-page>
+                  <px-page id="RemotePage2" title="Loaded Remote 2" import="./test/remote-page-2.html"></px-page>
                 </px-pages>
               </device-view>
             </div>
@@ -150,12 +159,15 @@
             <script type="text/javascript">
               var app = document.getElementById('app');
               var pages = document.getElementById('appPages');
-              pages.addEventListener('px-page-change', function (e) {
-                console.log('Page Changed', e);
+              ['px-navbar-back',
+                'px-page-change', 'px-page-back', 'px-page-show', 'px-page-hide'].forEach(function(event){
+                document.addEventListener(event, function (e) {
+                  console.log(e.type, e);
+                });
               });
-              pages.addEventListener('iron-items-changed', function (e) {
-                console.log('Page Changed', e);
-              });
+
+
+
               function createDemoList(count) {
                 var _out = [],
                   li;
@@ -169,60 +181,6 @@
                 return _out;
               }
               app.set('items', createDemoList(50));
-            </script>
-          </template>
-        </template>
-      </demo-snippet>
-
-      <!-- TODO: Usage with px-drawer-layout -->
-      <h2>Usage with px-drawer-layout</h2>
-      <demo-snippet>
-        <template>
-          <template id="app2" is="dom-bind">
-            <style media="screen">
-              px-page {
-                background-color: crimson;
-              }
-              px-page:nth-child(odd) {
-                background-color: lime;
-              }
-
-            </style>
-            <div class="buttons flex">
-              <button class="btn" type="button" onclick="document.getElementById('pages2').prev()">Prev</button>
-              <button class="btn" type="button" onclick="document.getElementById('pages2').next()">Next</button>
-            </div>
-            <div class="flex flex--center">
-              <device-view device="phone">
-                <px-pages id="pages2">
-                  <px-page id="page-1" title="Page 1" main>
-                    <px-navbar></px-navbar>
-                    <section>
-                      <h2>page1</h2>
-                    </section>
-                  </px-page>
-                  <px-page id="page-2" title="Page 2">
-                    <px-navbar></px-navbar>
-                  </px-page>
-                  <px-page id="page-3" title="Page 3">
-                    <px-navbar></px-navbar>
-                  </px-page>
-                  <px-page id="page-4" title="Page 4">
-                    <px-navbar></px-navbar>
-                  </px-page>
-                  <px-page id="page-5" title="Page 5">
-                    <px-navbar></px-navbar>
-                  </px-page>
-                </px-pages>
-              </device-view>
-            </div>
-
-            <script type="text/javascript">
-              var app = document.getElementById('app2');
-              var pages = document.getElementById('pages2');
-              pages.addEventListener('change', function (e) {
-                console.log('Page Changed', e);
-              });
             </script>
           </template>
         </template>
