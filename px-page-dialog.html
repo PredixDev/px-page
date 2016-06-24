@@ -1,0 +1,65 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<dom-module id="px-page-dialog">
+  <style>
+    :host {
+
+      display: none;
+      padding: 16px;
+      background: white;
+      color: black;
+      margin: 0 auto;
+    }
+
+  </style>
+  <template>
+    <div class="page-dialog">
+      <content id="content"></content>
+    </div>
+  </template>
+  <script type="text/javascript">
+    Polymer({
+      is: 'px-page-dialog',
+
+      behaviors: [Polymer.NeonAnimationRunnerBehavior],
+
+      properties: {
+
+        opened: {
+          type: Boolean
+        },
+        entryAnimation: {
+            value: 'slide-left-animation'
+          },
+          exitAnimation: {
+            value: 'slide-right-animation'
+          }
+
+
+      },
+
+      listeners: {
+        'neon-animation-finish': '_onAnimationFinish'
+      },
+
+      _onAnimationFinish: function () {
+        if (!this.opened) {
+          this.style.display = '';
+        }
+      },
+
+      show: function () {
+        this.opened = true;
+        this.style.display = 'inline-block';
+        this.playAnimation('entry');
+      },
+
+      hide: function () {
+        this.opened = false;
+        this.playAnimation('exit');
+      }
+    });
+  </script>
+</dom-module>

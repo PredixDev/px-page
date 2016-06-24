@@ -34,41 +34,6 @@
         }
         this.navbar = pageNavbar;
       }
-    },
-    show: function () {
-      this.toggleClass('current', false, this);
-    },
-    hide: function () {
-      this.toggleClass('hidden', true, this);
-    },
-    update: function () {
-      console.log('INFO', 'update view', this.id);
-    },
-    //I handle loading a page from a url
-    _tmplChanged: function (newVal, oldVal) {
-      var _this = this,
-        html = '';
-      if (newVal) {
-        //console.log(this.id, 'Load remote html', newVal);
-        this.importHref(newVal, function (e) {
-          html = e.target.import.body.innerHTML;
-          _this.$$('.page-content').innerHTML = html;
-        }, function (err) {
-          console.error('Error loading page', err);
-        });
-      }
-    },
-    open: function () {
-      if (this.dialog) {
-        this.toggleClass(this.currentClass);
-        this.toggleClass('is-open');
-      }
-    },
-    close: function () {
-      if (this.dialog) {
-        this.toggleClass('et-page-current');
-        this.toggleClass('is-open');
-      }
     }
   };
 </script>

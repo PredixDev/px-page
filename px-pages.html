@@ -1,8 +1,12 @@
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="px-page.html"/>
 <link rel="import" href="px-page-styles.html"/>
+
 
 
 <!--
@@ -120,6 +124,7 @@ Custom property | Description | Default
   Polymer({
     is: 'px-pages',
     behaviors: [
+      Polymer.IronSelectableBehavior,
       Polymer.IronResizableBehavior,
 			Polymer.NeonAnimationRunnerBehavior
     ],
@@ -136,6 +141,7 @@ Custom property | Description | Default
 		},
     properties: {
 			animationConfig: {
+				type: Object,
 				value: function() {
 					return {
 						'entry': {
@@ -203,6 +209,7 @@ Custom property | Description | Default
     created: function () {
       this._PageMap = {};
       this._PageList = [];
+			this.selectable = '.page';
     },
     attached: function () {
       var _this = this;

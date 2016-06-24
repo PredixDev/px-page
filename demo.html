@@ -21,6 +21,7 @@
       .demo {
         position: relative;
       }
+
     </style>
     <script type="text/javascript"></script>
   </head>
@@ -46,6 +47,38 @@
         <a href="mobile-demo.html" target="_blank">here.</a>
       </p>
     </div>
+
+    <link rel="import" href="px-page-dialog.html">
+    <div class="">
+      <h2>Neon Animation Example</h2>
+      <demo-snippet>
+        <template>
+          <template id="demo1" is="dom-bind">
+            <px-page-dialog id="pageDialog">
+              <h2>This is the content</h2>
+            </px-page-dialog>
+
+            <button type="button" on-tap="_onButtonClick">Toggle</button>
+          </template>
+
+          <script type="text/javascript">
+            var scope = document.querySelector('#demo1');
+
+            scope._onButtonClick = function (event) {
+              var node = document.querySelector('px-page-dialog');
+              if (node) {
+                if (node.opened) {
+                  node.hide();
+                } else {
+                  node.show();
+                }
+              }
+            };
+          </script>
+        </template>
+      </demo-snippet>
+    </div>
+
     <div class="">
       <h2>Example</h2>
       <demo-snippet>
@@ -56,12 +89,15 @@
                 background: fuchsia;
               }
             }
+
           </style>
           <template id="app" is="dom-bind">
             <div class="debug">
               <ul>
-                <li>Selected Page:<span>{{selectedPage.title}}</span></li>
-                <li>Selected Index:<span>{{selected}}</span></li>
+                <li>Selected Page:<span>{{selectedPage.title}}</span>
+                </li>
+                <li>Selected Index:<span>{{selected}}</span>
+                </li>
               </ul>
             </div>
 
@@ -98,8 +134,7 @@
                       <h2>page3</h2>
                     </section>
                   </px-page>
-                  <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html">
-                  </px-page>
+                  <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html"></px-page>
                 </px-pages>
               </device-view>
             </div>
@@ -107,7 +142,10 @@
             <script type="text/javascript">
               var app = document.getElementById('app');
               var pages = document.getElementById('appPages');
-              pages.addEventListener('change', function (e) {
+              pages.addEventListener('px-page-change', function (e) {
+                console.log('Page Changed', e);
+              });
+              pages.addEventListener('iron-items-changed', function (e) {
                 console.log('Page Changed', e);
               });
               function createDemoList(count) {
@@ -127,35 +165,50 @@
           </template>
         </template>
       </demo-snippet>
+
       <!-- TODO: Usage with px-drawer-layout -->
       <h2>Usage with px-drawer-layout</h2>
       <demo-snippet>
         <template>
           <template id="app2" is="dom-bind">
-            <px-pages id="pages2" debug selected="{{selected}}" selected-page="{{selectedPage}}">
-              <px-page id="Page0" title="Main Page" route="/Page0" main>
-                <px-navbar>
-                  <button class="navbar__button" drawer-toggle left>
-                    <i class="fa fa-lg fa-bars"></i>
-                  </button>
-                </px-navbar>
-                <section>
-                  <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
-                </section>
-              </px-page>
-              <px-page id="Page1" title="Page 1">
-                <px-navbar></px-navbar>
-                <section>
-                  <h2>page1</h2>
-                </section>
-              </px-page>
-              <px-page id="Page2" title="Page 2">
-                <px-navbar></px-navbar>
-                <section>
-                  <h2>page2</h2>
-                </section>
-              </px-page>
-            </px-pages>
+            <style media="screen">
+              px-page {
+                background-color: crimson;
+              }
+              px-page:nth-child(odd) {
+                background-color: lime;
+              }
+
+            </style>
+            <div class="buttons flex">
+              <button class="btn" type="button" onclick="document.getElementById('pages2').prev()">Prev</button>
+              <button class="btn" type="button" onclick="document.getElementById('pages2').next()">Next</button>
+            </div>
+            <div class="flex flex--center">
+              <device-view device="phone">
+                <px-pages id="pages2">
+                  <px-page id="page-1" title="Page 1" main>
+                    <px-navbar></px-navbar>
+                    <section>
+                      <h2>page1</h2>
+                    </section>
+                  </px-page>
+                  <px-page id="page-2" title="Page 2">
+                    <px-navbar></px-navbar>
+                  </px-page>
+                  <px-page id="page-3" title="Page 3">
+                    <px-navbar></px-navbar>
+                  </px-page>
+                  <px-page id="page-4" title="Page 4">
+                    <px-navbar></px-navbar>
+                  </px-page>
+                  <px-page id="page-5" title="Page 5">
+                    <px-navbar></px-navbar>
+                  </px-page>
+                </px-pages>
+              </device-view>
+            </div>
+
             <script type="text/javascript">
               var app = document.getElementById('app2');
               var pages = document.getElementById('pages2');

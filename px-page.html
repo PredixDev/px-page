@@ -4,8 +4,9 @@
 <link rel="import" href="px-page-transitions.html"/>
 <link rel="import" href="px-page-behavior.html"/>
 <!--<link rel="import" href="../neon-animation/neon-animation-behavior.html">-->
-<link rel="import" href="../neon-animation/neon-animations.html">
-<link rel="import" href="../neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
 
 <!--
 
@@ -87,26 +88,18 @@ Custom property | Description | Default
     is: 'px-page',
     behaviors: [
       Polymer.IronResizableBehavior,
+    //  Polymer.NeonAnimationRunnerBehavior,
       Polymer.NeonAnimatableBehavior,
       PageBehavior
     ],
     properties: {
-      animationConfig: {
-				value: function() {
-					return {
-						'entry': {
-							// provided by neon-animation/animations/scale-up-animation.html
-							name: 'fade-in-animation',
-							node: this
-						},
-						'exit': {
-							// provided by neon-animation-animations/fade-out-animation.html
-							name: 'fade-out-animation',
-							node: this
-						}
-					}
-				}
-			},
+      entryAnimation: {
+          value: 'slide-left-animation'
+        },
+        exitAnimation: {
+          value: 'slide-right-animation'
+        },
+
       //The title for the page
       title: {
         type: String,
@@ -197,6 +190,45 @@ Custom property | Description | Default
     _handleBack: function (e) {
       if (this.pagesContainer) {
         this.pagesContainer.back();
+      }
+    },
+    show: function () {
+      console.log('show');
+      this.playAnimation('entry');
+      //this.toggleClass('current', false, this);
+    },
+    hide: function () {
+      this.playAnimation('exit');
+      console.log('hide');
+      //this.toggleClass('hidden', true, this);
+    },
+    update: function () {
+      console.log('INFO', 'update view', this.id);
+    },
+    //I handle loading a page from a url
+    _tmplChanged: function (newVal, oldVal) {
+      var _this = this,
+        html = '';
+      if (newVal) {
+        //console.log(this.id, 'Load remote html', newVal);
+        this.importHref(newVal, function (e) {
+          html = e.target.import.body.innerHTML;
+          _this.$$('.page-content').innerHTML = html;
+        }, function (err) {
+          console.error('Error loading page', err);
+        });
+      }
+    },
+    open: function () {
+      if (this.dialog) {
+        this.toggleClass(this.currentClass);
+        this.toggleClass('is-open');
+      }
+    },
+    close: function () {
+      if (this.dialog) {
+        this.toggleClass('et-page-current');
+        this.toggleClass('is-open');
       }
     }
   });
