@@ -58,12 +58,20 @@
               <h2>This is the content</h2>
             </px-page-dialog>
 
-            <button type="button" on-tap="_onButtonClick">Toggle</button>
+            <p>
+              <button type="button" on-tap="hide">hide</button>
+              <button type="button" on-tap="show">show</button>
+            </p>
           </template>
 
           <script type="text/javascript">
             var scope = document.querySelector('#demo1');
-
+            scope.show = function(){
+              document.querySelector('px-page-dialog').show();
+            }
+            scope.hide = function(){
+              document.querySelector('px-page-dialog').hide();
+            }
             scope._onButtonClick = function (event) {
               var node = document.querySelector('px-page-dialog');
               if (node) {
