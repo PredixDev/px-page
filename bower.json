@@ -38,6 +38,9 @@
     "polymer-font-awesome": "~0.1.5",
     "px-drawer": "latest",
     "px-table-view": "latest",
-    "px-navbar": "latest"
+    "px-navbar": "latest",
+    "web-component-tester": "~4.2.2",
+    "async": "^1.5.0",
+    "chai": "^3.2.0"
   }
 }
