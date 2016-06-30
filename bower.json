@@ -21,15 +21,14 @@
     "polymer": "~v1.5.0",
     "fastclick": "latest",
     "overthrow": "~0.7.1",
-    "px-theme": "~0.7.0",
-    "neon-animation": "PolymerElements/neon-animation#^1.2.3"
+    "px-theme": "~0.7.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~1.0.5",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.2.3",
-    "px-navbar": "master",
-    "px-responsive-layouts": "master",
-    "px-table-view": "master",
+    "px-navbar": "latest",
+    "px-layout": "latest",
+    "px-table-view": "latest",
     "web-component-tester": "~4.2.2"
   },
   "resolutions": {
@@ -37,8 +36,8 @@
     "px-theme": "~0.7.0",
     "fetch": "~0.11.0",
     "polymer-font-awesome": "~0.1.5",
-    "px-drawer": "master",
-    "px-table-view": "master",
-    "px-navbar": "master"
+    "px-drawer": "latest",
+    "px-table-view": "latest",
+    "px-navbar": "latest"
   }
 }

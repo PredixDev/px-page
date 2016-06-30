@@ -73,7 +73,7 @@
               <device-view device="phone">
                 <px-pages id="appPages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
                   <px-page id="Page0" title="Main" main>
-                    <px-navbar>
+                    <px-navbar pages-container="appPages">
                       <button class="navbar__button" drawer-toggle left>
                         <i class="fa fa-lg fa-bars"></i>
                       </button>
@@ -81,19 +81,19 @@
                     <px-table-view id="list1" modifier="small" table-data="[[items]]"></px-table-view>
                   </px-page>
                   <px-page id="Page1" title="Page 1">
-                    <px-navbar></px-navbar>
+                    <px-navbar pages-container="appPages"></px-navbar>
                     <section>
                       <h2>page1</h2>
                     </section>
                   </px-page>
                   <px-page id="Page2" title="Page 2">
-                    <px-navbar></px-navbar>
+                    <px-navbar pages-container="appPages"></px-navbar>
                     <section>
                       <h2>page2</h2>
                     </section>
                   </px-page>
                   <px-page id="Page3" title="Page 3">
-                    <px-navbar></px-navbar>
+                    <px-navbar pages-container="appPages"></px-navbar>
                     <section>
                       <h2>page3</h2>
                     </section>
@@ -127,45 +127,7 @@
           </template>
         </template>
       </demo-snippet>
-      <!-- TODO: Usage with px-drawer-layout -->
-      <h2>Usage with px-drawer-layout</h2>
-      <demo-snippet>
-        <template>
-          <template id="app2" is="dom-bind">
-            <px-pages id="pages2" debug selected="{{selected}}" selected-page="{{selectedPage}}">
-              <px-page id="Page0" title="Main Page" route="/Page0" main>
-                <px-navbar>
-                  <button class="navbar__button" drawer-toggle left>
-                    <i class="fa fa-lg fa-bars"></i>
-                  </button>
-                </px-navbar>
-                <section>
-                  <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
-                </section>
-              </px-page>
-              <px-page id="Page1" title="Page 1">
-                <px-navbar></px-navbar>
-                <section>
-                  <h2>page1</h2>
-                </section>
-              </px-page>
-              <px-page id="Page2" title="Page 2">
-                <px-navbar></px-navbar>
-                <section>
-                  <h2>page2</h2>
-                </section>
-              </px-page>
-            </px-pages>
-            <script type="text/javascript">
-              var app = document.getElementById('app2');
-              var pages = document.getElementById('pages2');
-              pages.addEventListener('change', function (e) {
-                console.log('Page Changed', e);
-              });
-            </script>
-          </template>
-        </template>
-      </demo-snippet>
+
     </div>
   </body>
 </html>

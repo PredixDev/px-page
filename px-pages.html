@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+
 <link rel="import" href="px-page.html"/>
 <link rel="import" href="px-page-styles.html"/>
 
@@ -80,10 +80,10 @@ Custom property | Description | Default
       :host .pages ::content .page:not(.current){
         opacity: 0;
         visibility: hidden;
-        /*
+
         -webkit-transition: all 0.2s ease;
         transition: all 0.2s ease;
-        */
+
         @apply(--px-page);
       }
 
@@ -94,63 +94,41 @@ Custom property | Description | Default
       :host ::content .current {
         opacity: 1;
         visibility: visible;
-        /*
+
         transform: translate(0, 0);
-        */
+
         @apply(--px-page-current);
       }
 
       :host ::content .next {
-        /*
+
         transform: translate(50%, 0);
-        */
+
         @apply(--px-page-next);
       }
 
       :host ::content .previous {
-        /*transform: translate(-50%, 0);*/
+        transform: translate(-50%, 0);
         @apply(--px-page-previous);
       }
 
     </style>
-    <div class="pages"><content id="pages" select=".page, px-page, .px-page"></content></div>
+    <div class="pages">
+    	<content id="pages" select=".page, px-page, .px-page"></content>
+    </div>
   </template>
 </dom-module>
 <script type="text/javascript">
   Polymer({
     is: 'px-pages',
     behaviors: [
-      Polymer.IronResizableBehavior,
-			Polymer.NeonAnimationRunnerBehavior
+      Polymer.IronResizableBehavior
     ],
 		listeners: {
-			// this event is fired when the animation finishes
-			'neon-animation-finish': '_onNeonAnimationFinish'
-		},
-		animate: function() {
-			// run scale-down-animation
-			this.playAnimation();
-		},
-		_onNeonAnimationFinish: function() {
-			console.log('animation done!');
+
+			'px-navbar-back': 'back'
 		},
     properties: {
-			animationConfig: {
-				value: function() {
-					return {
-						'entry': {
-							// provided by neon-animation/animations/scale-up-animation.html
-							name: 'fade-in-animation',
-							node: this
-						},
-						'exit': {
-							// provided by neon-animation-animations/fade-out-animation.html
-							name: 'fade-out-animation',
-							node: this
-						}
-					}
-				}
-			},
       /**
        * The selected index
        */

@@ -3,9 +3,7 @@
 <link rel="import" href="overthrow-import.html"/>
 <link rel="import" href="px-page-transitions.html"/>
 <link rel="import" href="px-page-behavior.html"/>
-<!--<link rel="import" href="../neon-animation/neon-animation-behavior.html">-->
-<link rel="import" href="../neon-animation/neon-animations.html">
-<link rel="import" href="../neon-animation/neon-animatable-behavior.html">
+
 
 <!--
 
@@ -87,26 +85,11 @@ Custom property | Description | Default
     is: 'px-page',
     behaviors: [
       Polymer.IronResizableBehavior,
-      Polymer.NeonAnimatableBehavior,
+
       PageBehavior
     ],
     properties: {
-      animationConfig: {
-				value: function() {
-					return {
-						'entry': {
-							// provided by neon-animation/animations/scale-up-animation.html
-							name: 'fade-in-animation',
-							node: this
-						},
-						'exit': {
-							// provided by neon-animation-animations/fade-out-animation.html
-							name: 'fade-out-animation',
-							node: this
-						}
-					}
-				}
-			},
+
       //The title for the page
       title: {
         type: String,
@@ -164,15 +147,7 @@ Custom property | Description | Default
       }
     },
     listeners: {
-      // this event is fired when the animation finishes
-      'neon-animation-finish': '_onNeonAnimationFinish'
-    },
-    animate: function() {
-      // run scale-down-animation
-      this.playAnimation();
-    },
-    _onNeonAnimationFinish: function() {
-      console.log('animation done!');
+
     },
     /**
      * A reference to the px-navbar element. (if it exists)
@@ -190,7 +165,6 @@ Custom property | Description | Default
         if (this.parentNode && this.parentNode.localName === 'px-pages') {
           this.pagesContainer = this.parentNode;
           this.navbar.pagesContainer = this.pagesContainer;
-          this.listen(this.navbar, 'px-page-back', '_handleBack');
         }
       }
     },

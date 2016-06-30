@@ -6,8 +6,12 @@ function runCustomTests() {
     test('renders', function () {
       assert.ok(element);
     });
-    test('attaches .px-pages__wrapper class', function () {
-      assert(element.className.indexOf('px-pages__wrapper') > -1);
+    test('attaches .px-pages__wrapper class', function (done) {
+      setTimeout(function () {
+        assert(document.querySelector('px-pages').classList.contains('et-wrapper'));
+        done();
+      }, 500);
+
     });
     test('current page does not have .next or .previous class', function (done) {
       var page = document.getElementById('page1');

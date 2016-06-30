@@ -7,94 +7,55 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+
+    <link rel="import" href="../../px-theme/px-app.html">
+    <link rel="import" href="../../px-theme/px-theme.html">
+    <link rel="import" href="../../px-layout/px-layout-partials.html">
 
     <link rel="import" href="../../px-layout/px-layout.html">
-
+    <link rel="import" href="../../px-table-view/px-table-view.html">
     <link rel="import" href="../../px-card/px-card.html">
-
     <link rel="import" href="../px-pages.html">
-    <style>
-      body,
-      html {
-        background-color: #eee;
-      }
-      .demo {
-        position: relative;
-      }
-
-    </style>
   </head>
   <body unresolved>
-
     <template id="app" is="dom-bind">
-      <style is="custom-style">
-        :root {
-          --px-navbar: {
-            background-color: #0d5fb6;
-            color: #fff;
-          }
-
-        }
-        .bg--seed {
-          background-color: #0d5fb6;
-          color: #fff;
-        }
-        .nav a {
-          text-decoration: none;
-        }
-        .nav a.active {
-          color: #fff !important;
-          background-color: rgba(255,255,255,0.4);
-        }
-
-        .nav {}
+    <style is="custom-style">
+       .custom-selected {
+         background-color: crimson;
+         color: white;
+       }
       </style>
       <px-drawer-layout id="layout">
         <px-drawer id="drawer" fixed overlay swipe-open swipe-close>
-          <div class="brand flex flex--center u-m">
-            <px-brand size="165" wordmark></px-brand>
+          <div class="brand flex flex--center flex--middle u-p--">
+            <px-brand size="150" wordmark></px-brand>
           </div>
           <div class="side-nav">
-            <px-table-view id="sideNav" selected="[[selected]]" selected-item="[[selectedPage]]"></px-table-view>
+            <px-table-view id="sideNav" row-modifier="tappable" selected="{{selected}}"
+            selected-class="custom-selected">
+              <px-table-row title="Page 1"></px-table-row>
+              <px-table-row title="Page 2"></px-table-row>
+              <px-table-row title="Page 3"></px-table-row>
+              <px-table-row title="Page 4"></px-table-row>
+            </px-table-view>
           </div>
-
         </px-drawer>
-
         <div class="" content>
-          <px-header title="Seed Application" subtitle powered="" class="u-p-- seed-header">
-            <nav class="nav flex flex--justify">
-              <a href="#" class="u-p- active">Dashboards</a>
-              <a onclick="pages.selected++;" class="u-p-">Blank Page</a>
-            </nav>
-          </px-header>
-          <px-pages id="pages" debug selected="{{selected}}" selected-page="[[selectedPage]]">
+          <px-pages id="pages" selected="{{selected}}">
             <px-page id="Page0" title="Main Page" main>
               <px-navbar class="bg--seed">
                 <div left>
-                  <button class="navbar__button" drawer-toggle>
-                    <px-icon icon="fa:fa-bars"></px-icon>
+                  <button class="navbar__button" drawer-toggle><px-icon icon="fa:fa-bars"></px-icon>
                   </button>
                 </div>
                 <div right>
-                  <button class="navbar__button">
-                    <px-icon icon="fa:fa-user"></px-icon>
-                    <span class="is-hidden@md-">John Sinclair</span>
+                  <button class="navbar__button" onclick="document.getElementById('pages').next()">
+                    Next
                   </button>
                 </div>
               </px-navbar>
               <div class="cards u-mt">
-                <div class="box flex flex--spaced bg-dark color-white">
-		<div class="flex flex--col">
-			<span class="epsilon caps">Availability</span>
-			<span class="gamma caps muted">85%</span>
-		</div>
-		<div class="flex flex--col">
-			<span class="epsilon caps">Health</span>
-			<span class="gamma caps muted">99%</span>
-		</div>
-</div>
-
                 <px-card header-text="Card">
                   <p>
                     This is a card.
@@ -103,19 +64,36 @@
               </div>
             </px-page>
             <px-page id="Page1" title="Page 1">
-              <px-navbar></px-navbar>
-              <h2>page1</h2>
-              <div class="full-height scrollable">
-                <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
-              </div>
+              <px-navbar ></px-navbar>
+              <px-card header-text="Card">
+                <div class="full-height scrollable">
+                  <px-table-view id="list2" modifier="large" table-data="[[items]]"></px-table-view>
+                </div>
+              </px-card>
             </px-page>
             <px-page id="Page2" title="Page 2">
-              <px-navbar></px-navbar>
-              <h2>page2</h2>
+              <px-navbar ></px-navbar>
+              <px-card header-text="Card">
+                <p>
+                  This is a card.
+                </p>
+              </px-card>
             </px-page>
             <px-page id="Page3" title="Page 3">
-              <px-navbar></px-navbar>
-              <h2>page3</h2>
+              <px-navbar ></px-navbar>
+              <px-card header-text="Card">
+                <p>
+                  This is a card.
+                </p>
+              </px-card>
+            </px-page>
+            <px-page id="Page4" title="Page 4">
+              <px-navbar ></px-navbar>
+              <px-card header-text="Card">
+                <p>
+                  This is a card.
+                </p>
+              </px-card>
             </px-page>
           </px-pages>
         </div>
@@ -125,6 +103,8 @@
         document.addEventListener('WebComponentsReady', function () {
           var app = document.getElementById('app');
           var pages = document.getElementById('pages');
+          app.selectedPage = {};
+          app.selected = 0;
           app.set('items', createDemoList(15));
           document.addEventListener('px-page-ready', function (e) {
             console.log('Page ready', e);
