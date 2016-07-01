@@ -117,6 +117,25 @@ module.exports = function (grunt) {
           './<%= pkg.name %>.html': ['css/<%= pkg.name %>.min.css']
         }
       }
+    },
+    bump: {
+      options: {
+        files: ['package.json'],
+        updateConfigs: [],
+        commit: true,
+        commitMessage: 'Release v%VERSION%',
+        commitFiles: ['package.json', 'bower.json'],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: true,
+        pushTo: 'upstream',
+        gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+        globalReplace: false,
+        prereleaseName: false,
+        metadata: '',
+        regExp: false
+      }
     }
   });
 
@@ -131,15 +150,16 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('polymer-css-compiler');
+  grunt.loadNpmTasks('grunt-bump');
 
   // Default task.
   grunt.registerTask('default', 'Basic build', [
-    'clean:css',
-    'sass',
-    'autoprefixer',
-    'cssmin',
-    'polymer-css-compiler'
-  ]);
+		'clean:css',
+		'sass',
+		'autoprefixer',
+		'cssmin',
+		'polymer-css-compiler'
+	]);
   grunt.registerTask('devmode', 'Development Mode', [
 		'concurrent:devmode'
 	]);
@@ -160,7 +180,8 @@ module.exports = function (grunt) {
 		'clean',
 		'shell:bower',
 		'default',
-		'test'
+		'test',
+		'bump'
 	]);
 
 };

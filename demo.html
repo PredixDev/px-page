@@ -58,19 +58,17 @@
             }
           </style>
           <template id="app" is="dom-bind">
-            <div class="debug">
+            <div class="">
               <ul>
-                <li>Selected Page:<span>{{selectedPage.title}}</span></li>
-                <li>Selected Index:<span>{{selected}}</span></li>
+                <li>Selected Page:<span>{{selectedPage.title}}</span>
+                </li>
+                <li>Selected Index:<span>{{selected}}</span>
+                </li>
               </ul>
-            </div>
 
-            <div class="buttons flex">
-              <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
-              <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
             </div>
-            <div class="flex flex--center">
-              <device-view device="phone">
+            <div class="flex flex--middle flex--col">
+              <device-view device="phone" landscape>
                 <px-pages id="appPages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
                   <px-page id="Page0" title="Main" main>
                     <px-navbar pages-container="appPages">
@@ -98,12 +96,14 @@
                       <h2>page3</h2>
                     </section>
                   </px-page>
-                  <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html">
-                  </px-page>
+                  <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html"></px-page>
                 </px-pages>
               </device-view>
+              <div class="flex u-pt++">
+                <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
+                <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
+              </div>
             </div>
-
             <script type="text/javascript">
               var app = document.getElementById('app');
               var pages = document.getElementById('appPages');
@@ -127,7 +127,6 @@
           </template>
         </template>
       </demo-snippet>
-
     </div>
   </body>
 </html>

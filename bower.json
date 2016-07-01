@@ -29,7 +29,8 @@
     "px-navbar": "latest",
     "px-layout": "latest",
     "px-table-view": "latest",
-    "web-component-tester": "~4.2.2"
+    "web-component-tester": "~4.2.2",
+    "px-demo-helpers": "~0.0.2"
   },
   "resolutions": {
     "polymer": "~v1.4.0",
