@@ -146,9 +146,7 @@ Custom property | Description | Default
         type: Object
       }
     },
-    listeners: {
 
-    },
     /**
      * A reference to the px-navbar element. (if it exists)
      * @property navbar
@@ -160,12 +158,13 @@ Custom property | Description | Default
     _pagesContainer: null,
     attached: function () {
       this.toggleClass('page');
+      var root = Polymer.dom(this.root);
       if (this.navbar) {
-        console.warn('Page has navbar', this.navbar, this.parentNode.parentNode);
-      
+        //console.warn('Page has navbar', this.navbar, this.parentNode.parentNode);
+
         // TODO: Fix for shadow dom
-        if (this.parentNode && this.parentNode.parentNode.localName === 'px-pages') {
-          this.pagesContainer = this.parentNode.parentNode;
+        if (root.parentNode && root.parentNode.parentNode.localName === 'px-pages') {
+          this.pagesContainer = root.parentNode.parentNode;
           this.navbar.pagesContainer = this.pagesContainer;
         }
       }
