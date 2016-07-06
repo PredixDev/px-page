@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-
+<link rel="import" href="../neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../neon-animation/animations/slide-from-right-animation.html">
+<link rel="import" href="../neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="px-page.html"/>
 <link rel="import" href="px-page-styles.html"/>
 
@@ -51,7 +53,7 @@ Custom property | Description | Default
 -->
 
 <dom-module id="px-pages">
-		<style include="px-navbar-css"></style>
+	<style include="px-page-css"></style>
   <template>
     <style>
       :host {
@@ -122,6 +124,7 @@ Custom property | Description | Default
   Polymer({
     is: 'px-pages',
     behaviors: [
+			    Polymer.NeonAnimatableBehavior,
       Polymer.IronResizableBehavior
     ],
 		listeners: {
@@ -174,7 +177,29 @@ Custom property | Description | Default
       updateHash: {
         type: Boolean,
         value: false
+      },
+			animationConfig: {
+        value: function() {
+          return {
+            'entry': {
+              // provided by neon-animation/animations/scale-up-animation.html
+              name: 'scale-up-animation',
+              node: this
+            },
+            'exit': {
+              // provided by neon-animation-animations/fade-out-animation.html
+              name: 'fade-out-animation',
+              node: this
+            }
+          }
+        }
       }
+    },
+		listeners: {
+      'neon-animation-finish': '_onNeonAnimationFinish'
+    },
+    _onNeonAnimationFinish: function(e){
+      console.warn(this.tagName, '_onTransitionEnd', e);
     },
 
     created: function () {

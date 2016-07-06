@@ -65,12 +65,15 @@
                 <li>Selected Index:<span>{{selected}}</span>
                 </li>
               </ul>
-
+              <div class="flex u-pt++">
+                <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
+                <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
+              </div>
             </div>
             <div class="flex flex--middle flex--col">
-              <device-view device="phone" landscape>
-                <px-pages id="appPages" debug selected="{{selected}}" selected-page="{{selectedPage}}">
-                  <px-page id="Page0" title="Main" main>
+              <device-view device="phone" >
+                <px-pages id="appPages" selected="{{selected}}" selected-page="{{selectedPage}}">
+                  <px-page id="Page0" title="List" main>
                     <px-navbar pages-container="appPages">
                       <button class="navbar__button" drawer-toggle left>
                         <i class="fa fa-lg fa-bars"></i>
@@ -78,7 +81,7 @@
                     </px-navbar>
                     <px-table-view id="list1" modifier="small" table-data="[[items]]"></px-table-view>
                   </px-page>
-                  <px-page id="Page1" title="Page 1">
+                  <px-page id="Page1" title="Detail">
                     <px-navbar pages-container="appPages"></px-navbar>
                     <section>
                       <h2>page1</h2>
@@ -99,10 +102,7 @@
                   <px-page id="RemotePage" title="Loaded Remote" import="./test/remote-page.html"></px-page>
                 </px-pages>
               </device-view>
-              <div class="flex u-pt++">
-                <button class="btn" type="button" onclick="document.getElementById('appPages').prev()">Prev</button>
-                <button class="btn" type="button" onclick="document.getElementById('appPages').next()">Next</button>
-              </div>
+
             </div>
             <script type="text/javascript">
               var app = document.getElementById('app');
