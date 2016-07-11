@@ -79,7 +79,13 @@
                         <i class="fa fa-lg fa-bars"></i>
                       </button>
                     </px-navbar>
-                    <px-table-view id="list1" modifier="small" table-data="[[items]]"></px-table-view>
+                    <px-table-view id="list1" modifier="small">
+                      <template is="dom-repeat" items="[[items]]">
+                        <px-table-row
+                          modifier="{{item.modifier}}"
+                          title="{{item.title}}" data-page="Page1"></px-table-row>
+                      </template>
+                    </px-table-view>
                   </px-page>
                   <px-page id="Page1" title="Detail">
                     <px-navbar pages-container="appPages"></px-navbar>
