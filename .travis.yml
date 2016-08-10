@@ -12,7 +12,6 @@ addons:
       - google-chrome
     packages:
       - google-chrome-stable
-  firefox: '46.0'
 before_script:
   - npm install web-component-tester
   - npm install bower
