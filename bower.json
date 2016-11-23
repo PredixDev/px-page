@@ -1,6 +1,6 @@
 {
     "name": "px-page",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "authors": [
         "Jonnie Spratley <jonnie.spratley@ge.com>"
     ],
@@ -30,7 +30,7 @@
         "px-layout": "latest",
         "px-table-view": "latest",
         "web-component-tester": "~4.2.2",
-        "px-demo-helpers": "~0.0.2"
+        "px-demo-helpers": "^0.0.2"
     },
     "resolutions": {
         "polymer": "~v1.4.0",
