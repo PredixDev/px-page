@@ -8,13 +8,6 @@
     ],
     "license": "ISC",
     "author": "Jonnie Spratley",
-    "scripts": {
-        "build": "grunt dist",
-        "postinstall": "bower install",
-        "start": "grunt depserve",
-        "test": "grunt test",
-        "watch": "grunt watch"
-    },
     "devDependencies": {
         "bower": "*",
         "coveralls": "^2.11.9",
